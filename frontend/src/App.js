@@ -15,7 +15,7 @@ function App() {
   const [sessionID, setSessionID] = useState(0)
 
   return (
-    <Router >
+    <Router basename="/" >
 
       <Background darkMode={darkMode}/>
       <Nav/>
