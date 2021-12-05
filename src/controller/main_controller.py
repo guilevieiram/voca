@@ -28,6 +28,11 @@ class MainController(ABC):
     """Responsible for controlling the application"""
 
     @abstractmethod
+    def __init__(self, user_controller: UserControleler):
+        """Initialises the controller with the necessary subcontrollers and adds the resources from those subcontrollers."""
+        pass
+
+    @abstractmethod
     def run(self) -> None:
         """Runs the application."""
         pass
@@ -41,16 +46,15 @@ class MainController(ABC):
 class FlaskController(MainController):
     """Responsible for controlling the application via Flask RESTful API."""
 
-    def __init__(self, user_controller: UserController, debug: bool = True) -> None:
+    def __init__(self, user_controller: UserController) -> None:
         """Initializes the API and its endpoints"""
-        self.debug: bool = debug
         self.app: Flask = Flask(__name__)
         self._home()
         self.add_resources(sub_controller=user_controller)
 
-    def run(self) -> None:
+    def run(self, debug: bool = True) -> None:
         """Runs the application."""
-        self.app.run(debug=self.debug)
+        self.app.run(debug=debug)
 
     def add_resources(self, sub_controller: SubController) -> None:
         """Add resources from the other controlers"""
