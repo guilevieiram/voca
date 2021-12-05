@@ -1,7 +1,8 @@
 from flask import Flask, request, abort
 from flask_cors import CORS
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
+from json import loads
 
 from .sub_controller import Resource, SubController 
 from .user_controller import UserController
@@ -61,11 +62,43 @@ class FlaskController(MainController):
 
     def _home(self) -> None:
         """Defines an api endpoint to check if the server ir running fine and well."""
-        app = self.app
-        @app.route("/")
+        @self.app.route("/")
         def home() -> dict:
             return {
                 "code": 1,
                 "message": "all good here!!"
             }       
 
+class TerminalController(MainController):
+    """Responsible for controlling the application via terminal."""
+
+    def __init__(self, user_controller: UserController) -> None:
+        """Initializes the controller with its endpoints"""
+        self.on: bool = True
+        self.resources: Dict[str, Tuple[Resource, SubController]] = {}
+        self.add_resources(sub_controller=user_controller)
+        
+    def run(self) -> None:
+        """Runs the application."""
+        while self.on:
+            endpoint: str = input("\n~ ")
+            if endpoint in ["exit", "EXIT", "Exit", "e", "exit()"]:
+                self.on = False
+            elif endpoint not in list(self.resources.keys()): 
+               print("Command not valid.\n") 
+            else:
+                self._execute_task(endpoint=endpoint)
+    
+    def add_resources(self, sub_controller) -> None:
+        """Add resources from the other controlers"""
+        for resource in sub_controller.resources():
+            self.resources[resource.endpoint] = (resource, sub_controller)
+
+    def _execute_task(self, endpoint: str) -> dict:
+        """Executes a given task given its endpoints"""
+        resource, sub_controller = self.resources.get(endpoint)
+        parameters: dict = loads(input("pars: "))
+        if set(resource.parameters) == set(parameters.keys()):
+            print(resource.callable(sub_controller, **parameters))
+        else:
+            print("\n Parameters not valid.")

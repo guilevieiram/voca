@@ -1,6 +1,6 @@
-from src.controller import MainController, FlaskController, UserController, DummyUserController
+from src.controller import MainController, FlaskController, TerminalController, UserController, DummyUserController
 
-app: MainController = FlaskController(user_controller=DummyUserController())
+app: MainController = TerminalController(user_controller=DummyUserController())
 
 if __name__ == "__main__":
     app.run()
