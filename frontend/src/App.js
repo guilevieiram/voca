@@ -8,6 +8,7 @@ import {
 
 import Nav from './components/Nav';
 import Background from './components/Background';
+import Login from './components/userLogin';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -22,10 +23,10 @@ function App() {
 
       <Routes>
         <Route exact path="/" element={
-          <p>Home Page</p>
+          <p>Home</p>
         }></Route>
         <Route path="/login" element={
-          <p>login page</p>
+          <Login darkMode={darkMode}/>
         }></Route>
       </Routes>
     </Router>
