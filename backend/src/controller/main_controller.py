@@ -28,7 +28,7 @@ class MainController(ABC):
     """Responsible for controlling the application"""
 
     @abstractmethod
-    def __init__(self, user_controller: UserControleler):
+    def __init__(self, user_controller: UserController):
         """Initialises the controller with the necessary subcontrollers and adds the resources from those subcontrollers."""
         pass
 
