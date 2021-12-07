@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional, Union
 
+from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError
+
 
 class DataBaseModel(ABC):
     """Data base abstract model responsible for connecting and sending requests to the database."""
@@ -48,6 +50,7 @@ class LocalDataBase(DataBaseModel):
         self.users: List[dict] = [{
             "user_name": "test",
             "user_email": "test@gmail.com",
+            "user_language": "Testuguese",
             "user_password": "pass1234",
             "user_photo": "ph.com",
         }]
@@ -64,6 +67,7 @@ class LocalDataBase(DataBaseModel):
         self.users.append({
             "user_name": user_name,
             "user_email": user_email,
+            "user_language": user_language,
             "user_password": user_password,
             "user_photo": user_photo,
         })
@@ -74,12 +78,13 @@ class LocalDataBase(DataBaseModel):
             raise UserIdError("The required user cannot be found in the database.")
         self.users[user_id] = None
 
+    # Missing the value not value error handling
     def find_user(self, property: str, value: Union[int, str]) -> int:
         """Finds a user in the database"""
-        if not user_id < len(self.users) or self.users[user_id] is None:
-            raise UserIdError("The required user cannot be found in the database.")
         if not property in self.users[0].keys():
             raise PropertyNotValidError("The required property is not valid.")
+        if type(value) is not str:
+            raise ValueTypeNotValidError("The value type is not supported for this property.")
 
         user_matches: List[int] = [index for index, user in enumerate(self.users) if user.get(property) == value]
         
@@ -94,6 +99,8 @@ class LocalDataBase(DataBaseModel):
             raise UserIdError("The required user cannot be found in the database.")
         if not property in self.users[0].keys():
             raise PropertyNotValidError("The required property is not valid.")
+        if type(value) is not str:
+            raise ValueTypeNotValidError("The value type is not supported for this property.")
         self.users[user_id][property] = value
 
     def get_user(self, user_id: int) -> dict:
@@ -104,5 +111,6 @@ class LocalDataBase(DataBaseModel):
         return {
             "user_name": user.get("user_name"),
             "user_email": user.get("user_email"),
-            "user_photo": user.get("user_photo")
+            "user_photo": user.get("user_photo"),
+            "user_language": user.get("user_language")
         }
