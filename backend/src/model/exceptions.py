@@ -6,8 +6,12 @@ class DatabaseServerError(Exception):
     """General exception to be thrown when any problem in connecting with the DB happens"""
     pass
 
-class ProperyNotValidError(Exception):
+class PropertyNotValidError(Exception):
     """Excepntion to be thrown when a user property is not valid"""
+    pass
+
+class ValueTypeNotValidError(Exception):
+    """Exception to be raised when the type of the value to be changed is not correct"""
     pass
 
 class UserIdError(Exception):
