@@ -3,5 +3,5 @@ This is the models module of your application. Here you should develop the diffe
 After constructing them in a separate file, import them here, both the abstract form and the implementations.
 """
 
-from .user_model import UserModel
-from .db_model import DataBaseModel, LocalDataBase
+from .user_model import User, UserModel, MyUserModel
+from .db_model import DataBaseModel, LocalDataBaseModel

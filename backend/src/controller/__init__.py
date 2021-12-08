@@ -4,4 +4,4 @@ This is the heard of the application that will coordenate the requests and deleg
 tasks to the models.
 """
 from .main_controller import MainController, FlaskController, TerminalController
-from .user_controller import UserController, DummyUserController
+from .user_controller import UserController, DummyUserController, MyUserController
