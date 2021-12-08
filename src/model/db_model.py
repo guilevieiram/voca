@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Dict
 
-from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError
+from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError
 
 
 class DataBaseModel(ABC):
@@ -23,7 +23,7 @@ class DataBaseModel(ABC):
         pass
 
     @abstractmethod
-    def find_user(self, property: str, value: Union[int, str]) -> int:
+    def find_user(self, properties: Dict[str, str]) -> int:
         """Finds a user in the database"""
         pass
 
@@ -38,10 +38,11 @@ class DataBaseModel(ABC):
         return {
             "user_name": ...,
             "user_email": ...,
-            "user_photo": ...
+            "user_photo": ...,
+            "user_language": ...
         }
 
-class LocalDataBase(DataBaseModel):
+class LocalDataBaseModel(DataBaseModel):
     """Data base model that is implemented using local variables to store data. Mostly to test purposes"""
 
     def __init__(self, db_name: str = "local") -> None:
@@ -64,6 +65,8 @@ class LocalDataBase(DataBaseModel):
 
     def add_user(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> None: 
         """Adds a user to the database"""
+        if any([user.get("user_email") == user_email for user in self.users]):
+            raise UserAlreadyExistsError("This email is already in use.")
         self.users.append({
             "user_name": user_name,
             "user_email": user_email,
@@ -78,15 +81,19 @@ class LocalDataBase(DataBaseModel):
             raise UserIdError("The required user cannot be found in the database.")
         self.users[user_id] = None
 
-    # Missing the value not value error handling
-    def find_user(self, property: str, value: Union[int, str]) -> int:
+    def find_user(self, properties: Dict[str, str]) -> int:
         """Finds a user in the database"""
-        if not property in self.users[0].keys():
-            raise PropertyNotValidError("The required property is not valid.")
-        if type(value) is not str:
-            raise ValueTypeNotValidError("The value type is not supported for this property.")
+        if any([property not in self.users[0].keys() for property in properties.keys()]):
+            raise PropertyNotValidError("A required property is not valid.")
+        if any([type(value) is not str for value in properties.values()]):
+            raise ValueTypeNotValidError("A value type is not supported for this property.")
 
-        user_matches: List[int] = [index for index, user in enumerate(self.users) if user.get(property) == value]
+        user_matches: List[int] =[
+            index for index, user in enumerate(self.users) 
+            if all([
+                user.get(property) == value for property, value in properties.items()
+            ])
+        ]
         
         if not user_matches:
             raise UserNotFoundError("No user was found with that property.")

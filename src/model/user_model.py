@@ -1,14 +1,16 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
-from typing import Union, Tuple
+from typing import Union, Tuple, Optional, Dict
+
+from .db_model import DataBaseModel
 
 @dataclass
 class User:
-    id: int
     name: str
     email: str
-    password: str
     language: str 
+    id: int = 0
+    password: Optional[str] = None
     photo_url: str = ""
     
 
@@ -17,20 +19,66 @@ class UserModel(ABC):
 
     @abstractmethod
     def add_user(self, user: User) -> None:
-        """Adds a given user to the data base and returns a status object"""
+        """Adds a given user to the data base."""
         pass
 
     @abstractmethod
     def delete_user(self, user_id: int) -> None:
-        """Deletes a user from the data base and returns a status object"""
+        """Deletes a user from the data base."""
         pass
 
     @abstractmethod
-    def find_user(self, property: str, value: Union[int, str]) -> User:
-        """Finds a user in the data base and returns the status of the operation and the relative user object"""
+    def get_user(self, user_id) -> User:
+        """Finds a user in the data base by its id and returns the user object."""
+        pass
+
+    @abstractmethod
+    def get_user_id(self, properties: Dict[str, str]) -> int:
+        """Gets the first found user that satisfy the property value dictionary pairs"""
         pass
 
     @abstractmethod
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
-        """Updates a user in the data base given the user_id and returns the status of the operation """
+        """Updates a user in the data base given the user_id and a property, value pair."""
         pass
+
+# Missing exception handling
+class MyUserModel(UserModel):
+    """Simple logic implementation of the user model."""
+
+    def __init__(self, db_model: DataBaseModel) -> None:
+        """Initializes connection with the data base auxiliary model"""
+        self.db_model = db_model
+
+    def add_user(self, user: User) -> None:
+        """Adds a given user to the data base."""
+        self.db_model.add_user(
+            user_name=user.name,
+            user_email=user.email,
+            user_password=user.password,
+            user_language=user.language
+        )
+
+    def delete_user(self, user_id: int) -> None:
+        """Deletes a user from the data base."""
+        self.db_model.delete_user(user_id=user_id)
+
+    def get_user(self, user_id: int) -> User:
+        """Finds a user in the data base by the id and returns the user object."""
+        user_information = self.db_model.get_user(user_id=user_id)
+        return User(
+            id=user_id,
+            name=user_information.get("user_name"),
+            email=user_information.get("user_email"),
+            language=user_information.get("user_language"),
+            photo_url=user_information.get("user_photo")
+        )
+
+    def get_user_id(self, properties: Dict[str, str]) -> int:
+        """Gets the first found user that satisfy that property"""
+        user_id = self.db_model.find_user(properties=properties)
+        return user_id
+
+    def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
+        """Updates a user in the data base given the user_id and a property, value pair."""
+        self.db_model.update_user(user_id=user_id, property=property, value=value)

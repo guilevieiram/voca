@@ -14,6 +14,10 @@ class ValueTypeNotValidError(Exception):
     """Exception to be raised when the type of the value to be changed is not correct"""
     pass
 
+class UserAlreadyExistsError(Exception):
+    """Exception to be raised when the user trying to be added already exists"""
+    pass
+
 class UserIdError(Exception):
     """Exception to be thrown when a given user id is not valid (not in the db)"""
     pass

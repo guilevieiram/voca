@@ -1,14 +1,13 @@
-import unittest
-from unittest.mock import patch
+from unittest import TestCase
 
-from src.model import LocalDataBase
-from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError
+from src.model import LocalDataBaseModel
+from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError
 
 
-class LocalDbModelTestCase(unittest.TestCase):
+class LocalDbModelTestCase(TestCase):
 
     def setUp(self):
-        self.database = LocalDataBase()
+        self.database = LocalDataBaseModel()
 
     def test_add_user(self):
         self.database.add_user(
@@ -28,6 +27,16 @@ class LocalDbModelTestCase(unittest.TestCase):
                 "user_photo":"https://photo.com"
             }
         )
+
+    def test_add_user_already_exists(self):
+        self.assertRaises(
+            UserAlreadyExistsError,
+            self.database.add_user,
+            user_name="Guile",
+            user_email="test@gmail.com",
+            user_password="senha1234",
+            user_language="Portuguese"
+        )
     
     def test_delete_user(self):
         self.database.delete_user(user_id = 0)
@@ -41,34 +50,40 @@ class LocalDbModelTestCase(unittest.TestCase):
         )
     
     def test_find_user(self):
-        user_id = self.database.find_user(
-            property="user_name",
-            value="test"
-        )
+        user_id = self.database.find_user(properties={
+            "user_name": "test"
+        })
         self.assertEqual(user_id, 0)
+        user_id = self.database.find_user(properties={
+            "user_email": "test@gmail.com",
+            "user_password": "pass1234"
+        })
 
     def test_find_user_property_not_valid(self):
         self.assertRaises(
             PropertyNotValidError,
             self.database.find_user,
-            property="user_surname", 
-            value="asdf"
+            properties={
+                "user_surname": "asdf"
+            }
         )
 
     def test_find_user_value_type_not_valid(self):
         self.assertRaises(
             ValueTypeNotValidError,
             self.database.find_user,
-            property="user_name",
-            value=12
+            properties={
+                "user_name": 12
+            }
         )
     
     def test_find_user_no_matches(self):
         self.assertRaises(
             UserNotFoundError,
             self.database.find_user,
-            property="user_email",
-            value="email_not_existant@gmail.com"
+            properties={
+                "user_email": "email_not_existant@gmail.com"
+            }
         )
 
     def  test_update_user(self):
