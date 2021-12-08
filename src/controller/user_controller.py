@@ -5,7 +5,7 @@ from typing import Any, Callable, Optional, List
 from .sub_controller import Resource, SubController, router, Error
 
 from src.model import UserModel, User
-from src.model.exceptions import UserNotFoundError, UserIdError, UserAlreadyExistsError, WrongPasswordError
+from src.model.exceptions import UserNotFoundError, UserIdError, UserAlreadyExistsError, WrongPasswordError, PropertyNotValidError, ValueTypeNotValidError
 
 
 class UserController(SubController):
@@ -110,13 +110,13 @@ class MyUserController(UserController):
             })
             return {
                 "code": 1,
-                "message": "Login successful",
+                "message": "Login successful.",
                 "id": user_id
             }
         except WrongPasswordError:
             return {
                 "code": Error.WRONG_PASSWORD_ERROR.value,
-                "message": "Wrong password"
+                "message": "Wrong password."
             }
         except: 
             return {
@@ -137,12 +137,12 @@ class MyUserController(UserController):
             ))
             return {
                 "code": 1,
-                "message": "User added with no problem"
+                "message": "User added with no problem."
             }
         except UserAlreadyExistsError:
             return {
                 "code": Error.USER_ALREADY_EXISTS_ERROR.value,
-                "message": "This user email is already in use"
+                "message": "This user email is already in use."
             }
         except:
             return {
@@ -155,6 +155,10 @@ class MyUserController(UserController):
         """Delete a user in the system."""
         try:
             self.user_model.delete_user(user_id=user_id)
+            return {
+                "code": 1,
+                "message": "User deleted."
+            }
         except UserIdError:
             return {
                 "code": Error.USER_ID_ERROR.value,
@@ -179,7 +183,7 @@ class MyUserController(UserController):
         except UserIdError:
             return {
                 "code": Error.USER_ID_ERROR.value,
-                "message": "Given user id is not valid"
+                "message": "Given user id is not valid."
             }
         except:
             return {
@@ -198,17 +202,17 @@ class MyUserController(UserController):
             )
             return {
                 "code": 1,
-                "message": "User successfully updated"
+                "message": "User successfully updated."
             }
         except UserIdError:
             return {
                 "code": Error.USER_ID_ERROR.value,
-                "message": "Given user id is not valid"
+                "message": "Given user id is not valid."
             }
         except PropertyNotValidError:
             return {
                 "code": Error.PROPERTY_NOT_VALID_ERROR.value,
-                "message": "The given property is not valid"
+                "message": "The given property is not valid."
             }
         except ValueTypeNotValidError:
             return {
