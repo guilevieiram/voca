@@ -173,10 +173,12 @@ class MyUserControllerTestCase (TestCase):
                 "code": 1,
                 "message": "User data fetched with success.",
                 "user": {
+                    "id": 10,
                     "name": "Guile",
                     "email": "guile@gmail.com",
                     "language": "Chinese",
-                    "photo_url": "google.com/pic"   
+                    "photo_url": "google.com/pic",
+                    "password": None   
                 }
             }
         )
@@ -253,7 +255,7 @@ class MyUserControllerTestCase (TestCase):
         )
 
     def test_update_user_value_error(self):
-        self.mock_user_model.update_user.side_effect = PropertyNotValidError("ops...")
+        self.mock_user_model.update_user.side_effect = ValueTypeNotValidError("ops...")
         self.assertEqual(
             self.user_controller.res_update_user.callable(
                 self=self.user_controller,
