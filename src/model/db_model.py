@@ -42,6 +42,7 @@ class DataBaseModel(ABC):
             "user_language": ...
         }
 
+
 class LocalDataBaseModel(DataBaseModel):
     """Data base model that is implemented using local variables to store data. Mostly to test purposes"""
 
@@ -61,6 +62,7 @@ class LocalDataBaseModel(DataBaseModel):
         """Method to be called to connect with the database"""
         if not self.connection:
             raise ConnectionToDBRefusedError("Connection to the db could not be made.")
+            
         print("Connection made!")
 
     def add_user(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> None: 
@@ -79,6 +81,7 @@ class LocalDataBaseModel(DataBaseModel):
         """Deletes a user from the database"""
         if not user_id < len(self.users) or self.users[user_id] is None:
             raise UserIdError("The required user cannot be found in the database.")
+
         self.users[user_id] = None
 
     def find_user(self, properties: Dict[str, str]) -> int:
@@ -94,10 +97,9 @@ class LocalDataBaseModel(DataBaseModel):
                 user.get(property) == value for property, value in properties.items()
             ])
         ]
-        
+
         if not user_matches:
             raise UserNotFoundError("No user was found with that property.")
-        
         return user_matches[0]
 
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
@@ -108,12 +110,14 @@ class LocalDataBaseModel(DataBaseModel):
             raise PropertyNotValidError("The required property is not valid.")
         if type(value) is not str:
             raise ValueTypeNotValidError("The value type is not supported for this property.")
+        
         self.users[user_id][property] = value
 
     def get_user(self, user_id: int) -> dict:
         """Gets a user non-sensible info from the database and returns in the form of a dictionary."""
         if not user_id < len(self.users) or self.users[user_id] is None:
             raise UserIdError("The required user cannot be found in the database.")
+
         user = self.users[user_id]
         return {
             "user_name": user.get("user_name"),
