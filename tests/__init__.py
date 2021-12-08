@@ -5,3 +5,4 @@ in all the tests.
 """
 from .test_db_model import LocalDbModelTestCase
 from .test_user_model import MyUserModelTestCase
+from .test_user_controller import MyUserControllerTestCase
