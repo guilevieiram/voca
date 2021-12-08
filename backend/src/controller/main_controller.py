@@ -8,7 +8,7 @@ from .sub_controller import Resource, SubController
 from .user_controller import UserController
 
 
-def get_parameters(parameters_names: List[str]) -> Dict[str, Any]:
+def ger_request_parameters(parameters_names: List[str]) -> Dict[str, Any]:
     """Get parameters from the desired api call"""
     if not request.json or set(request.json.keys()) != set(parameters_names):
         abort(400)
@@ -18,7 +18,7 @@ def insert_https_parameters(sub_controller: SubController, parameters_names: Lis
     """Decorator with a purpose to insert parameters into a callable function in a https flask request"""
     def decorator(function):
         def callable():
-            return function(self=sub_controller, **get_parameters(parameters_names))
+            return function(self=sub_controller, **ger_request_parameters(parameters_names))
         callable.__name__ = function.__name__
         return callable
     return decorator
@@ -72,6 +72,7 @@ class FlaskController(MainController):
                 "code": 1,
                 "message": "all good here!!"
             }       
+
 
 class TerminalController(MainController):
     """Responsible for controlling the application via terminal."""

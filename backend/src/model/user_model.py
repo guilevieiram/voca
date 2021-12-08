@@ -4,6 +4,7 @@ from typing import Union, Tuple, Optional, Dict
 
 from .db_model import DataBaseModel
 
+
 @dataclass
 class User:
     name: str
@@ -42,7 +43,7 @@ class UserModel(ABC):
         """Updates a user in the data base given the user_id and a property, value pair."""
         pass
 
-# Missing exception handling
+
 class MyUserModel(UserModel):
     """Simple logic implementation of the user model."""
 

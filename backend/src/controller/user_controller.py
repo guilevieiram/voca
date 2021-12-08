@@ -58,7 +58,7 @@ class DummyUserController(UserController):
             "user_id": 0
         }
 
-    @router(endpoint="user/add")
+    @router(endpoint="user/signup")
     def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> dict: 
         """Add a user in the system."""
         return {
@@ -124,7 +124,7 @@ class MyUserController(UserController):
                 "message": "A problem occured with the database."
             }
 
-    @router(endpoint="user/add")
+    @router(endpoint="user/signup")
     def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> dict: 
         """Add a user in the system."""
         try:
