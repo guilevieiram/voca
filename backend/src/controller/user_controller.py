@@ -118,10 +118,11 @@ class MyUserController(UserController):
                 "code": Error.WRONG_PASSWORD_ERROR.value,
                 "message": "Wrong password"
             }
-        return {
-            "code": Error.DATABASE_SERVER_ERROR.value,
-            "message": "A problem occured with the database."
-        }
+        except: 
+            return {
+                "code": Error.DATABASE_SERVER_ERROR.value,
+                "message": "A problem occured with the database."
+            }
 
     @router(endpoint="user/add")
     def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> dict: 
@@ -143,10 +144,11 @@ class MyUserController(UserController):
                 "code": Error.USER_ALREADY_EXISTS_ERROR.value,
                 "message": "This user email is already in use"
             }
-        return {
-            "code": Error.DATABASE_SERVER_ERROR.value,
-            "message": "A problem occured in the database."
-        }
+        except:
+            return {
+                "code": Error.DATABASE_SERVER_ERROR.value,
+                "message": "A problem occured in the database."
+            }
 
     @router(endpoint="user/delete")
     def res_delete_user(self, user_id: id) -> dict: 
@@ -158,10 +160,11 @@ class MyUserController(UserController):
                 "code": Error.USER_ID_ERROR.value,
                 "message": "Given user id is not valid."
             }
-        return {
-            "code": Error.DATABASE_SERVER_ERROR.value,
-            "message": "A problem occured in the database."
-        }
+        except:
+            return {
+                "code": Error.DATABASE_SERVER_ERROR.value,
+                "message": "A problem occured in the database."
+            }
 
     @router(endpoint="user/get")
     def res_get_user(self, user_id: int) -> dict: 
@@ -178,10 +181,11 @@ class MyUserController(UserController):
                 "code": Error.USER_ID_ERROR.value,
                 "message": "Given user id is not valid"
             }
-        return {
-            "code": Error.DATABASE_SERVER_ERROR.value,
-            "message": "A problem occured in the database."
-        }
+        except:
+            return {
+                "code": Error.DATABASE_SERVER_ERROR.value,
+                "message": "A problem occured in the database."
+            }
 
     @router(endpoint="user/update")
     def res_update_user(self, user_id: int, property: str, value: Any) -> dict: 
@@ -211,7 +215,8 @@ class MyUserController(UserController):
                 "code": Error.VALUE_TYPE_NOT_VALID_ERROR.value,
                 "message": "The wanted value is not from the right type."
             }
-        return {
-            "code": Error.DATABASE_SERVER_ERROR.value,
-            "message": "A problem occured in the database."
-        }
+        except:
+            return {
+                "code": Error.DATABASE_SERVER_ERROR.value,
+                "message": "A problem occured in the database."
+            }
