@@ -76,8 +76,7 @@ class MyUserModel(UserModel):
 
     def get_user_id(self, properties: Dict[str, str]) -> int:
         """Gets the first found user that satisfy that property"""
-        user_id = self.db_model.find_user(properties=properties)
-        return user_id
+        return self.db_model.find_user(properties=properties)
 
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
         """Updates a user in the data base given the user_id and a property, value pair."""
