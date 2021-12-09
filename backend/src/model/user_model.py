@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Union, Tuple, Optional, Dict
 
 from .db_model import DataBaseModel
+from .exceptions import UserNotFoundError, WrongPasswordError
 
 
 @dataclass
@@ -36,6 +37,11 @@ class UserModel(ABC):
     @abstractmethod
     def get_user_id(self, properties: Dict[str, str]) -> int:
         """Gets the first found user that satisfy the property value dictionary pairs"""
+        pass
+
+    @abstractmethod
+    def login_user(self, user_email: str, user_password: str) -> int:
+        """Logs in a user with email and password, returning the user id if valid credentials"""
         pass
 
     @abstractmethod
@@ -78,6 +84,17 @@ class MyUserModel(UserModel):
     def get_user_id(self, properties: Dict[str, str]) -> int:
         """Gets the first found user that satisfy that property"""
         return self.db_model.find_user(properties=properties)
+    
+    def login_user(self, user_email: str, user_password: str) -> int:
+        """Tries to log in the user returning the user id if successful"""
+        try:
+            return self.db_model.find_user(properties={
+                "user_email": user_email,
+                "user_password": user_password
+            })
+        except UserNotFoundError:
+            raise WrongPasswordError("Given credentials do not match.")
+
 
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
         """Updates a user in the data base given the user_id and a property, value pair."""
