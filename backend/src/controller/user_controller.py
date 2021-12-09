@@ -12,6 +12,11 @@ class UserController(SubController):
     """
     UserController abstract class responsible for defining user related resources.
     """
+
+    @abstractmethod
+    def close_connection(self) -> None:
+        """Closes connections with databases"""
+        pass
         
     @router(endpoint="")
     @abstractmethod
@@ -48,6 +53,10 @@ class DummyUserController(UserController):
     """
     UserController dummy class responsible for defining user related resources.
     """
+    
+    def close_connection(self) -> None:
+        """Closes connections with databases"""
+        print("Closing connections.")
     
     @router(endpoint="user/login")
     def res_login(self, user_email: str, password: str) -> dict:
@@ -99,7 +108,11 @@ class MyUserController(UserController):
     def __init__(self, user_model: UserModel):
         """Initializer that makes connection with the required user model"""
         self.user_model = user_model
-    
+
+    def close_connection(self) -> None:
+        """Closes connections with databases"""
+        self.user_model.close_connection()
+        
     @router(endpoint="user/login")
     def res_login(self, user_email: str, password: str) -> dict:
         """Logs a user in and returns the dict message with the user id (if successfull)"""

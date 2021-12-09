@@ -2,12 +2,12 @@
 # git subtree push --prefix backend heroku main
 
 from src.controller import MainController, FlaskController, TerminalController, UserController, MyUserController
-from src.model import UserModel, MyUserModel, DataBaseModel, LocalDataBaseModel
+from src.model import UserModel, MyUserModel, DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 
-db_model: DataBaseModel = LocalDataBaseModel()
+db_model: DataBaseModel = PostgresqlDataBaseModel()
 user_model: UserModel = MyUserModel(db_model=db_model)
 user_controller: UserController = MyUserController(user_model=user_model)
-main_controller: MainController = FlaskController(user_controller=user_controller)
+main_controller: MainController = TerminalController(user_controller=user_controller)
 
 app = main_controller.app
 

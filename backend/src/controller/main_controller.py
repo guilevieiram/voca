@@ -79,7 +79,9 @@ class TerminalController(MainController):
 
     def __init__(self, user_controller: UserController) -> None:
         """Initializes the controller with its endpoints"""
+        self.app = None
         self.on: bool = True
+        self.user_controller = user_controller
         self.resources: Dict[str, Tuple[Resource, SubController]] = {}
         self.add_resources(sub_controller=user_controller)
         
@@ -89,6 +91,7 @@ class TerminalController(MainController):
             endpoint: str = input("\n~ ")
             if endpoint in ["exit", "EXIT", "Exit", "e", "exit()"]:
                 self.on = False
+                self.user_controller.close_connection()
             elif endpoint not in list(self.resources.keys()): 
                print("Command not valid.\n") 
             else:

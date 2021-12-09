@@ -1,7 +1,27 @@
 from unittest import TestCase
 
-from src.model import LocalDataBaseModel
+from src.model import LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError
+
+from src.model.db_model import parse_postgresql_url
+
+
+class PostgresqlDataBaseModelTestCase(TestCase):
+
+    def test_url_parsing(self):
+        result = parse_postgresql_url(
+            "postgres://username:password@asd-10-10-100-100-100.computer-1.amazonaws.com:5000/databasename"
+        )
+        self.assertEqual(
+            result,
+            {
+                "user": "username",
+                "password": "password",
+                "host": "asd-10-10-100-100-100.computer-1.amazonaws.com",
+                "port": 5000,
+                "database": "databasename"
+            }    
+        )
 
 
 class LocalDbModelTestCase(TestCase):

@@ -20,6 +20,10 @@ class UserModel(ABC):
     """Model in charge of doing all the user related calls and logic"""
 
     @abstractmethod
+    def close_connection(self) -> None:
+        """Closes connections with databases"""
+
+    @abstractmethod
     def add_user(self, user: User) -> None:
         """Adds a given user to the data base."""
         pass
@@ -56,6 +60,10 @@ class MyUserModel(UserModel):
     def __init__(self, db_model: DataBaseModel) -> None:
         """Initializes connection with the data base auxiliary model"""
         self.db_model = db_model
+
+    def close_connection(self) -> None:
+        """Closes connections with databases"""
+        self.db_model.close_connection()
 
     def add_user(self, user: User) -> None:
         """Adds a given user to the data base."""

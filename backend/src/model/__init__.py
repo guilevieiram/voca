@@ -4,4 +4,4 @@ After constructing them in a separate file, import them here, both the abstract 
 """
 
 from .user_model import User, UserModel, MyUserModel
-from .db_model import DataBaseModel, LocalDataBaseModel
+from .db_model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
