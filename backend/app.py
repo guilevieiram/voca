@@ -1,3 +1,6 @@
+# To deploy on heroku, run from the root app directory the command
+# git subtree push --prefix backend heroku main
+
 from src.controller import MainController, FlaskController, TerminalController, UserController, MyUserController
 from src.model import UserModel, MyUserModel, DataBaseModel, LocalDataBaseModel
 
