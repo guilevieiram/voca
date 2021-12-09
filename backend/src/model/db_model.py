@@ -3,6 +3,7 @@ from typing import List, Optional, Union, Dict
 from os import environ
 
 import psycopg2
+from psycopg2.errors import UniqueViolation
 
 from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError
 
@@ -67,15 +68,20 @@ class PostgresqlDataBaseModel(DataBaseModel):
         """Initializes the data base tables as local lists"""
         self.url = environ.get("VOCA_DATABASE_URL")
         self.connect()
+        self.user_table_columns = ["name", "email", "password", "language", "photo_url"]
 
     def connect (self) -> None:
         """Method to be called to connect with the database"""
         print("Connecting to database.")
-        self.connection: psycopg2.connect = psycopg2.connect(
-            **parse_postgresql_url(url=self.url)
-        )
-        self.connection.commit()
-        print("Connected to database.")
+        try:
+            self.connection: psycopg2.connect = psycopg2.connect(
+                **parse_postgresql_url(url=self.url)
+            )
+            self.connection.commit()
+            print("Connected to database.")
+        except:
+            print("Connection to database refused.")
+            raise ConnectionToDBRefusedError("Connection to the db could not be made.")
 
     def close_connection(self) -> None:
         """Closes connection with the database"""
@@ -88,22 +94,33 @@ class PostgresqlDataBaseModel(DataBaseModel):
         INSERT INTO app_users (name, email, password, language, photo_url)
         VALUES ('{user_name}', '{user_email}', '{user_password}', '{user_language}', '{user_photo}')
         """
-        with self.connection.cursor() as cursor:
-            cursor.execute(sql)
-        self.connection.commit()
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(sql)
+            self.connection.commit()
+        except UniqueViolation:
+            raise UserAlreadyExistsError("This email is already in use.")
 
     def delete_user(self, user_id: int) -> None:
         """Deletes a user from the database"""
         sql = f"""
         DELETE FROM app_users
         WHERE id = {user_id}
+        RETURNING id;
         """
         with self.connection.cursor() as cursor:
             cursor.execute(sql)
+            user = cursor.fetchone()
         self.connection.commit()
+        if not user:
+            raise UserIdError("The required user cannot be found in the database.")
 
     def find_user(self, properties: Dict[str, str]) -> int:
         """Finds a user in the database"""
+        if any(property not in self.user_table_columns for property in properties.keys()):
+            raise PropertyNotValidError("A required property is not valid.")
+        if any(type(value) is not str for value in properties.values()):
+            raise ValueTypeNotValidError("A value type is not supported for this property.")
         query: str = " AND ".join([
             f" {property} = '{value}' " for property, value in properties.items()
         ])
@@ -114,19 +131,29 @@ class PostgresqlDataBaseModel(DataBaseModel):
         with self.connection.cursor() as cursor:
             cursor = self.connection.cursor()
             cursor.execute(sql)
-            result, = cursor.fetchone()
-        return result
+            result = cursor.fetchone()
+        if result is null:
+            raise UserNotFoundError("No user was found with that property.") 
+        return result[0]
 
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
         """Updates user in the database"""
+        if any(property not in self.user_table_columns for property in properties.keys()):
+            raise PropertyNotValidError("A required property is not valid.")
+        if any(type(value) is not str for value in properties.values()):
+            raise ValueTypeNotValidError("A value type is not supported for this property.")
         sql = f"""
         UPDATE app_users
         SET {property} = '{value}'
         WHERE id = {user_id}
+        RETURNING id;
         """
         with self.connection.cursor() as cursor:
             cursor.execute(sql)
+            user = cursor.fetchone()
         self.connection.commit()
+        if user is None:
+            raise UserIdError("The required user cannot be found in the database.")
 
     def get_user(self, user_id: int) -> dict:
         """Gets a user non-sensible info from the database and returns in the form of a dictionary."""
@@ -138,6 +165,8 @@ class PostgresqlDataBaseModel(DataBaseModel):
         with self.connection.cursor() as cursor:
             cursor.execute(sql)
             result = cursor.fetchone()
+        if result is None:
+            raise UserIdError("The requires user cannot be found in the database.")
         return {
             "user_name": result[0],
             "user_email": result[1],
