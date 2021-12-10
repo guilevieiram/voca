@@ -1,12 +1,22 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from src.model import LocalDataBaseModel, PostgresqlDataBaseModel
-from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError
+from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError
 
-from src.model.db_model import parse_postgresql_url
+from src.model.db_model import parse_postgresql_url, construct_and_query, UniqueViolation
 
 
 class PostgresqlDataBaseModelTestCase(TestCase):
+
+    def setUp(self):
+        patcher = mock.patch('src.model.db_model.psycopg2.connect')
+        self.connect = patcher.start()
+        self.addCleanup(patcher.stop)
+
+        self.connect.commit.return_value = None
+        self.cursor = self.connect.return_value.cursor.return_value.__enter__.return_value
+
+        self.db_model = PostgresqlDataBaseModel()
 
     def test_url_parsing(self):
         result = parse_postgresql_url(
@@ -23,6 +33,108 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             }    
         )
 
+    def test_construct_and_query(self):
+        self.assertEqual(
+            construct_and_query(properties={
+                "name": "Guile",
+                "email": "gui@gmail.com",
+                "age": 10
+            }),
+            "name = 'Guile' AND email = 'gui@gmail.com' AND age = 10"
+        )
+
+    def test_connection_handling(self):
+        self.connect.side_effect = Exception("ops...")
+        self.assertRaises(
+            ConnectionToDBRefusedError,
+            self.db_model.connect
+        )
+
+    def test_add_user(self):
+        self.cursor.execute.side_effect = UniqueViolation("ops..")
+        self.assertRaises(
+            UserAlreadyExistsError,
+            self.db_model.add_user,
+            user_name="Guile",
+            user_email="guile@gmail.com",
+            user_password="senha123",
+            user_language="french"
+        )
+
+    def test_delete_user(self):
+        self.cursor.fetchone.return_value = None
+        self.assertRaises(
+            UserIdError,
+            self.db_model.delete_user,
+            user_id=1
+        )
+
+    def test_find_user_property_not_valid(self):
+        self.assertRaises(
+            PropertyNotValidError, 
+            self.db_model.find_user,
+            properties={
+                "surname": "Guile"
+            }
+        )
+    
+    def test_find_user_value_type_not_valid(self):
+        self.assertRaises(
+            ValueTypeNotValidError,
+            self.db_model.find_user,
+            properties={
+                "name": 12
+            }
+        )
+    
+    def test_find_user_no_matches(self):
+        self.cursor.fetchone.return_value = None
+        self.assertRaises(
+            UserNotFoundError,
+            self.db_model.find_user,
+            properties={
+                "name": "Guile"
+            }
+        )
+    
+    def test_update_user_property_not_valid(self):
+        self.assertRaises(
+            PropertyNotValidError, 
+            self.db_model.update_user,
+            user_id=10,
+            property="surname",
+            value="Vieira"
+        )
+
+    def test_update_user_value_type_not_valid(self):
+        self.assertRaises(
+            ValueTypeNotValidError,
+            self.db_model.update_user,
+            user_id=10,
+            property="name",
+            value=10
+        )
+    
+    def test_update_user_no_matches(self):
+        self.cursor.fetchone.return_value = None
+        self.assertRaises(
+            UserIdError,
+            self.db_model.update_user,
+            user_id=10,
+            property="name",
+            value="Guile"
+        )
+    
+    def test_get_user_no_matches(self):
+        self.cursor.fetchone.return_value = None
+        self.assertRaises(
+            UserIdError,
+            self.db_model.get_user,
+            user_id=10
+        )
+
+
+    
 
 class LocalDbModelTestCase(TestCase):
 

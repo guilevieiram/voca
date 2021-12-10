@@ -5,7 +5,7 @@ from os import environ
 import psycopg2
 from psycopg2.errors import UniqueViolation
 
-from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError
+from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError
 
 def parse_postgresql_url(url: str) -> dict:
     """A function to parse the posgresql url into a dictionary format with the login information"""
@@ -16,6 +16,13 @@ def parse_postgresql_url(url: str) -> dict:
     return {
         "user": user, "password": password, "host": host, "port": int(port), "database": database
     }
+
+def construct_and_query(properties: Dict[str, Union[str, int]]) -> str:
+    encapsulate = lambda value: f"'{value}'"
+    return " AND ".join([
+        f"{property} = {value if type(value) is int else encapsulate(value)}" for property, value in properties.items()
+    ])
+
 
 class DataBaseModel(ABC):
     """Data base abstract model responsible for connecting and sending requests to the database."""
@@ -64,23 +71,21 @@ class DataBaseModel(ABC):
 class PostgresqlDataBaseModel(DataBaseModel):
     """Data base model that is implemented using local variables to store data. Mostly to test purposes"""
 
-    def __init__(self, db_name: str = "local") -> None:
+    def __init__(self) -> None:
         """Initializes the data base tables as local lists"""
         self.url = environ.get("VOCA_DATABASE_URL")
+        self.connection: psycopg2.connect
         self.connect()
         self.user_table_columns = ["name", "email", "password", "language", "photo_url"]
 
     def connect (self) -> None:
         """Method to be called to connect with the database"""
-        print("Connecting to database.")
         try:
             self.connection: psycopg2.connect = psycopg2.connect(
                 **parse_postgresql_url(url=self.url)
             )
             self.connection.commit()
-            print("Connected to database.")
-        except:
-            print("Connection to database refused.")
+        except Exception as e:
             raise ConnectionToDBRefusedError("Connection to the db could not be made.")
 
     def close_connection(self) -> None:
@@ -121,26 +126,23 @@ class PostgresqlDataBaseModel(DataBaseModel):
             raise PropertyNotValidError("A required property is not valid.")
         if any(type(value) is not str for value in properties.values()):
             raise ValueTypeNotValidError("A value type is not supported for this property.")
-        query: str = " AND ".join([
-            f" {property} = '{value}' " for property, value in properties.items()
-        ])
+        query: str = construct_and_query(properties=properties)
         sql = f"""
         SELECT id FROM app_users
         WHERE {query}
         """
         with self.connection.cursor() as cursor:
-            cursor = self.connection.cursor()
             cursor.execute(sql)
             result = cursor.fetchone()
-        if result is null:
+        if result is None:
             raise UserNotFoundError("No user was found with that property.") 
         return result[0]
 
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
         """Updates user in the database"""
-        if any(property not in self.user_table_columns for property in properties.keys()):
+        if property not in self.user_table_columns:
             raise PropertyNotValidError("A required property is not valid.")
-        if any(type(value) is not str for value in properties.values()):
+        if type(value) is not str:
             raise ValueTypeNotValidError("A value type is not supported for this property.")
         sql = f"""
         UPDATE app_users
@@ -178,7 +180,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
 class LocalDataBaseModel(DataBaseModel):
     """Data base model that is implemented using local variables to store data. Mostly to test purposes"""
 
-    def __init__(self, db_name: str = "local") -> None:
+    def __init__(self) -> None:
         """Initializes the data base tables as local lists"""
         self.connection: bool = True
         self.users: List[dict] = [{
