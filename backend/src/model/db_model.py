@@ -76,7 +76,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
         self.url = environ.get("VOCA_DATABASE_URL")
         self.connection: psycopg2.connect
         self.connect()
-        self.user_table_columns = ["name", "email", "password", "language", "photo_url"]
+        self.user_table_columns = ["user_name", "user_email", "user_password", "user_language", "user_photo"]
 
     def connect (self) -> None:
         """Method to be called to connect with the database"""
@@ -96,7 +96,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
     def add_user(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> None: 
         """Adds a user to the database"""
         sql = f"""
-        INSERT INTO app_users (name, email, password, language, photo_url)
+        INSERT INTO app_users (user_name, user_email, user_password, user_language, user_photo)
         VALUES ('{user_name}', '{user_email}', '{user_password}', '{user_language}', '{user_photo}')
         """
         try:
@@ -146,7 +146,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
             raise ValueTypeNotValidError("A value type is not supported for this property.")
         sql = f"""
         UPDATE app_users
-        SET {property} = '{value}'
+        SET {construct_and_query(properties={property: value})}
         WHERE id = {user_id}
         RETURNING id;
         """
@@ -160,7 +160,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
     def get_user(self, user_id: int) -> dict:
         """Gets a user non-sensible info from the database and returns in the form of a dictionary."""
         sql = f"""
-        SELECT name, email, photo_url, language
+        SELECT user_name, user_email, user_photo, user_language
         FROM app_users
         WHERE id = {user_id}
         """

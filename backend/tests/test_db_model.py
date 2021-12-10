@@ -83,7 +83,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             ValueTypeNotValidError,
             self.db_model.find_user,
             properties={
-                "name": 12
+                "user_name": 12
             }
         )
     
@@ -93,7 +93,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             UserNotFoundError,
             self.db_model.find_user,
             properties={
-                "name": "Guile"
+                "user_name": "Guile"
             }
         )
     
@@ -111,7 +111,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             ValueTypeNotValidError,
             self.db_model.update_user,
             user_id=10,
-            property="name",
+            property="user_name",
             value=10
         )
     
@@ -121,7 +121,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             UserIdError,
             self.db_model.update_user,
             user_id=10,
-            property="name",
+            property="user_name",
             value="Guile"
         )
     
