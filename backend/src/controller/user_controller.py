@@ -131,8 +131,7 @@ class MyUserController(UserController):
                 "code": Error.WRONG_PASSWORD_ERROR.value,
                 "message": "Wrong password."
             }
-        except Exception as e: 
-            print(type(e), e)
+        except: 
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured with the database."
