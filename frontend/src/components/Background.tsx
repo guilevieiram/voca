@@ -1,6 +1,6 @@
 type BackgroundProps = {
     darkMode: boolean
-}
+};
 
 function Background ({darkMode}: BackgroundProps) {
     return(

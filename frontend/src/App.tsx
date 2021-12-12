@@ -4,9 +4,8 @@ import Nav from "./components/Nav";
 function App() {
   return (
     <div className="">
-      <Background darkMode={true}/>
+      <Background darkMode={true} />
       <Nav darkMode={true} />
-
 
       <p className="">Hello mom!!</p>
     </div>
