@@ -12,6 +12,10 @@ module.exports = {
         dark: "#141414",
         blue: "#068d9d",
         purple: "#831161"
+      },
+      fontFamily:{
+        title: ['Cardo', 'ui-serif'],
+        body: ['Quicksand', 'ui-sans-serif']
       }
     },
   },
