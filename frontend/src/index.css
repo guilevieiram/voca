@@ -22,4 +22,7 @@
   .secondary-button {
     @apply border-blue border-2 rounded-lg font-bold text-blue my-8 py-2;
   }
+  .page-title {
+    @apply mx-4 filter drop-shadow-md
+  }
 }
