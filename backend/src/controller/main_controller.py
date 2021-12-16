@@ -49,6 +49,7 @@ class FlaskController(MainController):
     def __init__(self, user_controller: UserController) -> None:
         """Initializes the API and its endpoints"""
         self.app: Flask = Flask(__name__)
+        CORS(self.app)
         self._home()
         self.add_resources(sub_controller=user_controller)
 
