@@ -52,7 +52,7 @@ function Nav ({darkMode}: NavProps): React.ReactElement {
     const barBlueSize: number = 10;
 
     return (
-        <div className={`absolute bottom-0 left-0 w-screen  h-${barFullSize} flex justify-center items-center`}>
+        <div className={`fixed bottom-0 left-0 w-screen  h-${barFullSize} flex justify-center items-center`}>
             <div className={`w-screen h-${barBlueSize} absolute bottom-0 left-0 bg-blue`}></div>
             <div className={`max-w-2xl w-full h-full px-4 z-10 flex justify-around items-center`}>
                 <Button active={false} icon={addIcon} link='' height={barBlueSize}/>

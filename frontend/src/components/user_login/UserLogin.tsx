@@ -1,5 +1,5 @@
 import React from "react";
-import ForgotPassword from './ForgotPassword';
+import RedirectToSignup from './RedirectToSignup';
 import LoginForm from './LoginForm';
 
 type UserLoginProps = {
@@ -12,7 +12,7 @@ function UserLogin ({darkMode, setToken}: UserLoginProps): React.ReactElement {
             <h1 className={`page-title text-${darkMode ? 'light' : 'dark'}`}>Login</h1>
             <div className="flex flex-col justify-between h-full ">
                 <LoginForm darkMode={darkMode} setToken={setToken}/>
-                <ForgotPassword />
+                <RedirectToSignup />
             </div>
        </div> 
     )

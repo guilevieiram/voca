@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Background from "./components/Background";
 import Nav from "./components/Nav";
 import UserLogin from "./components/user_login";
-import UserSignupPage from "./components/user_signup";
+import UserSignup from "./components/user_signup";
 import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 
@@ -21,7 +21,7 @@ function App(): React.ReactElement {
 
   const setToken = (userToken: string): void => sessionStorage.setItem('token', userToken);
   const getToken = (): string | null => sessionStorage.getItem('token');
-  const token: string | null = getToken()
+  const token: string | null = getToken();
   const ifLoggedIn = (element: React.ReactElement): React.ReactElement => token ? element : <Navigate replace to="/login" />;
   const ifNotLoggedIn = (element: React.ReactElement): React.ReactElement => !token ? element : <Navigate replace to="/" />;
 
@@ -38,7 +38,7 @@ function App(): React.ReactElement {
           <Routes>
             <Route path='/' element={ifLoggedIn(<HomePage darkMode={darkMode} />)}/>
             <Route path="/login" element={ifNotLoggedIn(<UserLogin darkMode={darkMode} setToken={setToken}/>)}/>
-            <Route path="/signup" element={ifNotLoggedIn(<UserSignupPage darkMode={darkMode} />)}/>
+            <Route path="/signup" element={ifNotLoggedIn(<UserSignup darkMode={darkMode} />)}/>
             <Route path='*' element={<NotFoundPage darkMode={darkMode} />}/>
           </Routes>
         </Router>
