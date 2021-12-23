@@ -9,7 +9,7 @@ enum UserLoginRequestState {
 type setTokenType = (id: string) => void;
 type setLoginStateType = (loginState: UserLoginRequestState) => void;
 
-const loginUser = (email: string, password: string, setToken: setTokenType, setLoginState: setLoginStateType, url: string = "https://voca-backend.herokuapp.com") => {
+const loginUser = (email: string, password: string, setToken: setTokenType, setLoginState: setLoginStateType, url: string) => {
     const endpoint: string = `${url}/user/login`;
     const data = {
         user_email: email,
@@ -23,7 +23,6 @@ const loginUser = (email: string, password: string, setToken: setTokenType, setL
         method: "POST"
     };
 
-    let res = null;
     setLoginState(UserLoginRequestState.Started);
     fetch(endpoint, parameters)
     .then( (data) => {
@@ -31,6 +30,7 @@ const loginUser = (email: string, password: string, setToken: setTokenType, setL
         return data.json();
     })
     .then( (response) => {
+        console.log(response);
         switch(response.code){
             case 1:{
                 setLoginState(UserLoginRequestState.Successful);
@@ -49,7 +49,7 @@ const loginUser = (email: string, password: string, setToken: setTokenType, setL
     })
     .catch( e => {
         setLoginState(UserLoginRequestState.BackendIssue);
-        console.log(e) 
+        console.log(e);
     });
 };
 export {

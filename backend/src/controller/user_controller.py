@@ -53,6 +53,9 @@ class DummyUserController(UserController):
     """
     UserController dummy class responsible for defining user related resources.
     """
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes the dummy controller with whatever args it needs"""
+        pass
     
     def close_connection(self) -> None:
         """Closes connections with databases"""

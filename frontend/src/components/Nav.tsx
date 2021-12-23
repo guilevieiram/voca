@@ -1,13 +1,13 @@
 // I'm still not sure how to do the purple icons idea work without changing the workings of the routing managemenet system.
 
 import playIcon from '../assets/nav-icons/Play.svg';
-import playIconPurple from '../assets/nav-icons/Play-purple.svg';
+// import playIconPurple from '../assets/nav-icons/Play-purple.svg';
 import homeIcon from '../assets/nav-icons/Home.svg';
-import homeIconPurple from '../assets/nav-icons/Home-purple.svg';
+// import homeIconPurple from '../assets/nav-icons/Home-purple.svg';
 import addIcon from '../assets/nav-icons/Add.svg';
-import addIconPurple from '../assets/nav-icons/Add-purple.svg';
+// import addIconPurple from '../assets/nav-icons/Add-purple.svg';
 import pointsIcon from '../assets/nav-icons/Points.svg';
-import pointsIconPurple from '../assets/nav-icons/Points-purple.svg';
+// import pointsIconPurple from '../assets/nav-icons/Points-purple.svg';
 
 import navLogo from '../assets/nav-logo.svg';
 import React from 'react';
@@ -58,7 +58,7 @@ function Nav ({darkMode}: NavProps): React.ReactElement {
                 <Button active={false} icon={addIcon} link='' height={barBlueSize}/>
                 <Button active={false} icon={homeIcon} link='' height={barBlueSize}/>
                 <NavLogoButton icon={navLogo} link='' height={barFullSize}/>
-                <Button active={false} icon={playIconPurple} link='' height={barBlueSize}/>
+                <Button active={false} icon={playIcon} link='' height={barBlueSize}/>
                 <Button active={true} icon={pointsIcon} link='' height={barBlueSize}/>
             </div>
         </div>

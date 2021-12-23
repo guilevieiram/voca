@@ -1,4 +1,4 @@
-export default async function wakeBackend (url: string = "https://voca-backend.herokuapp.com") {
+export default async function wakeBackend (url: string) {
     const endpoint: string = url;
     const parameters: any = {
         headers: {

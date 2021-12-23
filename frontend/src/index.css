@@ -7,8 +7,7 @@
 
 @layer base {
   h1, h2, h3 {
-    @apply text-4xl;
-    @apply font-title;
+    @apply text-4xl font-title;
   }
   * {
     @apply font-body;
@@ -17,10 +16,10 @@
     @apply my-4 border-blue border-b-2 bg-light px-2 py-1;
   }
   .primary-button {
-    @apply rounded-lg font-bold text-dark bg-blue w-full py-2;
+    @apply cursor-pointer rounded-lg font-bold text-dark bg-blue w-full py-2;
   }
   .secondary-button {
-    @apply border-blue border-2 rounded-lg font-bold text-blue my-8 py-2;
+    @apply cursor-pointer border-blue border-2 rounded-lg font-bold text-blue my-8 py-2;
   }
   .page-title {
     @apply mx-4 filter drop-shadow-md

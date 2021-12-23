@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Background from "./components/Background";
 import Nav from "./components/Nav";
 import UserLogin from "./components/user_login";
@@ -13,11 +13,10 @@ import {
   Navigate
 } from 'react-router-dom';
 
-//testing 
-import { loginUser, wakeBackend } from "./models";
+import { wakeBackend } from "./models";
 
 function App(): React.ReactElement {
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [darkMode, setDarkMode] = useState<boolean>(true);
   const toggleDarkMode = (): void => setDarkMode(!darkMode);
 
   const setToken = (userToken: string): void => sessionStorage.setItem('token', userToken);

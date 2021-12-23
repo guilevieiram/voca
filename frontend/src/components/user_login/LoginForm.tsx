@@ -1,18 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { loginUser, UserLoginRequestState } from "../../models";
 
 type LoginFormProps = {
     darkMode: boolean,
     setToken: (token: string) => void
-};
-type Response = {
-    code: number, 
-    message: string,
-    id?: number
-};
-type LoginButtonProps = {
-    darkMode: boolean,
-    logUser: () => void
 };
 
 function Spinner(): React.ReactElement {
@@ -23,10 +14,6 @@ function Spinner(): React.ReactElement {
     )
 }
 
-function LoginButton ({darkMode, logUser}: LoginButtonProps): React.ReactElement {
-    return <button onClick={logUser} className={`secondary-button bg-${darkMode ? 'dark' : 'light'}`}>Log in</button>
-}
-
 function LoginForm ({darkMode, setToken}: LoginFormProps): React.ReactElement {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -34,18 +21,32 @@ function LoginForm ({darkMode, setToken}: LoginFormProps): React.ReactElement {
 
     const changeEmail = (event: any) => setEmail(event.target.value);
     const changePassword = (event: any) => setPassword(event.target.value);
-    const logUser = () => loginUser(email, password, setToken, setLoginState, "http://127.0.0.1:5000");
+    const logUser = (event: any) => {
+        event.preventDefault()
+        loginUser(email, password, setToken, setLoginState, "http://127.0.0.1:5000")
+    };
 
-    const inputClass: string = `input-field bg-${darkMode ? 'dark' : 'light'}`;
+    useEffect(() => {
+        if(loginState === UserLoginRequestState.BackendIssue){
+            window.alert("It seems like our servers are down at the moment ... \n Try again in a few minutes!");
+        } else if (loginState === UserLoginRequestState.Successful){
+            window.location.reload();
+        }
+    }, [loginState])
+
     return(
-        <form action="#" className={`flex flex-col my-10 text-${darkMode ? 'light' : 'dark'}`}>
-            <input type="email" name="E-mail" id="email" placeholder="Email" className={inputClass} onChange={changeEmail}/>
-            <input type="password" name="Password" id="password" placeholder="Password" className={inputClass} onChange={changePassword}/>
+        <form action="#" onSubmit={logUser} className={`flex flex-col my-10 text-${darkMode ? 'light' : 'dark'}`}>
+            <input type="email" name="E-mail" id="email" placeholder="Email" required className={`input-field bg-${darkMode ? 'dark' : 'light'}`} onChange={changeEmail}/>
+            <input type="password" name="Password" id="password" placeholder="Password" required className={`input-field ${loginState === UserLoginRequestState.WrongPassword ? 'border-red' : ''} bg-${darkMode ? 'dark' : 'light'}`} onChange={changePassword}/>
+            {
+                loginState === UserLoginRequestState.WrongPassword ?
+                <p className="text-sm text-red">Wrong password.</p> : <></>
+            }
             {loginState === UserLoginRequestState.Waiting ?
                 <Spinner /> :
-                <LoginButton darkMode={darkMode} logUser={logUser} />
+                <input type="submit" value="Log in" className={`secondary-button bg-${darkMode ? 'dark' : 'light'}`} />
             }
-            <a href="#"className={`text-blue underline text-right`}>  Forgot password?</a>
+            <a href="https://google.com" className={`text-blue underline text-right`}>  Forgot password?</a>
         </form>
     )
 };
