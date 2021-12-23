@@ -13,6 +13,9 @@ import {
   Navigate
 } from 'react-router-dom';
 
+//testing 
+import { loginUser, wakeBackend } from "./models";
+
 function App(): React.ReactElement {
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const toggleDarkMode = (): void => setDarkMode(!darkMode);
@@ -20,7 +23,11 @@ function App(): React.ReactElement {
   const setToken = (userToken: string): void => sessionStorage.setItem('token', userToken);
   const getToken = (): string | null => sessionStorage.getItem('token');
   const token: string | null = getToken()
-  const protect = (element: React.ReactElement): React.ReactElement => token ? element : <Navigate replace to="/login" />;
+  const ifLoggedIn = (element: React.ReactElement): React.ReactElement => token ? element : <Navigate replace to="/login" />;
+  const ifNotLoggedIn = (element: React.ReactElement): React.ReactElement => !token ? element : <Navigate replace to="/" />;
+
+  // waking up backend server
+  useEffect(() => {wakeBackend("http://127.0.0.1:5000");}, [])
 
   return (
     <div className={`flex justify-center`}>
@@ -30,9 +37,9 @@ function App(): React.ReactElement {
       <div className="max-w-xl w-full px-8 ">
         <Router>
           <Routes>
-            <Route path='/' element={protect(<HomePage darkMode={darkMode} />)}/>
-            <Route path="/login" element={<UserLogin darkMode={darkMode} setToken={setToken}/>}/>
-            <Route path="/signup" element={<UserSignupPage darkMode={darkMode} />}/>
+            <Route path='/' element={ifLoggedIn(<HomePage darkMode={darkMode} />)}/>
+            <Route path="/login" element={ifNotLoggedIn(<UserLogin darkMode={darkMode} setToken={setToken}/>)}/>
+            <Route path="/signup" element={ifNotLoggedIn(<UserSignupPage darkMode={darkMode} />)}/>
             <Route path='*' element={<NotFoundPage darkMode={darkMode} />}/>
           </Routes>
         </Router>
