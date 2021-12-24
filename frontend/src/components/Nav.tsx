@@ -27,7 +27,7 @@ type NavLogoButtonProps = {
     icon: string,
     link: string,
     height: number
-}
+};
 
 function Button ({active, icon, link, height}: ButtonProps): React.ReactElement {
     return (
@@ -45,9 +45,9 @@ function NavLogoButton ({icon, link, height}: NavLogoButtonProps):React.ReactEle
             <img src={icon} alt={icon} className={`h-${height} p-1 filter drop-shadow-lg`}/>
         </a>
     )
-}
+};
 
-function Nav ({darkMode}: NavProps): React.ReactElement {
+export default function Nav ({darkMode}: NavProps): React.ReactElement {
     const barFullSize: number = 16;
     const barBlueSize: number = 10;
 
@@ -64,5 +64,3 @@ function Nav ({darkMode}: NavProps): React.ReactElement {
         </div>
     )
 };
-
-export default Nav

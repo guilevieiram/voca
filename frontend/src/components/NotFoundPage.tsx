@@ -3,7 +3,7 @@ type NotFountPageProps = {
     darkMode: boolean
 };
 
-function NotFoundPage ({darkMode}: NotFountPageProps): React.ReactElement {
+export default function NotFoundPage ({darkMode}: NotFountPageProps): React.ReactElement {
     return (
         <div className={`flex flex-col justify-around items-start my-10 text-${darkMode ? 'light' : 'dark'}`}>
             <h1 className='my-4'>404 Error</h1>           
@@ -12,5 +12,3 @@ function NotFoundPage ({darkMode}: NotFountPageProps): React.ReactElement {
         </div>
     )
 };
-
-export default  NotFoundPage;

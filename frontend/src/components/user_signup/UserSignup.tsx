@@ -1,5 +1,6 @@
 import SignupForm from './SignupForm';
 import RedirectToLogin from './RedirectToLogin';
+
 type UserSignupProps = {
     darkMode: boolean
 };

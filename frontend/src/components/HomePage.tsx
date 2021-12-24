@@ -2,12 +2,10 @@ type HomePageProps = {
     darkMode: boolean
 };
 
-function HomePage ({ darkMode }:HomePageProps): React.ReactElement {
+export default function HomePage ({ darkMode }:HomePageProps): React.ReactElement {
     return(
         <div>
-            <h1>Welcome home!</h1>
+            <h1 className={`my-10 text-${darkMode ? 'light' : 'dark'}`}>Welcome home!</h1>
         </div>
     )
 };
-
-export default HomePage;

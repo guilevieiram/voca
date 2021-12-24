@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
-function RedirectToSignup (): React.ReactElement {
+
+export default function RedirectToSignup (): React.ReactElement {
     return(
         <div className="w-full mb-32" >
             <p className={`text-blue py-2`}>Don't have an account?</p>
@@ -9,4 +10,3 @@ function RedirectToSignup (): React.ReactElement {
         </div>
     )
 };
-export default RedirectToSignup;

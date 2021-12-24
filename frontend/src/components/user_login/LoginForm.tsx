@@ -37,9 +37,9 @@ export default function LoginForm ({darkMode, setToken}: LoginFormProps): React.
                 requestState === UserLoginRequestState.WrongPassword ?
                 <p className="text-sm text-red">Wrong password.</p> : <></>
             }
-            {requestState === UserLoginRequestState.Waiting ?
-                <Loader /> :
-                <input type="submit" value="Log in" className={`secondary-button bg-${darkMode ? 'dark' : 'light'}`} />
+            {
+                requestState === UserLoginRequestState.Waiting ?
+                <Loader /> : <input type="submit" value="Log in" className={`secondary-button bg-${darkMode ? 'dark' : 'light'}`} />
             }
             <a href="https://google.com" className={`text-blue underline text-right`}>  Forgot password?</a>
         </form>

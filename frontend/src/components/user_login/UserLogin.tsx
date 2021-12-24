@@ -6,7 +6,8 @@ type UserLoginProps = {
     darkMode: boolean,
     setToken: (token: string) => void
 };
-function UserLogin ({darkMode, setToken}: UserLoginProps): React.ReactElement {
+
+export default function UserLogin ({darkMode, setToken}: UserLoginProps): React.ReactElement {
     return(
        <div className={`w-full h-screen py-10`}>
             <h1 className={`page-title text-${darkMode ? 'light' : 'dark'}`}>Login</h1>
@@ -17,5 +18,3 @@ function UserLogin ({darkMode, setToken}: UserLoginProps): React.ReactElement {
        </div> 
     )
 };
-
-export default UserLogin;

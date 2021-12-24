@@ -7,7 +7,7 @@ import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Routes,
   Navigate
