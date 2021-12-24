@@ -1,22 +1,27 @@
 {
   "files": {
-    "main.css": "/voca/static/css/main.a512c891.chunk.css",
-    "main.js": "/voca/static/js/main.5db5d447.chunk.js",
-    "main.js.map": "/voca/static/js/main.5db5d447.chunk.js.map",
-    "runtime-main.js": "/voca/static/js/runtime-main.e1e0c995.js",
-    "runtime-main.js.map": "/voca/static/js/runtime-main.e1e0c995.js.map",
-    "static/js/2.e4421a2b.chunk.js": "/voca/static/js/2.e4421a2b.chunk.js",
-    "static/js/2.e4421a2b.chunk.js.map": "/voca/static/js/2.e4421a2b.chunk.js.map",
-    "static/js/3.87a691dd.chunk.js": "/voca/static/js/3.87a691dd.chunk.js",
-    "static/js/3.87a691dd.chunk.js.map": "/voca/static/js/3.87a691dd.chunk.js.map",
+    "main.css": "/voca/static/css/main.5dd37cc9.chunk.css",
+    "main.js": "/voca/static/js/main.4aabdfb2.chunk.js",
+    "main.js.map": "/voca/static/js/main.4aabdfb2.chunk.js.map",
+    "runtime-main.js": "/voca/static/js/runtime-main.44825b50.js",
+    "runtime-main.js.map": "/voca/static/js/runtime-main.44825b50.js.map",
+    "static/js/2.61623ade.chunk.js": "/voca/static/js/2.61623ade.chunk.js",
+    "static/js/2.61623ade.chunk.js.map": "/voca/static/js/2.61623ade.chunk.js.map",
+    "static/js/3.fe7573c8.chunk.js": "/voca/static/js/3.fe7573c8.chunk.js",
+    "static/js/3.fe7573c8.chunk.js.map": "/voca/static/js/3.fe7573c8.chunk.js.map",
     "index.html": "/voca/index.html",
-    "static/css/main.a512c891.chunk.css.map": "/voca/static/css/main.a512c891.chunk.css.map",
-    "static/js/2.e4421a2b.chunk.js.LICENSE.txt": "/voca/static/js/2.e4421a2b.chunk.js.LICENSE.txt"
+    "static/css/main.5dd37cc9.chunk.css.map": "/voca/static/css/main.5dd37cc9.chunk.css.map",
+    "static/js/2.61623ade.chunk.js.LICENSE.txt": "/voca/static/js/2.61623ade.chunk.js.LICENSE.txt",
+    "static/media/Add.fbd4f9bf.svg": "/voca/static/media/Add.fbd4f9bf.svg",
+    "static/media/Home.f391c814.svg": "/voca/static/media/Home.f391c814.svg",
+    "static/media/Play.aece485a.svg": "/voca/static/media/Play.aece485a.svg",
+    "static/media/Points.023137a0.svg": "/voca/static/media/Points.023137a0.svg",
+    "static/media/nav-logo.126134b2.svg": "/voca/static/media/nav-logo.126134b2.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.e1e0c995.js",
-    "static/js/2.e4421a2b.chunk.js",
-    "static/css/main.a512c891.chunk.css",
-    "static/js/main.5db5d447.chunk.js"
+    "static/js/runtime-main.44825b50.js",
+    "static/js/2.61623ade.chunk.js",
+    "static/css/main.5dd37cc9.chunk.css",
+    "static/js/main.4aabdfb2.chunk.js"
   ]
 }
