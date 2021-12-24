@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/voca/static/css/main.5dd37cc9.chunk.css",
-    "main.js": "/voca/static/js/main.4aabdfb2.chunk.js",
-    "main.js.map": "/voca/static/js/main.4aabdfb2.chunk.js.map",
+    "main.css": "/voca/static/css/main.a919c917.chunk.css",
+    "main.js": "/voca/static/js/main.5f58abf3.chunk.js",
+    "main.js.map": "/voca/static/js/main.5f58abf3.chunk.js.map",
     "runtime-main.js": "/voca/static/js/runtime-main.44825b50.js",
     "runtime-main.js.map": "/voca/static/js/runtime-main.44825b50.js.map",
     "static/js/2.61623ade.chunk.js": "/voca/static/js/2.61623ade.chunk.js",
@@ -10,7 +10,7 @@
     "static/js/3.fe7573c8.chunk.js": "/voca/static/js/3.fe7573c8.chunk.js",
     "static/js/3.fe7573c8.chunk.js.map": "/voca/static/js/3.fe7573c8.chunk.js.map",
     "index.html": "/voca/index.html",
-    "static/css/main.5dd37cc9.chunk.css.map": "/voca/static/css/main.5dd37cc9.chunk.css.map",
+    "static/css/main.a919c917.chunk.css.map": "/voca/static/css/main.a919c917.chunk.css.map",
     "static/js/2.61623ade.chunk.js.LICENSE.txt": "/voca/static/js/2.61623ade.chunk.js.LICENSE.txt",
     "static/media/Add.fbd4f9bf.svg": "/voca/static/media/Add.fbd4f9bf.svg",
     "static/media/Home.f391c814.svg": "/voca/static/media/Home.f391c814.svg",
@@ -21,7 +21,7 @@
   "entrypoints": [
     "static/js/runtime-main.44825b50.js",
     "static/js/2.61623ade.chunk.js",
-    "static/css/main.5dd37cc9.chunk.css",
-    "static/js/main.4aabdfb2.chunk.js"
+    "static/css/main.a919c917.chunk.css",
+    "static/js/main.5f58abf3.chunk.js"
   ]
 }
