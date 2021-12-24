@@ -42,6 +42,15 @@ class MyUserModelTestCase(TestCase):
     def test_login_user_not_valid(self):
         self.mock_db_model.find_user.side_effect = UserNotFoundError("ops ... ")
         self.assertRaises(
+            UserNotFoundError,
+            self.user_model.login_user,
+            user_email="test@gmail.com",
+            user_password="pass1234"
+        )
+
+    def test_login_user_not_valid(self):
+        self.mock_db_model.find_user.side_effect = WrongPasswordError("ops ... ")
+        self.assertRaises(
             WrongPasswordError,
             self.user_model.login_user,
             user_email="test@gmail.com",

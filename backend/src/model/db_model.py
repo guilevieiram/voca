@@ -3,7 +3,7 @@ from typing import List, Optional, Union, Dict
 from os import environ
 
 import psycopg2
-from psycopg2.errors import UniqueViolation
+from psycopg2.errors import UniqueViolation, InFailedSqlTransaction
 
 from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError
 
@@ -104,6 +104,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
                 cursor.execute(sql)
             self.connection.commit()
         except UniqueViolation:
+            self._rollback()
             raise UserAlreadyExistsError("This email is already in use.")
 
     def delete_user(self, user_id: int) -> None:
@@ -175,6 +176,11 @@ class PostgresqlDataBaseModel(DataBaseModel):
             "user_photo": result[2],
             "user_language": result[3]
         }
+    
+    def _rollback(self) -> None:
+        with self.connection.cursor() as cursor:
+            cursor.execute("ROLLBACK")
+        self.connection.commit()
 
 
 class LocalDataBaseModel(DataBaseModel):
@@ -219,7 +225,6 @@ class LocalDataBaseModel(DataBaseModel):
         """Deletes a user from the database"""
         if not user_id < len(self.users) or self.users[user_id] is None:
             raise UserIdError("The required user cannot be found in the database.")
-
         self.users[user_id] = None
 
     def find_user(self, properties: Dict[str, str]) -> int:
@@ -228,14 +233,12 @@ class LocalDataBaseModel(DataBaseModel):
             raise PropertyNotValidError("A required property is not valid.")
         if any([type(value) is not str for value in properties.values()]):
             raise ValueTypeNotValidError("A value type is not supported for this property.")
-
         user_matches: List[int] =[
             index for index, user in enumerate(self.users) 
             if all([
                 user.get(property) == value for property, value in properties.items()
             ])
         ]
-
         if not user_matches:
             raise UserNotFoundError("No user was found with that property.")
         return user_matches[0]

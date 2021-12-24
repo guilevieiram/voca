@@ -53,6 +53,9 @@ class DummyUserController(UserController):
     """
     UserController dummy class responsible for defining user related resources.
     """
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes the dummy controller with whatever args it needs"""
+        pass
     
     def close_connection(self) -> None:
         """Closes connections with databases"""
@@ -64,7 +67,7 @@ class DummyUserController(UserController):
         return {
             "code": 1,
             "message": f"User {user_email=} logged in.",
-            "user_id": 0
+            "id": 0
         }
 
     @router(endpoint="user/signup")
@@ -117,21 +120,27 @@ class MyUserController(UserController):
     def res_login(self, user_email: str, password: str) -> dict:
         """Logs a user in and returns the dict message with the user id (if successfull)"""
         try:
-            user_id: int = self.user_model.get_user_id(properties={
-                "user_email": user_email,
-                "user_password": password
-            })
+            user_id: int = self.user_model.login_user(
+                user_email=user_email,
+                user_password=password
+            )
             return {
                 "code": 1,
                 "message": "Login successful.",
                 "id": user_id
+            }
+        except UserNotFoundError:
+            return {
+                "code": Error.USER_NOT_FOUND_ERROR.value,
+                "message": "This user does not exists."
             }
         except WrongPasswordError:
             return {
                 "code": Error.WRONG_PASSWORD_ERROR.value,
                 "message": "Wrong password."
             }
-        except: 
+        except Exception as e:
+            print(type(e), e)
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured with the database."
@@ -157,7 +166,8 @@ class MyUserController(UserController):
                 "code": Error.USER_ALREADY_EXISTS_ERROR.value,
                 "message": "This user email is already in use."
             }
-        except:
+        except Exception as e:
+            print(type(e), e)
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured in the database."
@@ -177,7 +187,7 @@ class MyUserController(UserController):
                 "code": Error.USER_ID_ERROR.value,
                 "message": "Given user id is not valid."
             }
-        except:
+        except Exception as e:
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured in the database."
@@ -198,7 +208,7 @@ class MyUserController(UserController):
                 "code": Error.USER_ID_ERROR.value,
                 "message": "Given user id is not valid."
             }
-        except:
+        except Exception as e:
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured in the database."
@@ -232,7 +242,7 @@ class MyUserController(UserController):
                 "code": Error.VALUE_TYPE_NOT_VALID_ERROR.value,
                 "message": "The wanted value is not from the right type."
             }
-        except:
+        except Exception as e:
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured in the database."

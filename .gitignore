@@ -1,3 +1,5 @@
 design
 backend/venv
 backend/db_credentials.txt
+.gitignore
+.vscode
