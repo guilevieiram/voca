@@ -11,10 +11,7 @@ import pointsIcon from '../assets/nav-icons/Points.svg';
 
 import navLogo from '../assets/nav-logo.svg';
 import React from 'react';
-
-type NavProps = {
-    darkMode: boolean
-};
+import {Link} from 'react-router-dom';
 
 type ButtonProps = {
     active: boolean,
@@ -32,9 +29,9 @@ type NavLogoButtonProps = {
 function Button ({active, icon, link, height}: ButtonProps): React.ReactElement {
     return (
         <div  className={`h-full z-10 flex justify-center items-end fill-${active ? 'purple' : 'dark'}`}>
-            <a href={link}>
+            <Link to={link}>
                 <img src={icon} alt={icon} className={`h-${height} p-3 bottom-0 filter drop-shadow-lg`}/>
-            </a>
+            </Link>
         </div>
     )
 };
@@ -47,7 +44,7 @@ function NavLogoButton ({icon, link, height}: NavLogoButtonProps):React.ReactEle
     )
 };
 
-export default function Nav ({darkMode}: NavProps): React.ReactElement {
+export default function Nav (): React.ReactElement {
     const barFullSize: number = 16;
     const barBlueSize: number = 10;
 
@@ -59,7 +56,7 @@ export default function Nav ({darkMode}: NavProps): React.ReactElement {
                 <Button active={false} icon={homeIcon} link='' height={barBlueSize}/>
                 <NavLogoButton icon={navLogo} link='' height={barFullSize}/>
                 <Button active={false} icon={playIcon} link='' height={barBlueSize}/>
-                <Button active={true} icon={pointsIcon} link='' height={barBlueSize}/>
+                <Button active={false} icon={pointsIcon} link='/config' height={barBlueSize}/>
             </div>
         </div>
     )

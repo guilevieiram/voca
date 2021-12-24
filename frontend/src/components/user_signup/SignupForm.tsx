@@ -2,15 +2,11 @@ import { useEffect, useState } from "react";
 import { signupUser, UserSignupRequestState} from '../../models/UserRequests';
 import { useNavigate } from 'react-router-dom';
 
-type SignupFormProps = {
-    darkMode: boolean
-};
 type LanguageSelectComponentProps = {
-    darkMode: boolean,
     setLanguage: (language: string) => void;
 };
 
-function LanguageSelectComponent ({darkMode, setLanguage}: LanguageSelectComponentProps): React.ReactElement {
+function LanguageSelectComponent ({setLanguage}: LanguageSelectComponentProps): React.ReactElement {
     const languages = [
         {
             "name": "French",
@@ -30,14 +26,14 @@ function LanguageSelectComponent ({darkMode, setLanguage}: LanguageSelectCompone
     return (
         <div className={`w-full flex justify-between items-center my-4`}>
             <p>Language:</p>
-            <select className={`bg-${darkMode ? 'dark' : 'light'}`} onChange={onChange}>
-                {languages.map((element, index) => <option value={element.name} key={index} className={`bg-${darkMode ? 'dark' : 'light'}`}>{element.flag}</option>)}
+            <select className={`bg-light dark:bg-dark`} onChange={onChange}>
+                {languages.map((element, index) => <option value={element.name} key={index} className={`bg-light dark:bg-dark`}>{element.flag}</option>)}
             </select>
         </div>
     )
 };
 
-export default function SignupForm ({darkMode}: SignupFormProps): React.ReactElement {
+export default function SignupForm (): React.ReactElement {
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -63,20 +59,20 @@ export default function SignupForm ({darkMode}: SignupFormProps): React.ReactEle
     }, [requestState]);
 
     return(
-        <form action="#" onSubmit={onSubmit} className={`flex flex-col my-10 text-${darkMode ? 'light' : 'dark'}`}>
-            <input required onChange={(event: any):void => setName(event.target.value)} type="text" name="Name" id="Name" placeholder="Name" className={`input-field bg-${darkMode ? 'dark' : 'light'} `}/>
-            <input required onChange={(event: any):void => setEmail(event.target.value)} type="email" name="E-mail" id="email" placeholder="Email" className={`input-field bg-${darkMode ? 'dark' : 'light'} ${requestState === UserSignupRequestState.EmailInUse ? 'border-red' : ''} `}/>
+        <form action="#" onSubmit={onSubmit} className={`flex flex-col my-10 text-dark dark:text-light`}>
+            <input required onChange={(event: any):void => setName(event.target.value)} type="text" name="Name" id="Name" placeholder="Name" className={`input-field bg-light dark:bg-dark `}/>
+            <input required onChange={(event: any):void => setEmail(event.target.value)} type="email" name="E-mail" id="email" placeholder="Email" className={requestState === UserSignupRequestState.EmailInUse ? 'input-field bg-light dark:bg-dark border-red' : 'input-field bg-light dark:bg-dark'}/>
             {
                 requestState === UserSignupRequestState.EmailInUse ?
                 <p className="text-sm text-red p-0">This email is already in use.</p> : <></>
             }
-            <input required onChange={(event: any):void => setPassword(event.target.value)} type="password" name="Password" id="password" placeholder="Password" className={`input-field bg-${darkMode ? 'dark' : 'light'} `}/>
-            <input required onChange={(event: any):void => setPasswordCheck(event.target.value)} type="password" name="Password-2" id="password-2" placeholder="Confirm password" className={`input-field bg-${darkMode ? 'dark' : 'light'} ${matchPassword === false ? "border-red" : ""}`}/>
+            <input required onChange={(event: any):void => setPassword(event.target.value)} type="password" name="Password" id="password" placeholder="Password" className={`input-field bg-light dark:bg-dark`}/>
+            <input required onChange={(event: any):void => setPasswordCheck(event.target.value)} type="password" name="Password-2" id="password-2" placeholder="Confirm password" className={matchPassword === false ? "input-field bg-light dark:bg-dark border-red" : "input-field bg-light dark:bg-dark"}/>
             {
                 matchPassword === false ?
                 <p className="text-sm text-red p-0">Please make sure the passwords are the same.</p> : <></>
             }
-            <LanguageSelectComponent setLanguage={setLanguage} darkMode={darkMode}/> 
+            <LanguageSelectComponent setLanguage={setLanguage} /> 
             <input type="submit" value="Sign up" className={`primary-button my-4`} />
         </form>
     )

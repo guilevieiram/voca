@@ -1,12 +1,8 @@
 import React from 'react';
 
-type BackgroundProps = {
-    darkMode: boolean
-};
-
-export default function Background ({darkMode}: BackgroundProps):React.ReactElement{
+export default function Background ():React.ReactElement{
     return(
-        <div className={`bg-${darkMode ? 'dark' : 'light'} h-screen w-screen fixed top-0 left-0`}
+        <div className={`bg-light dark:bg-dark h-screen w-screen fixed top-0 left-0`}
             style={{zIndex:-10}}
         ></div>
     )

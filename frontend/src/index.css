@@ -7,7 +7,7 @@
 
 @layer base {
   h1, h2, h3 {
-    @apply text-4xl font-title;
+    @apply text-2xl font-title;
   }
   * {
     @apply font-body;

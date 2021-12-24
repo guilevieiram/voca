@@ -1,15 +1,11 @@
 import {Link} from 'react-router-dom';
 
-type RedirectToLoginProps = {
-    darkMode: boolean
-};
-
-export default function RedirectToLogin({darkMode}: RedirectToLoginProps): React.ReactElement {
+export default function RedirectToLogin(): React.ReactElement {
     return (
         <div>
-            <p className={`text-sm text-${darkMode ? 'light' : 'dark'}`}>Already have an account?</p>
+            <p className={`text-sm text-dark dark:text-light`}>Already have an account?</p>
             <Link to="/login">
-                <button className={`secondary-button bg-${darkMode ? 'dark' : 'light'}`}>Log in!</button>
+                <button className={`secondary-button bg-light dark:bg-dark`}>Log in!</button>
             </Link>
         </div>
     )
