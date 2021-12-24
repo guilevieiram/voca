@@ -37,9 +37,10 @@ function Button ({active, icon, link, height}: ButtonProps): React.ReactElement 
 };
 
 function NavLogoButton ({icon, link, height}: NavLogoButtonProps):React.ReactElement {
+    const className = `h-${height} p-1 filter drop-shadow-lg`;
     return (
         <a href={link} className={`h-full`}>
-            <img src={icon} alt={icon} className={`h-${height} p-1 filter drop-shadow-lg`}/>
+            <img src={icon} alt={icon} className={className}/>
         </a>
     )
 };
