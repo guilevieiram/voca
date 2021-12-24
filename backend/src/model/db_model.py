@@ -104,6 +104,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
                 cursor.execute(sql)
             self.connection.commit()
         except UniqueViolation:
+            self._rollback()
             raise UserAlreadyExistsError("This email is already in use.")
 
     def delete_user(self, user_id: int) -> None:
@@ -175,6 +176,11 @@ class PostgresqlDataBaseModel(DataBaseModel):
             "user_photo": result[2],
             "user_language": result[3]
         }
+    
+    def _rollback(self) -> None:
+        with self.connection.cursor() as cursor:
+            cursor.execute("ROLLBACK")
+        self.connection.commit()
 
 
 class LocalDataBaseModel(DataBaseModel):

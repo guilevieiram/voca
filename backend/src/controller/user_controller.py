@@ -140,6 +140,7 @@ class MyUserController(UserController):
                 "message": "Wrong password."
             }
         except Exception as e:
+            print(type(e), e)
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured with the database."
@@ -166,6 +167,7 @@ class MyUserController(UserController):
                 "message": "This user email is already in use."
             }
         except Exception as e:
+            print(type(e), e)
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured in the database."
