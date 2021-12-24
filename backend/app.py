@@ -4,7 +4,7 @@
 from src.controller import MainController, FlaskController, TerminalController, UserController, MyUserController, DummyUserController
 from src.model import UserModel, MyUserModel, DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 
-db_model: DataBaseModel = PostgresqlDataBaseModel()
+db_model: DataBaseModel = LocalDataBaseModel()
 user_model: UserModel = MyUserModel(db_model=db_model)
 user_controller: UserController = MyUserController(user_model=user_model)
 main_controller: MainController = FlaskController(user_controller=user_controller)

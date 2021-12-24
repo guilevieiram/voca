@@ -93,16 +93,22 @@ class MyUserModel(UserModel):
         """Gets the first found user that satisfy that property"""
         return self.db_model.find_user(properties=properties)
     
+    # Right now this method is making two calls to the database and can be enhanced sometime in the future ...
     def login_user(self, user_email: str, user_password: str) -> int:
         """Tries to log in the user returning the user id if successful"""
+        try:
+            self.db_model.find_user(properties={
+                "user_email": user_email
+            })
+        except UserNotFoundError:
+            raise UserNotFoundError("User does not exists in the database.")
         try:
             return self.db_model.find_user(properties={
                 "user_email": user_email,
                 "user_password": user_password
             })
         except UserNotFoundError:
-            raise WrongPasswordError("Given credentials do not match.")
-
+            raise WrongPasswordError("Wrong password.")
 
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
         """Updates a user in the data base given the user_id and a property, value pair."""

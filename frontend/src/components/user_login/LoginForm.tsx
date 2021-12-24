@@ -27,7 +27,11 @@ export default function LoginForm ({darkMode, setToken}: LoginFormProps): React.
 
     return(
         <form action="#" onSubmit={onSubmit} className={`flex flex-col my-10 text-${darkMode ? 'light' : 'dark'}`}>
-            <input type="email" name="E-mail" id="email" placeholder="Email" required className={`input-field bg-${darkMode ? 'dark' : 'light'}`} onChange={changeEmail}/>
+            <input type="email" name="E-mail" id="email" placeholder="Email" required className={`input-field bg-${darkMode ? 'dark' : 'light'} ${requestState === UserLoginRequestState.UserNotFound ? 'border-red' : '' }`} onChange={changeEmail}/>
+            {
+                requestState === UserLoginRequestState.UserNotFound ?
+                <p className="text-sm text-red">This user does not exists.</p> : <></>
+            }
             <input type="password" name="Password" id="password" placeholder="Password" required className={`input-field ${requestState === UserLoginRequestState.WrongPassword ? 'border-red' : ''} bg-${darkMode ? 'dark' : 'light'}`} onChange={changePassword}/>
             {
                 requestState === UserLoginRequestState.WrongPassword ?

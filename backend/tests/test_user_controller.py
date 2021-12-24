@@ -2,7 +2,7 @@ from unittest import TestCase, mock
 
 from src.controller import MyUserController
 from src.model import UserModel, User
-from src.model.exceptions import WrongPasswordError, UserAlreadyExistsError, UserIdError, PropertyNotValidError, ValueTypeNotValidError
+from src.model.exceptions import WrongPasswordError, UserAlreadyExistsError, UserIdError, PropertyNotValidError, ValueTypeNotValidError, UserNotFoundError
 
 class MyUserControllerTestCase (TestCase):
 
@@ -13,7 +13,7 @@ class MyUserControllerTestCase (TestCase):
         self.user_controller = MyUserController(self.mock_user_model)
 
     def test_login(self):
-        self.mock_user_model.get_user_id.return_value = 0
+        self.mock_user_model.login_user.return_value = 0
         self.assertEqual(
             self.user_controller.res_login.callable(
                 self=self.user_controller,
@@ -28,7 +28,7 @@ class MyUserControllerTestCase (TestCase):
         )
 
     def test_login_wrong_password(self):
-        self.mock_user_model.get_user_id.side_effect = WrongPasswordError("Wrong password!!")
+        self.mock_user_model.login_user.side_effect = WrongPasswordError("Wrong password!!")
         self.assertEqual(
             self.user_controller.res_login.callable(
                 self=self.user_controller,
@@ -41,8 +41,22 @@ class MyUserControllerTestCase (TestCase):
             }
         )
 
+    def test_login_user_not_exist(self):
+        self.mock_user_model.login_user.side_effect = UserNotFoundError("Wrong password!!")
+        self.assertEqual(
+            self.user_controller.res_login.callable(
+                self=self.user_controller,
+                user_email="gui@google.com",
+                password="1234"
+            ),
+            {
+                "code": -1,
+                "message": "This user does not exists."
+            }
+        )
+
     def test_login_databse_error(self):
-        self.mock_user_model.get_user_id.side_effect = Exception("Something happened!")
+        self.mock_user_model.login_user.side_effect = Exception("Something happened!")
         self.assertEqual(
             self.user_controller.res_login.callable(
                 self=self.user_controller,

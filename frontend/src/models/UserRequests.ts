@@ -4,6 +4,7 @@ enum UserLoginRequestState {
     Waiting,
     Successful,
     WrongPassword,
+    UserNotFound,
     BackendIssue
 };
 enum UserSignupRequestState {
@@ -40,6 +41,7 @@ const loginUser = (email: string, password: string, setToken: setTokenType, setL
         return data.json();
     })
     .then( (response) => {
+        console.log(response)
         switch(response.code){
             case 1:{
                 setLoginState(UserLoginRequestState.Successful);
@@ -48,6 +50,10 @@ const loginUser = (email: string, password: string, setToken: setTokenType, setL
             }
             case -2:{
                 setLoginState(UserLoginRequestState.WrongPassword);
+                break;
+            }
+            case -1:{
+                setLoginState(UserLoginRequestState.UserNotFound);
                 break;
             }
             default:{

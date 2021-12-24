@@ -56,10 +56,11 @@ export default function SignupForm ({darkMode}: SignupFormProps): React.ReactEle
     useEffect(():void => password && passwordCheck ? setMatchPassword(password === passwordCheck) : undefined , [password, passwordCheck]);
     useEffect(():void => {
         if(requestState === UserSignupRequestState.BackendIssue) window.alert("It seems like our servers are down at the moment ... \n Try again in a few minutes!");
-        else if (requestState === UserSignupRequestState.Successful) navigate("/login");
+        else if (requestState === UserSignupRequestState.Successful) {
+            window.alert("Signup successful!");
+            navigate("/login");
+        };
     }, [requestState]);
-
-    console.log(requestState)
 
     return(
         <div>
