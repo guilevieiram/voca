@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Background from "./components/Background";
 import Nav from "./components/Nav";
 import UserLogin from "./components/user_login";
@@ -17,6 +17,7 @@ import {
 } from 'react-router-dom';
 
 import { wakeBackend } from "./models";
+import { apiEndpoint } from "./app.config";
 
 function App(): React.ReactElement {
 
@@ -27,7 +28,7 @@ function App(): React.ReactElement {
   const ifNotLoggedIn = (element: React.ReactElement): React.ReactElement => !token ? element : <Navigate replace to="/" />;
 
   useEffect(() => {
-    wakeBackend("http://127.0.0.1:5000");
+    wakeBackend(apiEndpoint);
     loadTheme();
   }, [])
 

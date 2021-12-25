@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { loginUser, UserLoginRequestState } from "../../models";
 import Loader from  '../Loader';
+import { apiEndpoint } from '../../app.config';
 
 type LoginFormProps = {
     setToken: (token: string) => void
@@ -16,7 +17,7 @@ export default function LoginForm ({setToken}: LoginFormProps): React.ReactEleme
     const changePassword = (event: any) => setPassword(event.target.value);
     const onSubmit = (event: any) => {
         event.preventDefault();
-        loginUser(email, password, setToken, setRequestState, "http://127.0.0.1:5000");
+        loginUser(email, password, setToken, setRequestState, apiEndpoint);
     };
 
     useEffect(() => {

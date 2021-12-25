@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { signupUser, UserSignupRequestState} from '../../models/UserRequests';
 import { useNavigate } from 'react-router-dom';
+import { apiEndpoint } from "../../app.config";
 
 type LanguageSelectComponentProps = {
     setLanguage: (language: string) => void;
@@ -46,7 +47,7 @@ export default function SignupForm (): React.ReactElement {
     const onSubmit = (event: any): void => {
         event.preventDefault();
         if(!matchPassword) return;
-        signupUser(name, email, password, language, setRequestState, "http://127.0.0.1:5000")
+        signupUser(name, email, password, language, setRequestState, apiEndpoint)
     };
 
     useEffect(():void => password && passwordCheck ? setMatchPassword(password === passwordCheck) : undefined , [password, passwordCheck]);

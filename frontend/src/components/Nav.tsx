@@ -22,8 +22,7 @@ type ButtonProps = {
 
 type NavLogoButtonProps = {
     icon: string,
-    link: string,
-    height: number
+    link: string
 };
 
 function Button ({active, icon, link, height}: ButtonProps): React.ReactElement {
@@ -36,11 +35,10 @@ function Button ({active, icon, link, height}: ButtonProps): React.ReactElement 
     )
 };
 
-function NavLogoButton ({icon, link, height}: NavLogoButtonProps):React.ReactElement {
-    const className = `h-${height} p-1 filter drop-shadow-lg`;
+function NavLogoButton ({icon, link}: NavLogoButtonProps):React.ReactElement {
     return (
         <a href={link} className={`h-full`}>
-            <img src={icon} alt={icon} className={className}/>
+            <img src={icon} alt={icon} className={`h-16 p-1 filter drop-shadow-lg`}/>
         </a>
     )
 };
@@ -50,12 +48,12 @@ export default function Nav (): React.ReactElement {
     const barBlueSize: number = 10;
 
     return (
-        <div className={`fixed bottom-0 left-0 w-screen  h-${barFullSize} flex justify-center items-center`}>
-            <div className={`w-screen h-${barBlueSize} absolute bottom-0 left-0 bg-blue`}></div>
+        <div className={`fixed bottom-0 left-0 w-screen  h-16 flex justify-center items-center`}>
+            <div className={`w-screen h-10 absolute bottom-0 left-0 bg-blue`}></div>
             <div className={`max-w-2xl w-full h-full px-4 z-10 flex justify-around items-center`}>
                 <Button active={false} icon={addIcon} link='' height={barBlueSize}/>
                 <Button active={false} icon={homeIcon} link='' height={barBlueSize}/>
-                <NavLogoButton icon={navLogo} link='' height={barFullSize}/>
+                <NavLogoButton icon={navLogo} link='' />
                 <Button active={false} icon={playIcon} link='' height={barBlueSize}/>
                 <Button active={false} icon={pointsIcon} link='/config' height={barBlueSize}/>
             </div>
