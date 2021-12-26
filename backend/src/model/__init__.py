@@ -5,3 +5,6 @@ After constructing them in a separate file, import them here, both the abstract 
 
 from .user_model import User, UserModel, MyUserModel
 from .db_model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
+from .nlp_model import NlpModel, DummyNlpModel
+from .translation_model import TranslationModel, DummyTranslationModel
+from .words_model import WordsModel, DummyWordsModel, WordInfo
