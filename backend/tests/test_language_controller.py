@@ -1,8 +1,15 @@
 from unittest import TestCase, mock
 
-from src.controller import LanguageController, MyLanguageControllere
+from src.controller import LanguageController, MyLanguageController
 from src.model import   WordsModel, DummyWordsModel, TranslationModel, DummyTranslationModel, NlpModel, DummyNlpModel, WordInfo
 from src.model.exceptions import UserIdError, WordDoesNotExistError, TranslationNotFound, TranslationApiConnectionError, NlpCalculationError
+
+"""
+Lacking implementation:
+- type checking of the inputs
+- differenciating between server error and db error (in all tests and controllers)
+"""
+
 
 class MyLanguageControllerTestCase(TestCase):
 
@@ -60,7 +67,7 @@ class MyLanguageControllerTestCase(TestCase):
 
         )
     
-    def test_add_words_db_error(self):
+    def test_add_words_server_error(self):
         self.mock_words_model.add_words.side_effect = Exception("ops...")
         self.assertEqual(
             self.language_controller.res_add_words.callable(
@@ -101,7 +108,7 @@ class MyLanguageControllerTestCase(TestCase):
             }
         )
     
-    def test_get_words_from_user_db_error(self):
+    def test_get_words_from_user_server_error(self):
         self.mock_words_model.get_words_from_user.side_effect = Exception("ops...")
         self.assertEqual(
             self.language_controller.res_get_words_from_user.callable(
@@ -123,7 +130,7 @@ class MyLanguageControllerTestCase(TestCase):
             ),
             {
                 "code": 1,
-                "message": "Score calculated successfuly.",
+                "message": "Score calculated successfully.",
                 "score": 0.5
             }
         )
@@ -142,7 +149,7 @@ class MyLanguageControllerTestCase(TestCase):
             }
         )
 
-    def test_res_calculate_score_word_dont_exist(self):
+    def test_res_calculate_score_user_dont_exist(self):
         self.mock_words_model.get_word_and_language.side_effect = UserIdError("ops...")
         self.assertEqual(
             self.language_controller.res_calculate_score.callable(
@@ -194,6 +201,20 @@ class MyLanguageControllerTestCase(TestCase):
             ),
             {
                 "code": -11,
-                "message": "NLP model could not calculate your request."
+                "message": "The NLP model could not calculate your request."
+            }
+        )
+
+    def test_res_calculate_score_server_error(self):
+        self.mock_words_model.get_word_and_language.side_effect = Exception("ops...")
+        self.assertEqual(
+            self.language_controller.res_calculate_score.callable(
+                self.language_controller,
+                1,
+                "Casa"
+            ),
+            {
+                "code": -3,
+                "message": "An error occured in the database."
             }
         )
