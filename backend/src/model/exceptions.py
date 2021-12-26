@@ -32,3 +32,15 @@ class ConnectionToDBRefusedError(Exception):
 
 class WordDoesNotExistError(Exception):
     """Exception to be raised when a word cannot be found in the database"""
+    pass
+
+class TranslationNotFound(Exception):
+    """Exception to be raised when a word cannot be translated by the api"""
+    pass
+
+class TranslationApiConnectionError(Exception):
+    """Exception to be raised when the translation routine cannot be accessed"""
+    pass
+
+class NlpCalculationError(Exception):
+    """Exception to be raised when the NLP algorithm cannot complete the given task."""

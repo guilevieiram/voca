@@ -60,6 +60,7 @@ class MyLanguageController(LanguageController):
             "words": words
         }
 
+    # can be redesigned to take words and languages from frontend (will need more testing and confirmation)
     @router(endpoint="language/score")
     def res_calculate_score(self, word_id: int, word: str) -> dict:
         """Calculates the similarity score between the user inputed word and the given word in the DB located by its ID. Returns the api response."""
