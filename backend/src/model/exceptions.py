@@ -29,3 +29,6 @@ class WrongPasswordError(Exception):
 class ConnectionToDBRefusedError(Exception):
     """Exception to be called when the connection with the db is refused."""
     pass
+
+class WordDoesNotExistError(Exception):
+    """Exception to be raised when a word cannot be found in the database"""

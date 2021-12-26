@@ -2,7 +2,7 @@ from unittest import TestCase, mock
 from typing import List
 
 from src.model import LocalDataBaseModel, PostgresqlDataBaseModel
-from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError
+from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError, WordDoesNotExistError
 
 from src.model.db_model import parse_postgresql_url, construct_and_query, UniqueViolation
 
@@ -304,12 +304,72 @@ class LocalDbModelTestCase(TestCase):
             self.database.words[2].get("word"),
             "word2"
         )
+
+    def test_add_words_wrong_type(self):
+        self.assertRaises(
+            TypeError,
+            self.database.add_words,
+            0,
+            ["House", 3]
+        )
+    
+    def test_add_words_user_not_exists(self):
+        self.assertRaises(
+            UserIdError,
+            self.database.add_words,
+            10,
+            ["House", "Horse"]
+        )
     
     def test_get_words(self):
+        self.database.words.append({
+            "word": "House",
+            "score": 5,
+            "active": True,
+            "user_id": 0
+        })
+        self.assertEqual(
+            self.database.get_words(user_id=0),
+            ["House", "Cup"]
+        )
+
+    def test_get_words_actives(self):
+        self.database.words.append({
+            "word": "House",
+            "score": 5,
+            "active": False,
+            "user_id": 0
+        })
         self.assertEqual(
             self.database.get_words(user_id=0),
             ["Cup"]
         )
+
+    def test_get_words_same_user(self):
+        self.database.users.append({
+            "user_name": "test2",
+            "user_email": "test2@gmail.com",
+            "user_language": "English",
+            "user_password": "ssap",
+            "user_photo": "google.com"
+        })
+        self.database.words.append({
+            "word": "House",
+            "score": 5,
+            "active": True,
+            "user_id": 1
+        })
+        self.assertEqual(
+            self.database.get_words(user_id=0),
+            ["Cup"]
+        )
+
+    def test_get_words_user_not_exists(self):
+        self.assertRaises(
+            UserIdError,
+            self.database.get_words,
+            10
+        )  
     
     def test_get_word_and_user_info(self):
         self.assertEqual(
@@ -330,3 +390,16 @@ class LocalDbModelTestCase(TestCase):
                 }
             }
         )
+    
+    def test_get_word_and_user_info_word_not_exists(self):
+        self.assertRaises(
+            WordDoesNotExistError,
+            self.database.get_word_and_user_info,
+            10
+        )
+
+
+
+
+
+

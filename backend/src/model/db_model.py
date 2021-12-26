@@ -5,7 +5,7 @@ from os import environ
 import psycopg2
 from psycopg2.errors import UniqueViolation, InFailedSqlTransaction
 
-from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError
+from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError, WordDoesNotExistError
 
 def parse_postgresql_url(url: str) -> dict:
     """A function to parse the posgresql url into a dictionary format with the login information"""
@@ -301,6 +301,10 @@ class LocalDataBaseModel(DataBaseModel):
 
     def add_words(self, user_id: int, words: List[str]) -> None:
         """Adds a list of words in the words table in the database"""
+        if not user_id < len(self.users) or self.users[user_id] is None:
+            raise UserIdError("The required user cannot be found in the database.")
+        if any(not isinstance(word, str) for word in words):
+            raise TypeError("The list contains items of type not string.")
         for word in words:
             self.words.append({
                 "word": word,
@@ -311,16 +315,28 @@ class LocalDataBaseModel(DataBaseModel):
 
     def get_words(self, user_id: int) -> List[str]:
         """Gets the list of words from a user in the relevance order"""
-        return [
-            word.get("word")
+        if not user_id < len(self.users) or self.users[user_id] is None:
+            raise UserIdError("The required user cannot be found in the database.")
+        words: List[dict]  = [
+            word
             for word in self.words
             if word.get("user_id") == user_id
+            and word.get("active")
         ]
+        return [word.get("word") for word in sorted(words, key = lambda word: word.get("score"))]
 
     def get_word_and_user_info(self, word_id: int) -> dict:
         """Gets all relevant info from a word and its user given the word ID."""
-        user_id: int = self.words[word_id].get("user_id")
-        user: dict = self.users[user_id]
+        if not word_id < len(self.words) or self.words[word_id] is None:
+            raise WordDoesNotExistError("The required word cannot be found in the database.")
+        try:
+            user_id: int = self.words[word_id].get("user_id")
+        except IndexError:
+            raise WordDoesNotExistError("The requires word could not be found in the database.")
+        try:
+            user: dict = self.users[user_id]
+        except IndexError:
+            raise UserIdError("The required user could not be found in the database.")
         word: dict = self.words[word_id]
         return {
             "user": {
