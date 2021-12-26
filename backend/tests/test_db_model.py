@@ -1,4 +1,5 @@
 from unittest import TestCase, mock
+from typing import List
 
 from src.model import LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError
@@ -288,4 +289,44 @@ class LocalDbModelTestCase(TestCase):
             UserIdError,
             self.database.get_user,
             user_id=0
+        )
+    
+    def test_add_words(self):
+        self.database.add_words(
+            user_id=0,
+            words=["word1", "word2"]
+        )
+        self.assertEqual(
+            self.database.words[1].get("word"),
+            "word1"
+        )
+        self.assertEqual(
+            self.database.words[2].get("word"),
+            "word2"
+        )
+    
+    def test_get_words(self):
+        self.assertEqual(
+            self.database.get_words(user_id=0),
+            ["Cup"]
+        )
+    
+    def test_get_word_and_user_info(self):
+        self.assertEqual(
+            self.database.get_word_and_user_info(word_id=0),
+            {
+                "user": {
+                    "id": 0,
+                    "name": "test",
+                    "email": "test@gmail.com",
+                    "language": "Testuguese",
+                    "photo": "ph.com"
+                },
+                "word": {
+                    "id": 0,
+                    "word": "Cup",
+                    "score": 10,
+                    "active": True
+                }
+            }
         )

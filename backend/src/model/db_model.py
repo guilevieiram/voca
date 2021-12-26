@@ -225,7 +225,7 @@ class LocalDataBaseModel(DataBaseModel):
         }]
         self.words: List[dict] = [{
             "word": "Cup",
-            "score": 20,
+            "score": 10,
             "active": True,
             "user_id": 0
         }]
@@ -301,7 +301,6 @@ class LocalDataBaseModel(DataBaseModel):
 
     def add_words(self, user_id: int, words: List[str]) -> None:
         """Adds a list of words in the words table in the database"""
-        print(f"Adding words in the DB for the user with {user_id=}")
         for word in words:
             self.words.append({
                 "word": word,
@@ -312,10 +311,9 @@ class LocalDataBaseModel(DataBaseModel):
 
     def get_words(self, user_id: int) -> List[str]:
         """Gets the list of words from a user in the relevance order"""
-        print(f"Getting all words for the user with {user_id=}")
         return [
-            word
-            for word in self.word
+            word.get("word")
+            for word in self.words
             if word.get("user_id") == user_id
         ]
 
@@ -326,13 +324,14 @@ class LocalDataBaseModel(DataBaseModel):
         word: dict = self.words[word_id]
         return {
             "user": {
+                "id": user_id,
                 "name": user.get("user_name"),
                 "email": user.get("user_email"),
                 "photo": user.get("user_photo"),
                 "language": user.get("user_language")
             },
             "word": {
-                "id": word.get("id"),
+                "id": word_id,
                 "word": word.get("word"),
                 "score": word.get("score"),
                 "active": word.get("active")
