@@ -67,6 +67,33 @@ class DataBaseModel(ABC):
             "user_language": ...
         }
 
+    @abstractmethod
+    def add_words(self, user_id: int, words: List[str]) -> None:
+        """Adds a list of words in the words table in the database"""
+        pass
+
+    @abstractmethod
+    def get_words(self, user_id: int) -> List[str]:
+        """Gets the list of words from a user in the relevance order"""
+        pass
+
+    @abstractmethod
+    def get_word_and_user_info(self, word_id: int) -> dict:
+        """Gets all relevant info from a word and its user given the word ID."""
+        return {
+            "user": {
+                "name": ...,
+                "email": ...,
+                "photo": ...,
+                "language": ...
+            },
+            "word": {
+                "id": ...,
+                "word": ...,
+                "score": ...,
+                "active": ...
+            }
+        }
 
 class PostgresqlDataBaseModel(DataBaseModel):
     """Data base model that is implemented using local variables to store data. Mostly to test purposes"""
@@ -196,7 +223,12 @@ class LocalDataBaseModel(DataBaseModel):
             "user_password": "pass1234",
             "user_photo": "ph.com",
         }]
-        self.words: List[dict] = []
+        self.words: List[dict] = [{
+            "word": "Cup",
+            "score": 20,
+            "active": True,
+            "user_id": 0
+        }]
 
     def connect (self) -> None:
         """Method to be called to connect with the database"""
@@ -265,4 +297,44 @@ class LocalDataBaseModel(DataBaseModel):
             "user_email": user.get("user_email"),
             "user_photo": user.get("user_photo"),
             "user_language": user.get("user_language")
+        }
+
+    def add_words(self, user_id: int, words: List[str]) -> None:
+        """Adds a list of words in the words table in the database"""
+        print(f"Adding words in the DB for the user with {user_id=}")
+        for word in words:
+            self.words.append({
+                "word": word,
+                "score": 10,
+                "active": True,
+                "user_id": user_id
+            })
+
+    def get_words(self, user_id: int) -> List[str]:
+        """Gets the list of words from a user in the relevance order"""
+        print(f"Getting all words for the user with {user_id=}")
+        return [
+            word
+            for word in self.word
+            if word.get("user_id") == user_id
+        ]
+
+    def get_word_and_user_info(self, word_id: int) -> dict:
+        """Gets all relevant info from a word and its user given the word ID."""
+        user_id: int = self.words[word_id].get("user_id")
+        user: dict = self.users[user_id]
+        word: dict = self.words[word_id]
+        return {
+            "user": {
+                "name": user.get("user_name"),
+                "email": user.get("user_email"),
+                "photo": user.get("user_photo"),
+                "language": user.get("user_language")
+            },
+            "word": {
+                "id": word.get("id"),
+                "word": word.get("word"),
+                "score": word.get("score"),
+                "active": word.get("active")
+            }
         }
