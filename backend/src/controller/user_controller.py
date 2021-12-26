@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, asdict
 from typing import Any, Callable, Optional, List
 
-from .sub_controller import Resource, SubController, router, Error
+from .sub_controller import Resource, SubController, router
+from .error import Error
 
 from src.model import UserModel, User
 from src.model.exceptions import UserNotFoundError, UserIdError, UserAlreadyExistsError, WrongPasswordError, PropertyNotValidError, ValueTypeNotValidError
@@ -140,7 +141,6 @@ class MyUserController(UserController):
                 "message": "Wrong password."
             }
         except Exception as e:
-            print(type(e), e)
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured with the database."
@@ -167,7 +167,6 @@ class MyUserController(UserController):
                 "message": "This user email is already in use."
             }
         except Exception as e:
-            print(type(e), e)
             return {
                 "code": Error.DATABASE_SERVER_ERROR.value,
                 "message": "A problem occured in the database."

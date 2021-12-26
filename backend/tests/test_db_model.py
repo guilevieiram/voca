@@ -52,6 +52,9 @@ class PostgresqlDataBaseModelTestCase(TestCase):
 
     def test_add_user(self):
         self.cursor.execute.side_effect = UniqueViolation("ops..")
+        patcher = mock.patch('src.model.db_model.PostgresqlDataBaseModel._rollback')
+        self._rollback = patcher.start()
+        self._rollback.return_value = None
         self.assertRaises(
             UserAlreadyExistsError,
             self.db_model.add_user,
@@ -60,6 +63,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             user_password="senha123",
             user_language="french"
         )
+        patcher.stop()
 
     def test_delete_user(self):
         self.cursor.fetchone.return_value = None
