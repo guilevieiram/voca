@@ -137,6 +137,44 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             self.db_model.get_user,
             user_id=10
         )
+    
+    def test_add_words(self):
+        self.assertIsNone(
+            self.db_model.add_words(
+                user_id=1,
+                words=["House", "Plant"]
+            )
+        )
+    
+    def test_get_words(self):
+        self.cursor.fetchall.return_value = [
+            ("House", ), ("Plant", )
+        ]
+        self.assertEqual(
+            self.db_model.get_words(user_id=1),
+            ["House", "Plant"]
+        )
+    
+    def test_get_word_and_user_info(self):
+        self.cursor.fetchone.return_value = (1, "Test", "test@gmail.com", "ph.com", "English", 2, "Plant", 20, True)
+        self.assertEqual(
+            self.db_model.get_word_and_user_info(word_id=2),
+            {
+                "user": {
+                    "id": 1,
+                    "name": "Test",
+                    "email": "test@gmail.com",
+                    "photo": "ph.com",
+                    "language": "English"
+                },
+                "word": {
+                    "id": 2,
+                    "word": "Plant",
+                    "score": 20,
+                    "active": True
+                }
+            }
+        )
 
 
     

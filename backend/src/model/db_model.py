@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Union, Dict
+from typing import List, Optional, Union, Dict, Any
 from os import environ
 
 import psycopg2
@@ -17,11 +17,20 @@ def parse_postgresql_url(url: str) -> dict:
         "user": user, "password": password, "host": host, "port": int(port), "database": database
     }
 
+def encapsulate(string: str) -> str:
+    return f"'{string}'"
+
 def construct_and_query(properties: Dict[str, Union[str, int]]) -> str:
-    encapsulate = lambda value: f"'{value}'"
     return " AND ".join([
-        f"{property} = {value if type(value) is int else encapsulate(value)}" for property, value in properties.items()
+        f"{property} = {value if type(value) is int else encapsulate(value)}" 
+        for property, value in properties.items()
     ])
+
+def construct_values_query(user_id: int, words: List[str]) -> str:
+   return " , ".join([
+       f"({encapsulate(string=word)}, {user_id})"
+       for word in words
+   ])
 
 
 class DataBaseModel(ABC):
@@ -82,6 +91,7 @@ class DataBaseModel(ABC):
         """Gets all relevant info from a word and its user given the word ID."""
         return {
             "user": {
+                "id": ...,
                 "name": ...,
                 "email": ...,
                 "photo": ...,
@@ -206,26 +216,53 @@ class PostgresqlDataBaseModel(DataBaseModel):
 
     def add_words(self, user_id: int, words: List[str]) -> None:
         """Adds a list of words in the words table in the database"""
-        pass
+        sql = f"""
+        INSERT INTO app_words (word, user_id),
+        VALUES {construct_values_query(user_id=user_id, words=words)};
+        """
+        with self.connection.cursor() as cursor:
+            cursor.execute(sql)
+        self.connection.commit()
 
     def get_words(self, user_id: int) -> List[str]:
         """Gets the list of words from a user in the relevance order"""
-        pass
+        sql = f"""
+        SELECT word FROM app_words
+        WHERE user_id = {user_id}
+        ORDER BY score;
+        """
+        with self.connection.cursor() as cursor:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+        return [word for word, in results]
 
     def get_word_and_user_info(self, word_id: int) -> dict:
         """Gets all relevant info from a word and its user given the word ID."""
+        sql = f"""
+        SELECT 
+        u.id user_id, u.user_name,  u.user_email, u.user_photo, u.user_language,
+        w.id word_id, w.word, w.score, w.active
+        FROM app_users u, app_words w
+        WHERE w.user_id = u.id 
+        AND w.id = {word_id};
+        """
+        with self.connection.cursor() as cursor:
+            cursor.execute(sql)
+            results = cursor.fetchone()
+        user_id, user_name, user_email, user_photo, user_language, word_id, word_word, word_score, word_active = results
         return {
             "user": {
-                "name": ...,
-                "email": ...,
-                "photo": ...,
-                "language": ...
+                "id": user_id,
+                "name": user_name,
+                "email": user_email,
+                "photo": user_photo,
+                "language": user_language
             },
             "word": {
-                "id": ...,
-                "word": ...,
-                "score": ...,
-                "active": ...
+                "id": word_id,
+                "word": word_word,
+                "score": word_score,
+                "active": word_active
             }
         }
     
