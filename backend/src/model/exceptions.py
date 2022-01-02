@@ -2,7 +2,7 @@ class UserNotFoundError(Exception):
     """Exception to be raised when used cannot be found in the DB"""
     pass
 
-class DatabaseServerError(Exception):
+class DatabaseError(Exception):
     """General exception to be thrown when any problem in connecting with the DB happens"""
     pass
 

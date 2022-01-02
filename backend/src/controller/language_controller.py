@@ -59,7 +59,7 @@ class MyLanguageController(LanguageController):
             }
         except Exception as e:
             return {
-                "code": Error.DATABASE_SERVER_ERROR.value,
+                "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
             }
 
@@ -80,7 +80,7 @@ class MyLanguageController(LanguageController):
             }
         except Exception as e:
             return {
-                "code": Error.DATABASE_SERVER_ERROR.value,
+                "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
             }
             
@@ -131,6 +131,6 @@ class MyLanguageController(LanguageController):
             }
         except Exception as e:
             return {
-                "code": Error.DATABASE_SERVER_ERROR.value,
+                "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
             }

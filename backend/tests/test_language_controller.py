@@ -76,7 +76,7 @@ class MyLanguageControllerTestCase(TestCase):
                 ["House", "Plant"]
             ),
             {
-                "code": -3,
+                "code": -12,
                 "message": "An error occured in the database."
             }
         )
@@ -116,7 +116,7 @@ class MyLanguageControllerTestCase(TestCase):
                 1
             ),
             {
-                "code": -3,
+                "code": -12,
                 "message": "An error occured in the database."
             }
         )
@@ -214,7 +214,7 @@ class MyLanguageControllerTestCase(TestCase):
                 "Casa"
             ),
             {
-                "code": -3,
+                "code": -12,
                 "message": "An error occured in the database."
             }
         )

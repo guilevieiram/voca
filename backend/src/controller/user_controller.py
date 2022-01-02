@@ -142,7 +142,7 @@ class MyUserController(UserController):
             }
         except Exception as e:
             return {
-                "code": Error.DATABASE_SERVER_ERROR.value,
+                "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured with the database."
             }
 
@@ -168,7 +168,7 @@ class MyUserController(UserController):
             }
         except Exception as e:
             return {
-                "code": Error.DATABASE_SERVER_ERROR.value,
+                "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
             }
 
@@ -188,7 +188,7 @@ class MyUserController(UserController):
             }
         except Exception as e:
             return {
-                "code": Error.DATABASE_SERVER_ERROR.value,
+                "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
             }
 
@@ -209,7 +209,7 @@ class MyUserController(UserController):
             }
         except Exception as e:
             return {
-                "code": Error.DATABASE_SERVER_ERROR.value,
+                "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
             }
 
@@ -243,6 +243,6 @@ class MyUserController(UserController):
             }
         except Exception as e:
             return {
-                "code": Error.DATABASE_SERVER_ERROR.value,
+                "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
             }

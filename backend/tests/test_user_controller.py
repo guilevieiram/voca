@@ -64,7 +64,7 @@ class MyUserControllerTestCase (TestCase):
                 password="1234"
             ),
             {
-                "code": -3,
+                "code": -12,
                 "message": "A problem occured with the database."
             }
         )
@@ -126,7 +126,7 @@ class MyUserControllerTestCase (TestCase):
                 user_language="Chinese",
             ),
             {
-                "code": -3,
+                "code": -12,
                 "message": "A problem occured in the database."
             }
         )
@@ -165,7 +165,7 @@ class MyUserControllerTestCase (TestCase):
                 user_id=10
             ),
             {
-                "code": -3,
+                "code": -12,
                 "message": "A problem occured in the database."
             }
         )
@@ -218,7 +218,7 @@ class MyUserControllerTestCase (TestCase):
                 user_id=10
             ),
             {
-                "code": -3,
+                "code": -12,
                 "message": "A problem occured in the database."
             }
         )
@@ -293,7 +293,7 @@ class MyUserControllerTestCase (TestCase):
                 value="Pierre"
             ),
             {
-                "code": -3,
+                "code": -12,
                 "message": "A problem occured in the database."
             }
         )

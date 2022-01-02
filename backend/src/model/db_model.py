@@ -203,6 +203,31 @@ class PostgresqlDataBaseModel(DataBaseModel):
             "user_photo": result[2],
             "user_language": result[3]
         }
+
+    def add_words(self, user_id: int, words: List[str]) -> None:
+        """Adds a list of words in the words table in the database"""
+        pass
+
+    def get_words(self, user_id: int) -> List[str]:
+        """Gets the list of words from a user in the relevance order"""
+        pass
+
+    def get_word_and_user_info(self, word_id: int) -> dict:
+        """Gets all relevant info from a word and its user given the word ID."""
+        return {
+            "user": {
+                "name": ...,
+                "email": ...,
+                "photo": ...,
+                "language": ...
+            },
+            "word": {
+                "id": ...,
+                "word": ...,
+                "score": ...,
+                "active": ...
+            }
+        }
     
     def _rollback(self) -> None:
         with self.connection.cursor() as cursor:
