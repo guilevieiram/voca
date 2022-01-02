@@ -4,7 +4,7 @@ from typing import List
 from src.model import LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError, WordDoesNotExistError
 
-from src.model.db_model import parse_postgresql_url, construct_and_query, UniqueViolation
+from src.model.db_model import parse_postgresql_url, construct_and_query, encapsulate, construct_values_query, UniqueViolation
 
 
 class PostgresqlDataBaseModelTestCase(TestCase):
@@ -32,6 +32,18 @@ class PostgresqlDataBaseModelTestCase(TestCase):
                 "port": 5000,
                 "database": "databasename"
             }    
+        )
+    
+    def test_encapsulate(self):
+        self.assertEqual(
+            encapsulate("word"),
+            "'word'"
+        )
+    
+    def test_construct_values_query(self):
+        self.assertEqual(
+            construct_values_query(user_id=10, words=["House", "Plant", "Pig"]),
+            " ('House', 10), ('Plant', 10), ('Pig', 10) "
         )
 
     def test_construct_and_query(self):
