@@ -43,7 +43,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
     def test_construct_values_query(self):
         self.assertEqual(
             construct_values_query(user_id=10, words=["House", "Plant", "Pig"]),
-            " ('House', 10), ('Plant', 10), ('Pig', 10) "
+            "('House', 10) , ('Plant', 10) , ('Pig', 10)"
         )
 
     def test_construct_and_query(self):
