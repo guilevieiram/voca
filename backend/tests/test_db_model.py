@@ -146,6 +146,23 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             )
         )
     
+    def test_add_words_wrong_type(self):
+        self.assertRaises(
+            TypeError,
+            self.db_model.add_words,
+            0,
+            ["House", 3]
+        )
+    
+    def test_add_words_user_not_exists(self):
+        self.cursor.fetchone.return_value = None
+        self.assertRaises(
+            UserIdError,
+            self.db_model.add_words,
+            10,
+            ["House", "Horse"]
+        )
+    
     def test_get_words(self):
         self.cursor.fetchall.return_value = [
             ("House", ), ("Plant", )
@@ -153,6 +170,14 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.assertEqual(
             self.db_model.get_words(user_id=1),
             ["House", "Plant"]
+        )
+
+    def test_get_words_user_not_exists(self):
+        self.cursor.fetchone.return_value = None
+        self.assertRaises(
+            UserIdError,
+            self.db_model.get_words,
+            user_id=10
         )
     
     def test_get_word_and_user_info(self):
@@ -176,6 +201,13 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             }
         )
 
+    def test_get_word_and_user_info_word_not_exists(self):
+        self.cursor.fetchone.return_value = None
+        self.assertRaises(
+            WordDoesNotExistError,
+            self.db_model.get_word_and_user_info,
+            word_id=100
+        )
 
     
 

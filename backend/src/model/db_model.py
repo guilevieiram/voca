@@ -216,6 +216,10 @@ class PostgresqlDataBaseModel(DataBaseModel):
 
     def add_words(self, user_id: int, words: List[str]) -> None:
         """Adds a list of words in the words table in the database"""
+        if any(not isinstance(word, str) for word in words):
+            raise TypeError("The list contains items of type not string.")
+        self._check_user_exitst(user_id=user_id)
+
         sql = f"""
         INSERT INTO app_words (word, user_id),
         VALUES {construct_values_query(user_id=user_id, words=words)};
@@ -229,11 +233,13 @@ class PostgresqlDataBaseModel(DataBaseModel):
         sql = f"""
         SELECT word FROM app_words
         WHERE user_id = {user_id}
+        AND active = true
         ORDER BY score;
         """
         with self.connection.cursor() as cursor:
             cursor.execute(sql)
             results = cursor.fetchall()
+        self._check_user_exitst(user_id=user_id)
         return [word for word, in results]
 
     def get_word_and_user_info(self, word_id: int) -> dict:
@@ -249,6 +255,8 @@ class PostgresqlDataBaseModel(DataBaseModel):
         with self.connection.cursor() as cursor:
             cursor.execute(sql)
             results = cursor.fetchone()
+        if results is None:
+            raise WordDoesNotExistError("The required word could not be found in the database.")
         user_id, user_name, user_email, user_photo, user_language, word_id, word_word, word_score, word_active = results
         return {
             "user": {
@@ -270,6 +278,16 @@ class PostgresqlDataBaseModel(DataBaseModel):
         with self.connection.cursor() as cursor:
             cursor.execute("ROLLBACK")
         self.connection.commit()
+    
+    def _check_user_exitst(self, user_id: int) -> None:
+        "Checks if the user exists by its id by contacting the database with a simple query."
+        sql = f"""SELECT id FROM app_users WHERE id = {user_id};"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchone()
+        if result is None:
+            raise UserIdError("The required user cannot be found in the database.")
+
 
 
 class LocalDataBaseModel(DataBaseModel):
@@ -389,12 +407,10 @@ class LocalDataBaseModel(DataBaseModel):
 
     def get_word_and_user_info(self, word_id: int) -> dict:
         """Gets all relevant info from a word and its user given the word ID."""
-        if not word_id < len(self.words) or self.words[word_id] is None:
-            raise WordDoesNotExistError("The required word cannot be found in the database.")
         try:
             user_id: int = self.words[word_id].get("user_id")
         except IndexError:
-            raise WordDoesNotExistError("The requires word could not be found in the database.")
+            raise WordDoesNotExistError("The required word could not be found in the database.")
         try:
             user: dict = self.users[user_id]
         except IndexError:
