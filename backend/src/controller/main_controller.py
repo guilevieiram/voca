@@ -6,6 +6,7 @@ from json import loads
 
 from .sub_controller import Resource, SubController 
 from .user_controller import UserController
+from .language_controller import LanguageController
 
 
 def ger_request_parameters(parameters_names: List[str]) -> Dict[str, Any]:
@@ -28,7 +29,7 @@ class MainController(ABC):
     """Responsible for controlling the application"""
 
     @abstractmethod
-    def __init__(self, user_controller: UserController):
+    def __init__(self, user_controller: UserController, language_controller: LanguageController):
         """Initialises the controller with the necessary subcontrollers and adds the resources from those subcontrollers."""
         pass
 
@@ -46,12 +47,13 @@ class MainController(ABC):
 class FlaskController(MainController):
     """Responsible for controlling the application via Flask RESTful API."""
 
-    def __init__(self, user_controller: UserController) -> None:
+    def __init__(self, user_controller: UserController, language_controller: LanguageController) -> None:
         """Initializes the API and its endpoints"""
         self.app: Flask = Flask(__name__)
         CORS(self.app)
         self._home()
         self.add_resources(sub_controller=user_controller)
+        self.add_resources(sub_controller=language_controller)
 
     def run(self, debug: bool = True) -> None:
         """Runs the application."""
@@ -78,13 +80,14 @@ class FlaskController(MainController):
 class TerminalController(MainController):
     """Responsible for controlling the application via terminal."""
 
-    def __init__(self, user_controller: UserController) -> None:
+    def __init__(self, user_controller: UserController, language_controller: LanguageController) -> None:
         """Initializes the controller with its endpoints"""
         self.app = None
         self.on: bool = True
         self.user_controller = user_controller
         self.resources: Dict[str, Tuple[Resource, SubController]] = {}
         self.add_resources(sub_controller=user_controller)
+        self.add_resources(sub_controller=language_controller)
         
     def run(self) -> None:
         """Runs the application."""

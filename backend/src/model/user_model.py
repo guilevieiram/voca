@@ -57,17 +57,17 @@ class UserModel(ABC):
 class MyUserModel(UserModel):
     """Simple logic implementation of the user model."""
 
-    def __init__(self, db_model: DataBaseModel) -> None:
+    def __init__(self, database_model: DataBaseModel) -> None:
         """Initializes connection with the data base auxiliary model"""
-        self.db_model = db_model
+        self.database_model = database_model
 
     def close_connection(self) -> None:
         """Closes connections with databases"""
-        self.db_model.close_connection()
+        self.database_model.close_connection()
 
     def add_user(self, user: User) -> None:
         """Adds a given user to the data base."""
-        self.db_model.add_user(
+        self.database_model.add_user(
             user_name=user.name,
             user_email=user.email,
             user_password=user.password,
@@ -76,11 +76,11 @@ class MyUserModel(UserModel):
 
     def delete_user(self, user_id: int) -> None:
         """Deletes a user from the data base."""
-        self.db_model.delete_user(user_id=user_id)
+        self.database_model.delete_user(user_id=user_id)
 
     def get_user(self, user_id: int) -> User:
         """Finds a user in the data base by the id and returns the user object."""
-        user_information = self.db_model.get_user(user_id=user_id)
+        user_information = self.database_model.get_user(user_id=user_id)
         return User(
             id=user_id,
             name=user_information.get("user_name"),
@@ -91,19 +91,19 @@ class MyUserModel(UserModel):
 
     def get_user_id(self, properties: Dict[str, str]) -> int:
         """Gets the first found user that satisfy that property"""
-        return self.db_model.find_user(properties=properties)
+        return self.database_model.find_user(properties=properties)
     
     # Right now this method is making two calls to the database and can be enhanced sometime in the future ...
     def login_user(self, user_email: str, user_password: str) -> int:
         """Tries to log in the user returning the user id if successful"""
         try:
-            self.db_model.find_user(properties={
+            self.database_model.find_user(properties={
                 "user_email": user_email
             })
         except UserNotFoundError:
             raise UserNotFoundError("User does not exists in the database.")
         try:
-            return self.db_model.find_user(properties={
+            return self.database_model.find_user(properties={
                 "user_email": user_email,
                 "user_password": user_password
             })
@@ -112,4 +112,4 @@ class MyUserModel(UserModel):
 
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
         """Updates a user in the data base given the user_id and a property, value pair."""
-        self.db_model.update_user(user_id=user_id, property=property, value=value)
+        self.database_model.update_user(user_id=user_id, property=property, value=value)

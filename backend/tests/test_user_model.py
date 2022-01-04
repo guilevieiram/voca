@@ -7,12 +7,12 @@ class MyUserModelTestCase(TestCase):
 
     def setUp(self):
         patcher = mock.patch('src.model.LocalDataBaseModel')
-        self.mock_db_model = patcher.start()
+        self.mock_database_model = patcher.start()
         self.addCleanup(patcher.stop)
-        self.user_model = MyUserModel(db_model=self.mock_db_model)
+        self.user_model = MyUserModel(database_model=self.mock_database_model)
 
     def test_get_user(self):
-        self.mock_db_model.get_user.return_value = {
+        self.mock_database_model.get_user.return_value = {
             "user_name": "Guile",
             "user_email": "guile@gmail.com",
             "user_language": "French",
@@ -30,7 +30,7 @@ class MyUserModelTestCase(TestCase):
         )
     
     def test_login_user(self):
-        self.mock_db_model.find_user.return_value = 10
+        self.mock_database_model.find_user.return_value = 10
         self.assertEqual(
             self.user_model.login_user(
                 user_email="test@gmail.com",
@@ -40,7 +40,7 @@ class MyUserModelTestCase(TestCase):
         )
     
     def test_login_user_not_valid(self):
-        self.mock_db_model.find_user.side_effect = UserNotFoundError("ops ... ")
+        self.mock_database_model.find_user.side_effect = UserNotFoundError("ops ... ")
         self.assertRaises(
             UserNotFoundError,
             self.user_model.login_user,
@@ -49,7 +49,7 @@ class MyUserModelTestCase(TestCase):
         )
 
     def test_login_user_not_valid(self):
-        self.mock_db_model.find_user.side_effect = WrongPasswordError("ops ... ")
+        self.mock_database_model.find_user.side_effect = WrongPasswordError("ops ... ")
         self.assertRaises(
             WrongPasswordError,
             self.user_model.login_user,

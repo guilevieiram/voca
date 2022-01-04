@@ -221,7 +221,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
         self._check_user_exitst(user_id=user_id)
 
         sql = f"""
-        INSERT INTO app_words (word, user_id),
+        INSERT INTO app_words (word, user_id)
         VALUES {construct_values_query(user_id=user_id, words=words)};
         """
         with self.connection.cursor() as cursor:
