@@ -1,10 +1,12 @@
 from abc import abstractmethod
-from typing import List
+from typing import List, Dict, Union
 
-from .sub_controller import Resource, SubController, router
+from src.model import WordInfo 
 from src.model import NlpModel, TranslationModel, WordsModel
 from src.model import WordInfo
-from src.model.exceptions import UserIdError, WordDoesNotExistError, UserIdError, TranslationApiConnectionError, TranslationNotFound, NlpCalculationError
+from src.model.exceptions import UserIdError, WordDoesNotExistError, TranslationApiConnectionError, TranslationNotFound, NlpCalculationError
+
+from .sub_controller import SubController, router
 from .error import Error
 
 
@@ -17,21 +19,18 @@ class LanguageController(SubController):
 
     @router(endpoint="")
     @abstractmethod
-    def res_add_words(self, user_id: int, words: List[str]) -> dict:
+    def res_add_words(self, user_id: int, words: List[str]) -> Dict[str, Union[int, str]]:
         """Adds a list of words in the database for a given user located by its ID. Returns the api response dict/json."""
-        pass
 
     @router(endpoint="")
     @abstractmethod
-    def res_get_words_from_user(self, user_id: int) -> dict:
+    def res_get_words_from_user(self, user_id: int) -> Dict[str, Union[int, str, List[str]]]:
         """Gets the list of words from an user sorted by relevance, along with the words ids. Returns the api response dict/json."""
-        pass
 
     @router(endpoint="")
     @abstractmethod
-    def res_calculate_score(self, word_id: int, word: str) -> dict:
+    def res_calculate_score(self, word_id: int, word: str) -> Dict[str, Union[str, int, float]]:
         """Calculates the similarity score between the user inputed word and the given word in the DB located by its ID. Returns the api response."""
-        pass
 
 # The implementation user input type checking error handling
 class MyLanguageController(LanguageController):
@@ -44,7 +43,7 @@ class MyLanguageController(LanguageController):
         self.words_model: WordsModel = words_model
 
     @router(endpoint="language/add_words")
-    def res_add_words(self, user_id: int, words: List[str]) -> dict:
+    def res_add_words(self, user_id: int, words: List[str]) -> Dict[str, Union[int, str]]:
         """Adds a list of words in the database for a given user located by its ID. Returns the api response dict/json."""
         try:
             self.words_model.add_words(user_id=user_id, words=words) 
@@ -64,7 +63,7 @@ class MyLanguageController(LanguageController):
             }
 
     @router(endpoint="language/get_words")
-    def res_get_words_from_user(self, user_id: int) -> dict:
+    def res_get_words_from_user(self, user_id: int) -> Dict[str, Union[int, str, List[str]]]:
         """Gets the list of words from an user sorted by relevance, along with the words ids. Returns the api response dict/json."""
         try:
             words: List[str] = self.words_model.get_words_from_user(user_id=user_id)
@@ -76,9 +75,9 @@ class MyLanguageController(LanguageController):
         except UserIdError:
             return {
                 "code": Error.USER_ID_ERROR.value,
-                "message": "The desired user was not found in the database." 
+                "message": "The desired user was not found in the database."
             }
-        except Exception as e:
+        except Exception:
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
@@ -86,7 +85,7 @@ class MyLanguageController(LanguageController):
             
     # can be redesigned to take words and languages from frontend (will need more testing and confirmation)
     @router(endpoint="language/score")
-    def res_calculate_score(self, word_id: int, word: str) -> dict:
+    def res_calculate_score(self, word_id: int, word: str) -> Dict[str, Union[int, str, float]]:
         """Calculates the similarity score between the user inputed word and the given word in the DB located by its ID. Returns the api response."""
         try:
             word_info: WordInfo = self.words_model.get_word_and_language(word_id=word_id)
@@ -129,7 +128,7 @@ class MyLanguageController(LanguageController):
                 "code": Error.NLP_CALCULATION_ERROR.value,
                 "message": "The NLP model could not calculate your request."
             }
-        except Exception as e:
+        except Exception:
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
