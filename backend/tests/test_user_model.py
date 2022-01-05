@@ -3,24 +3,28 @@ from unittest import TestCase, mock
 from src.model import MyUserModel, User
 from src.model.exceptions import UserNotFoundError, WrongPasswordError, LanguageNotSupportedError
 
+
 class MyUserModelTestCase(TestCase):
 
     def setUp(self):
         patcher = mock.patch('src.model.LocalDataBaseModel')
         self.mock_database_model = patcher.start()
         self.addCleanup(patcher.stop)
-        self.user_model = MyUserModel(database_model=self.mock_database_model)
-
+        self.user_model = MyUserModel(
+            database_model=self.mock_database_model,
+            supported_languages_codes=["en", "pt"]
+        )
     
     def test_add_user_language_not_supported(self):
         self.assertRaises(
             LanguageNotSupportedError,
-            self.user_model.add_user(user=User(
+            self.user_model.add_user,
+            user=User(
                 name="Guile",
                 email="guile@gmail.com",
                 language="aa",
                 password="asdf"
-            ))
+            )
         )
 
     def test_get_user(self):

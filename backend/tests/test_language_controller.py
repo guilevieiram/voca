@@ -31,7 +31,14 @@ class MyLanguageControllerTestCase(TestCase):
         self.language_controller: LanguageController = MyLanguageController(
             words_model=self.mock_words_model,
             translation_model=self.mock_translation_model, 
-            nlp_model=self.mock_nlp_model
+            nlp_model=self.mock_nlp_model,
+            supported_languages=[
+                {
+                    "name": "English",
+                    "flag": "🇬🇧",
+                    "code": "en"
+                }
+            ]
         )
 
         self.mock_words_model.get_word_and_language.return_value = WordInfo("Cat", "English")

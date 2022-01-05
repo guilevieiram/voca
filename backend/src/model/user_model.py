@@ -68,7 +68,7 @@ class MyUserModel(UserModel):
 
     def add_user(self, user: User) -> None:
         """Adds a given user to the data base."""
-        if user.language not in self.supported_languages:
+        if user.language not in self.supported_languages_codes:
             raise LanguageNotSupportedError("The desired language is not supported.")
         self.database_model.add_user(
             user_name=user.name,
