@@ -1,5 +1,6 @@
 # To deploy on heroku, run from the root app directory the command
 # git subtree push --prefix backend heroku main
+from typing import List, Dict
 
 from config import Configurations
 
@@ -13,6 +14,7 @@ from src.model import TranslationModel, DummyTranslationModel
 from src.model import NlpModel, DummyNlpModel
 
 database_model: DataBaseModel = PostgresqlDataBaseModel()
+
 user_model: UserModel = MyUserModel
 nlp_model: NlpModel = DummyNlpModel
 translation_model: TranslationModel = DummyTranslationModel
@@ -21,11 +23,14 @@ user_controller: UserController = MyUserController
 language_controller: LanguageController = MyLanguageController
 main_controller: MainController = FlaskController
 
+supported_languages: List[Dict[str, str]] = Configurations.supported_languages
+supported_languages_codes: List[str] = Configurations.supported_languages_codes
+
 endpoint = main_controller(
     user_controller=user_controller(
         user_model=user_model(
             database_model=database_model,
-            supported_languages=Configurations.supported_languages_codes
+            supported_languages_codes=supported_languages_codes
         )
     ),
     language_controller=language_controller(
@@ -33,7 +38,8 @@ endpoint = main_controller(
             database_model=database_model
         ),
         translation_model=translation_model(),
-        nlp_model=nlp_model()
+        nlp_model=nlp_model(),
+        supported_languages=supported_languages
     )
 )
 app = endpoint.app

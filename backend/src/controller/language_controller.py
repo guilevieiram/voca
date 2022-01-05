@@ -54,11 +54,12 @@ class LanguageController(SubController):
 class MyLanguageController(LanguageController):
     """Concrete controller responsible for defining the endpoints of the language related tasks of the api."""
 
-    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel) -> None:
+    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]]) -> None:
         """Initializes the controller with all the needed initialized models."""
         self.nlp_model: NlpModel = nlp_model
         self.translation_model: TranslationModel = translation_model
         self.words_model: WordsModel = words_model
+        self.supported_languages: List[Dict[str, str]] = supported_languages
 
     @router(endpoint="language/add_words")
     def res_add_words(self, user_id: int, words: List[str]) -> ResourceResponse:
@@ -109,7 +110,7 @@ class MyLanguageController(LanguageController):
             word_info: WordInfo = self.words_model.get_word_and_language(word_id=word_id)
             translated_word: str = self.translation_model.translate(
                 to_language=word_info.language,
-                word=word_info.word
+                word=word
             )
             similarity_score = self.nlp_model.calculate_similarity(
                 first_word=word_info.word,
@@ -157,10 +158,13 @@ class MyLanguageController(LanguageController):
     @abstractmethod
     def res_get_supported_languages(self) -> ResourceResponse:
         """Returns the dictionary of the supported languages on user signup."""
-        with open("./languages.json", encoding="uft-8") as file:
-            languages: List[Dict[str, str]] = load(file.read())
+        if self.supported_languages is None:
+            return {
+                "code": Error.SUPPORTED_LANGUAGES_NOT_FOUND_ERROR,
+                "message": "The list of supported languages could not be found."
+            }
         return {
             "code": 1,
             "message": "Supported languages fetched successfully.",
-            "languages": languages
+            "languages": self.supported_languages
         }

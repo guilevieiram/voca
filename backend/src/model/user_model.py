@@ -57,10 +57,10 @@ class UserModel(ABC):
 class MyUserModel(UserModel):
     """Simple logic implementation of the user model."""
 
-    def __init__(self, database_model: DataBaseModel, supported_languages: List[str]) -> None:
+    def __init__(self, database_model: DataBaseModel, supported_languages_codes: List[str]) -> None:
         """Initializes connection with the data base auxiliary model"""
         self.database_model = database_model
-        self.supported_languages = supported_languages
+        self.supported_languages_codes = supported_languages_codes
 
     def close_connection(self) -> None:
         """Closes connections with databases"""
