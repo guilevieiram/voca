@@ -21,9 +21,9 @@
                 "code": "ru"
             },
             {
-                "name": "Chinese",
+                "name": "Chinese (simplified)",
                 "flag": "🇨🇳",
-                "code": "zh"
+                "code": "zh-CN"
             }
         ]
 }

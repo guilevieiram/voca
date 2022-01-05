@@ -1,8 +1,8 @@
 from unittest import TestCase, mock
 
 from src.controller import LanguageController, MyLanguageController
-from src.model import   WordsModel, DummyWordsModel, TranslationModel, DummyTranslationModel, NlpModel, DummyNlpModel, WordInfo
-from src.model.exceptions import UserIdError, WordDoesNotExistError, TranslationNotFound, TranslationApiConnectionError, NlpCalculationError
+from src.model import WordInfo
+from src.model.exceptions import LanguageNotSupportedError, UserIdError, WordDoesNotExistError, TranslationNotFound, TranslationApiConnectionError, NlpCalculationError
 
 """
 Lacking implementation:
@@ -225,3 +225,18 @@ class MyLanguageControllerTestCase(TestCase):
                 "message": "An error occured in the database."
             }
         )
+
+    def test_res_calculate_score_language_not_supported(self):
+        self.mock_translation_model.translate.side_effect = LanguageNotSupportedError("ops...")
+        self.assertEqual(
+            self.language_controller.res_calculate_score.callable(
+                self.language_controller,
+                1,
+                "Casa"
+            ),
+            {
+                "code": -14,
+                "message": "The desired language is not supported."
+            }
+        )
+        

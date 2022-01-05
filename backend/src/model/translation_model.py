@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from googletrans import Translator
+from .exceptions import LanguageNotSupportedError
 
 class TranslationModel(ABC):
     """Abstract model class to handle translation of words between languages"""
@@ -27,4 +28,7 @@ class GoogleTranslationModel(TranslationModel):
 
     def translate(self, to_language: str, word: str) -> str:
         """Translates word from detected language to to_language, returning the translated word"""
-        return self.translator.translate(word, dest=to_language)
+        try:
+            return self.translator.translate(word, dest=to_language)
+        except ValueError:
+            raise LanguageNotSupportedError("The desired language is not supported.")

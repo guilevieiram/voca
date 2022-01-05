@@ -5,7 +5,7 @@ from json import load
 from src.model import WordInfo 
 from src.model import NlpModel, TranslationModel, WordsModel
 from src.model import WordInfo
-from src.model.exceptions import UserIdError, WordDoesNotExistError, TranslationApiConnectionError, TranslationNotFound, NlpCalculationError
+from src.model.exceptions import LanguageNotSupportedError, UserIdError, WordDoesNotExistError, TranslationApiConnectionError, TranslationNotFound, NlpCalculationError
 
 from .sub_controller import Method, SubController, router, ResourceResponse
 from .error import Error
@@ -136,6 +136,11 @@ class MyLanguageController(LanguageController):
             return {
                 "code": Error.TRANSLATION_NOT_FOUND_ERROR.value,
                 "message": "The given word could not be translated."
+            }
+        except LanguageNotSupportedError:
+            return {
+                "code": Error.LANGUAGE_NOT_SUPPORTED_ERROR.value,
+                "message": "The desired language is not supported."
             }
         except TranslationApiConnectionError:
             return {
