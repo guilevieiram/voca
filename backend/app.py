@@ -13,7 +13,7 @@ from src.model import WordsModel, MyWordsModel
 from src.model import TranslationModel, DummyTranslationModel
 from src.model import NlpModel, DummyNlpModel
 
-database_model: DataBaseModel = PostgresqlDataBaseModel()
+database_model: DataBaseModel = LocalDataBaseModel()
 
 user_model: UserModel = MyUserModel
 nlp_model: NlpModel = DummyNlpModel

@@ -153,11 +153,12 @@ class MyLanguageController(LanguageController):
                 "message": "An error occured in the database."
             }
 
-    # Missing error handling and testing
-    @router(endpoint="languages/supported_languages")
-    @abstractmethod
-    def res_get_supported_languages(self) -> ResourceResponse:
+    # Needs to adapt routing mechanism to accept get requests.
+    # For the moment we need this dummy "response" variable that doesn't do anything.
+    @router(endpoint="language/supported_languages")
+    def res_get_supported_languages(self, response: bool) -> ResourceResponse:
         """Returns the dictionary of the supported languages on user signup."""
+        print("called")
         if self.supported_languages is None:
             return {
                 "code": Error.SUPPORTED_LANGUAGES_NOT_FOUND_ERROR,
