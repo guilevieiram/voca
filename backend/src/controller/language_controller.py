@@ -1,12 +1,13 @@
 from abc import abstractmethod
-from typing import List, Dict, Union
+from typing import List, Dict
+from json import load
 
 from src.model import WordInfo 
 from src.model import NlpModel, TranslationModel, WordsModel
 from src.model import WordInfo
 from src.model.exceptions import UserIdError, WordDoesNotExistError, TranslationApiConnectionError, TranslationNotFound, NlpCalculationError
 
-from .sub_controller import SubController, router
+from .sub_controller import SubController, router, ResourceResponse
 from .error import Error
 
 
@@ -19,18 +20,35 @@ class LanguageController(SubController):
 
     @router(endpoint="")
     @abstractmethod
-    def res_add_words(self, user_id: int, words: List[str]) -> Dict[str, Union[int, str]]:
+    def res_add_words(self, user_id: int, words: List[str]) -> ResourceResponse:
         """Adds a list of words in the database for a given user located by its ID. Returns the api response dict/json."""
 
     @router(endpoint="")
     @abstractmethod
-    def res_get_words_from_user(self, user_id: int) -> Dict[str, Union[int, str, List[str]]]:
+    def res_get_words_from_user(self, user_id: int) -> ResourceResponse:
         """Gets the list of words from an user sorted by relevance, along with the words ids. Returns the api response dict/json."""
 
     @router(endpoint="")
     @abstractmethod
-    def res_calculate_score(self, word_id: int, word: str) -> Dict[str, Union[str, int, float]]:
+    def res_calculate_score(self, word_id: int, word: str) -> ResourceResponse:
         """Calculates the similarity score between the user inputed word and the given word in the DB located by its ID. Returns the api response."""
+
+    @router(endpoint="")
+    @abstractmethod
+    def res_get_supported_languages(self) -> ResourceResponse:
+        """Returns the dictionary of the supported languages on user signup."""
+        return {
+            "code": ...,
+            "message": ...,
+            "languages": [
+                {
+                    "name": ...,
+                    "flag": ...,
+                    "code": ...
+                }, ...
+            ]
+        }
+
 
 # The implementation user input type checking error handling
 class MyLanguageController(LanguageController):
@@ -43,7 +61,7 @@ class MyLanguageController(LanguageController):
         self.words_model: WordsModel = words_model
 
     @router(endpoint="language/add_words")
-    def res_add_words(self, user_id: int, words: List[str]) -> Dict[str, Union[int, str]]:
+    def res_add_words(self, user_id: int, words: List[str]) -> ResourceResponse:
         """Adds a list of words in the database for a given user located by its ID. Returns the api response dict/json."""
         try:
             self.words_model.add_words(user_id=user_id, words=words) 
@@ -63,7 +81,7 @@ class MyLanguageController(LanguageController):
             }
 
     @router(endpoint="language/get_words")
-    def res_get_words_from_user(self, user_id: int) -> Dict[str, Union[int, str, List[str]]]:
+    def res_get_words_from_user(self, user_id: int) -> ResourceResponse:
         """Gets the list of words from an user sorted by relevance, along with the words ids. Returns the api response dict/json."""
         try:
             words: List[str] = self.words_model.get_words_from_user(user_id=user_id)
@@ -85,7 +103,7 @@ class MyLanguageController(LanguageController):
             
     # can be redesigned to take words and languages from frontend (will need more testing and confirmation)
     @router(endpoint="language/score")
-    def res_calculate_score(self, word_id: int, word: str) -> Dict[str, Union[int, str, float]]:
+    def res_calculate_score(self, word_id: int, word: str) -> ResourceResponse:
         """Calculates the similarity score between the user inputed word and the given word in the DB located by its ID. Returns the api response."""
         try:
             word_info: WordInfo = self.words_model.get_word_and_language(word_id=word_id)
@@ -133,3 +151,16 @@ class MyLanguageController(LanguageController):
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
             }
+
+    # Missing error handling and testing
+    @router(endpoint="languages/supported_languages")
+    @abstractmethod
+    def res_get_supported_languages(self) -> ResourceResponse:
+        """Returns the dictionary of the supported languages on user signup."""
+        with open("./languages.json", encoding="uft-8") as file:
+            languages: List[Dict[str, str]] = load(file.read())
+        return {
+            "code": 1,
+            "message": "Supported languages fetched successfully.",
+            "languages": languages
+        }

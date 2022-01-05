@@ -44,3 +44,6 @@ class TranslationApiConnectionError(Exception):
 
 class NlpCalculationError(Exception):
     """Exception to be raised when the NLP algorithm cannot complete the given task."""
+
+class LanguageNotSupportedError(Exception):
+    """Exception to be raised when a not supported language is demanded."""

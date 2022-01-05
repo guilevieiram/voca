@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
-from typing import Union, Tuple, Optional, Dict
+from typing import Union, Optional, Dict, List
 
 from .db_model import DataBaseModel
-from .exceptions import UserNotFoundError, WrongPasswordError
+from .exceptions import UserNotFoundError, WrongPasswordError, LanguageNotSupportedError
 
 
 @dataclass
@@ -57,9 +57,10 @@ class UserModel(ABC):
 class MyUserModel(UserModel):
     """Simple logic implementation of the user model."""
 
-    def __init__(self, database_model: DataBaseModel) -> None:
+    def __init__(self, database_model: DataBaseModel, supported_languages: List[str]) -> None:
         """Initializes connection with the data base auxiliary model"""
         self.database_model = database_model
+        self.supported_languages = supported_languages
 
     def close_connection(self) -> None:
         """Closes connections with databases"""
@@ -67,6 +68,8 @@ class MyUserModel(UserModel):
 
     def add_user(self, user: User) -> None:
         """Adds a given user to the data base."""
+        if user.language not in self.supported_languages:
+            raise LanguageNotSupportedError("The desired language is not supported.")
         self.database_model.add_user(
             user_name=user.name,
             user_email=user.email,

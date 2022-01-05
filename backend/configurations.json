@@ -1,0 +1,29 @@
+{
+    "supportedLanguages": [
+            {
+                "name": "English",
+                "flag": "🇬🇧",
+                "code": "en"
+            },
+            {
+                "name": "Portuguese",
+                "flag": "🇧🇷",
+                "code": "pt"
+            },
+            {
+                "name": "French",
+                "flag": "🇫🇷",
+                "code": "fr"
+            },
+            {
+                "name": "Russian",
+                "flag": "🇷🇺",
+                "code": "ru"
+            },
+            {
+                "name": "Chinese",
+                "flag": "🇨🇳",
+                "code": "zh"
+            }
+        ]
+}

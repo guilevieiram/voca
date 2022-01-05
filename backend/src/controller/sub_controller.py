@@ -1,8 +1,10 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from dataclasses import dataclass
-from typing import Callable, Any, List
+from typing import Callable, Any, List, Dict
 from inspect import signature, getmembers
 
+
+ResourceResponse = Dict[str, Any]
 
 @dataclass
 class Resource:
