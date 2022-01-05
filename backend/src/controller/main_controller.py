@@ -4,22 +4,24 @@ from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Tuple
 from json import loads
 
-from .sub_controller import Resource, SubController 
+from .sub_controller import Method, Resource, SubController 
 from .user_controller import UserController
 from .language_controller import LanguageController
 
 
-def ger_request_parameters(parameters_names: List[str]) -> Dict[str, Any]:
+def ger_request_parameters(parameters_names: List[str], method: Method) -> Dict[str, Any]:
     """Get parameters from the desired api call"""
+    if method.value == "GET":
+        return {}
     if not request.json or set(request.json.keys()) != set(parameters_names):
         abort(400)
     return request.json
 
-def insert_https_parameters(sub_controller: SubController, parameters_names: List[str]):
+def insert_https_parameters(sub_controller: SubController, parameters_names: List[str], method: Method):
     """Decorator with a purpose to insert parameters into a callable function in a https flask request"""
     def decorator(function):
         def callable():
-            return function(self=sub_controller, **ger_request_parameters(parameters_names))
+            return function(self=sub_controller, **ger_request_parameters(parameters_names, method=method))
         callable.__name__ = function.__name__
         return callable
     return decorator
@@ -63,8 +65,8 @@ class FlaskController(MainController):
         """Add resources from the other controlers"""
         resources = sub_controller.resources()
         for resource in resources:
-            self.app.route(f"/{resource.endpoint}", methods=["POST", "GET"])(
-                insert_https_parameters(sub_controller, resource.parameters)(resource.callable)
+            self.app.route(f"/{resource.endpoint}", methods=[resource.method.value])(
+                insert_https_parameters(sub_controller, resource.parameters, method=resource.method)(resource.callable)
             )
 
     def _home(self) -> None:
@@ -109,8 +111,11 @@ class TerminalController(MainController):
     def _execute_task(self, endpoint: str) -> dict:
         """Executes a given task given its endpoints"""
         resource, sub_controller = self.resources.get(endpoint)
-        parameters: dict = loads(input("pars: "))
-        if set(resource.parameters) == set(parameters.keys()):
-            print(resource.callable(sub_controller, **parameters))
+        if resource.method.value == "POST":
+            parameters: dict = loads(input("pars: "))
+            if set(resource.parameters) == set(parameters.keys()):
+                print(resource.callable(sub_controller, **parameters))
+            else:
+                print("\n Parameters not valid.")
         else:
-            print("\n Parameters not valid.")
+            print(resource.callable(sub_controller))

@@ -7,7 +7,7 @@ from src.model import NlpModel, TranslationModel, WordsModel
 from src.model import WordInfo
 from src.model.exceptions import UserIdError, WordDoesNotExistError, TranslationApiConnectionError, TranslationNotFound, NlpCalculationError
 
-from .sub_controller import SubController, router, ResourceResponse
+from .sub_controller import Method, SubController, router, ResourceResponse
 from .error import Error
 
 
@@ -153,10 +153,8 @@ class MyLanguageController(LanguageController):
                 "message": "An error occured in the database."
             }
 
-    # Needs to adapt routing mechanism to accept get requests.
-    # For the moment we need this dummy "response" variable that doesn't do anything.
-    @router(endpoint="language/supported_languages")
-    def res_get_supported_languages(self, response: bool) -> ResourceResponse:
+    @router(endpoint="language/supported_languages", method=Method.GET)
+    def res_get_supported_languages(self) -> ResourceResponse:
         """Returns the dictionary of the supported languages on user signup."""
         print("called")
         if self.supported_languages is None:

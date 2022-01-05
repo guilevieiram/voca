@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, asdict
-from typing import Any, Callable, Optional, List
+from typing import Any, Optional 
 
-from .sub_controller import Resource, SubController, router
+from .sub_controller import SubController, router, ResourceResponse
 from .error import Error
 
 from src.model import UserModel, User
@@ -21,31 +21,31 @@ class UserController(SubController):
         
     @router(endpoint="")
     @abstractmethod
-    def res_login(self, user_email: str, password: str) -> dict:
+    def res_login(self, user_email: str, password: str) -> ResourceResponse:
         """Logs a user in and returns the dict message with the user id (if successfull)"""
         pass
 
     @router(endpoint="")
     @abstractmethod
-    def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> dict: 
+    def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> ResourceResponse:
         """Add a user in the system."""
         pass
         
     @router(endpoint="")
     @abstractmethod
-    def res_delete_user(self, user_id: id) -> dict: 
+    def res_delete_user(self, user_id: id) -> ResourceResponse:
         """Delete a user in the system."""
         pass
         
     @router(endpoint="")
     @abstractmethod
-    def res_get_user(self, user_id: int) -> dict: 
+    def res_get_user(self, user_id: int) -> ResourceResponse:
         """Find a user in the system."""
         pass
         
     @router(endpoint="")
     @abstractmethod
-    def res_update_user(self, user_id: int, property: str, value: Any) -> dict: 
+    def res_update_user(self, user_id: int, property: str, value: Any) -> ResourceResponse:
         """Update a user in the system."""
         pass
 
@@ -63,7 +63,7 @@ class DummyUserController(UserController):
         print("Closing connections.")
     
     @router(endpoint="user/login")
-    def res_login(self, user_email: str, password: str) -> dict:
+    def res_login(self, user_email: str, password: str) -> ResourceResponse:
         """Logs a user in and returns the dict message with the user id (if successfull)"""
         return {
             "code": 1,
@@ -72,7 +72,7 @@ class DummyUserController(UserController):
         }
 
     @router(endpoint="user/signup")
-    def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> dict: 
+    def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> ResourceResponse:
         """Add a user in the system."""
         return {
             "code": 1,
@@ -80,7 +80,7 @@ class DummyUserController(UserController):
         }
 
     @router(endpoint="user/delete")
-    def res_delete_user(self, user_id: id) -> dict: 
+    def res_delete_user(self, user_id: id) -> ResourceResponse:
         """Delete a user in the system."""
         return {
             "code": 1,
@@ -92,11 +92,11 @@ class DummyUserController(UserController):
         """Find a user in the system."""
         return {
             "code": 1,
-            "message": f"Finding user with {property=}, {value=}"
+            "message": f"Getting user with {user_id=}"
         }
 
     @router(endpoint="user/update")
-    def res_update_user(self, user_id: int, property: str, value: Any) -> dict: 
+    def res_update_user(self, user_id: int, property: str, value: Any) -> ResourceResponse:
         """Update a user in the system."""
         return {
             "code": 1,
@@ -118,7 +118,7 @@ class MyUserController(UserController):
         self.user_model.close_connection()
         
     @router(endpoint="user/login")
-    def res_login(self, user_email: str, password: str) -> dict:
+    def res_login(self, user_email: str, password: str) -> ResourceResponse:
         """Logs a user in and returns the dict message with the user id (if successfull)"""
         try:
             user_id: int = self.user_model.login_user(
@@ -147,7 +147,7 @@ class MyUserController(UserController):
             }
 
     @router(endpoint="user/signup")
-    def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> dict: 
+    def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> ResourceResponse:
         """Add a user in the system."""
         try:
             self.user_model.add_user(user=User(
@@ -173,7 +173,7 @@ class MyUserController(UserController):
             }
 
     @router(endpoint="user/delete")
-    def res_delete_user(self, user_id: id) -> dict: 
+    def res_delete_user(self, user_id: id) -> ResourceResponse:
         """Delete a user in the system."""
         try:
             self.user_model.delete_user(user_id=user_id)
@@ -193,7 +193,7 @@ class MyUserController(UserController):
             }
 
     @router(endpoint="user/get")
-    def res_get_user(self, user_id: int) -> dict: 
+    def res_get_user(self, user_id: int) -> ResourceResponse:
         """Find a user in the system."""
         try:
             user_info: User = self.user_model.get_user(user_id=user_id)
@@ -214,7 +214,7 @@ class MyUserController(UserController):
             }
 
     @router(endpoint="user/update")
-    def res_update_user(self, user_id: int, property: str, value: Any) -> dict: 
+    def res_update_user(self, user_id: int, property: str, value: Any) -> ResourceResponse:
         """Update a user in the system."""
         try:
             self.user_model.update_user(

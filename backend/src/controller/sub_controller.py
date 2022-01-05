@@ -1,19 +1,25 @@
 from abc import ABC
 from dataclasses import dataclass
-from typing import Callable, Any, List, Dict
+from enum import Enum
+from typing import Callable, Any, List, Dict, Union
 from inspect import signature, getmembers
 
 
 ResourceResponse = Dict[str, Any]
+
+class Method(Enum):
+    GET = "GET"
+    POST = "POST"
 
 @dataclass
 class Resource:
     callable: Callable[... , dict]
     endpoint: str
     parameters: List[str]
+    method: Method
 
 
-def router(endpoint: str):
+def router(endpoint: str, method: Method = Method.POST):
     """
     Decorator to add to each method of a SubController implementation.
     Allows creation of a resource from that method when it is called from the Main Contoller.
@@ -22,7 +28,9 @@ def router(endpoint: str):
         return Resource(
             callable=function,
             endpoint=endpoint,
-            parameters=[param 
+            method=method,
+            parameters=[
+                param 
                 for param in list(signature(function).parameters)
                 if param != "self"
             ]
