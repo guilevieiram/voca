@@ -16,8 +16,7 @@ import {Link} from 'react-router-dom';
 type ButtonProps = {
     active: boolean,
     icon: string,
-    link: string,
-    height: number
+    link: string
 };
 
 type NavLogoButtonProps = {
@@ -25,11 +24,15 @@ type NavLogoButtonProps = {
     link: string
 };
 
-function Button ({active, icon, link, height}: ButtonProps): React.ReactElement {
+function Button ({active, icon, link}: ButtonProps): React.ReactElement {
     return (
-        <div  className={`h-full z-10 flex justify-center items-end fill-${active ? 'purple' : 'dark'}`}>
+        <div  className={
+            active ?
+            `h-full z-10 flex justify-center items-end fill-purple`:
+            `h-full z-10 flex justify-center items-end fill-dark`
+        }>
             <Link to={link}>
-                <img src={icon} alt={icon} className={`h-${height} p-3 bottom-0 filter drop-shadow-lg`}/>
+                <img src={icon} alt={icon} className={`h-10 p-3 bottom-0 filter drop-shadow-lg`}/>
             </Link>
         </div>
     )
@@ -44,18 +47,16 @@ function NavLogoButton ({icon, link}: NavLogoButtonProps):React.ReactElement {
 };
 
 export default function Nav (): React.ReactElement {
-    const barFullSize: number = 16;
-    const barBlueSize: number = 10;
 
     return (
         <div className={`fixed bottom-0 left-0 w-screen  h-16 flex justify-center items-center`}>
             <div className={`w-screen h-10 absolute bottom-0 left-0 bg-blue`}></div>
             <div className={`max-w-2xl w-full h-full px-4 z-10 flex justify-around items-center`}>
-                <Button active={false} icon={addIcon} link='' height={barBlueSize}/>
-                <Button active={false} icon={homeIcon} link='' height={barBlueSize}/>
+                <Button active={false} icon={addIcon} link='' />
+                <Button active={false} icon={homeIcon} link='' />
                 <NavLogoButton icon={navLogo} link='' />
-                <Button active={false} icon={playIcon} link='' height={barBlueSize}/>
-                <Button active={false} icon={pointsIcon} link='/config' height={barBlueSize}/>
+                <Button active={false} icon={playIcon} link='' />
+                <Button active={false} icon={pointsIcon} link='/config' />
             </div>
         </div>
     )

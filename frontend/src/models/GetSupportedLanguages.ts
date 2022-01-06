@@ -24,6 +24,7 @@ async function getSupportedLanguages(url: string, setLanguages: setLanguagesType
                 break;
             }
             default:{
+                window.alert("Looks like our servers are down for the moment... Try again later!")
                 break;
             }
         }
