@@ -21,7 +21,7 @@ type setLoginStateType = (loginState: UserLoginRequestState) => void;
 type setSignupStateType = (signupState: UserSignupRequestState) => void;
 
 const loginUser = (email: string, password: string, setToken: setTokenType, setLoginState: setLoginStateType, url: string) => {
-    const endpoint: string = `${url}/user/login`;
+    const endpoint: string = `${url}user/login`;
     const data = {
         user_email: email,
         password: password

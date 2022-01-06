@@ -4,8 +4,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
-
 @layer base {
+  * {
+    @apply text-dark dark:text-light
+  }
   h1, h2, h3 {
     @apply text-2xl font-title;
   }
@@ -13,13 +15,16 @@
     @apply font-body;
   }
   .input-field {
-    @apply my-4 border-blue border-b-2 bg-light px-2 py-1;
+    @apply my-4 border-blue border-b-2 bg-transparent px-2 py-1;
   }
   .primary-button {
     @apply cursor-pointer rounded-lg font-bold text-dark bg-blue w-full py-2;
   }
   .secondary-button {
     @apply cursor-pointer border-blue border-2 rounded-lg font-bold text-blue w-full my-8 py-2;
+  }
+  .rounded-button {
+    @apply rounded-full bg-blue text-black h-10 w-10
   }
   .page-title {
     @apply mx-4 filter drop-shadow-md

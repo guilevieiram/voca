@@ -3,6 +3,7 @@ import Background from "./components/Background";
 import Nav from "./components/Nav";
 import UserLogin from "./components/user_login";
 import UserSignup from "./components/user_signup";
+import AddWordsPage from "./components/add_words";
 import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 import ConfigPage from "./components/config_page";
@@ -42,6 +43,9 @@ function App(): React.ReactElement {
             <Route path='/' element={ifLoggedIn(<HomePage />)}/>
             <Route path="/login" element={ifNotLoggedIn(<UserLogin setToken={setToken}/>)}/>
             <Route path="/signup" element={ifNotLoggedIn(<UserSignup />)}/>
+            <Route path="/add_words" element={ifLoggedIn(<AddWordsPage />)} />
+            <Route path="/play" element={ifLoggedIn(<></>)}/>
+            <Route path="/home" element={ifLoggedIn(<></>)}/>
             <Route path="/config" element={<ConfigPage />} />
             <Route path='*' element={<NotFoundPage />}/>
           </Routes>
