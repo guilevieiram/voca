@@ -4,17 +4,13 @@ import AddWordsBar from './AddWordsBar';
 import SaveButton from './SaveButton';
 import AddWordsList from './WordsList';
 
-type AddWordsPageProps = {
-
-};
-
 const getWordsFromSessionStorage = (): string[] => {
     const storedWords: string | null = sessionStorage.getItem("words");
     if (storedWords) return JSON.parse(storedWords)
     else return []
 };
 
-export default function AddWordsPage ({}: AddWordsPageProps): React.ReactElement {
+export default function AddWordsPage (): React.ReactElement {
     const [words, setWords] = useState<string[]>(getWordsFromSessionStorage());
     const addWord = (word: string): void => {if (!words.includes(word)) setWords([...words, word])};
     const removeWord = (word: string): void => setWords(words.filter(item => item !== word));
@@ -30,7 +26,7 @@ export default function AddWordsPage ({}: AddWordsPageProps): React.ReactElement
     }, [words])
 
     return (
-        <div className='flex flex-col items-start my-6 min-h-screen'>
+        <div className='flex flex-col items-start min-h-screen'>
             <h1 className='page-title'>New vocabulary</h1>
             <AddWordsBar addWord={addWord}/>
             <AddWordsList words={words} removeWord={removeWord}/>
