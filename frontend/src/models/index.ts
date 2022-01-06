@@ -1,9 +1,14 @@
 import wakeBackend from "./TestBackend";
-import { loginUser, UserLoginRequestState } from "./UserRequests";
+import { loginUser, signupUser, UserLoginRequestState, UserSignupRequestState} from "./UserRequests";
+import { getSupportedLanguages, Language } from "./GetSupportedLanguages";
 import loadTheme from "./Theme";
 export {
-    wakeBackend, 
+    wakeBackend,
     loginUser,
+    signupUser,
     UserLoginRequestState,
-    loadTheme
+    UserSignupRequestState,
+    loadTheme,
+    getSupportedLanguages
 };
+export type { Language };

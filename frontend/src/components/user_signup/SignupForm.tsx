@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { signupUser, UserSignupRequestState} from '../../models/UserRequests';
+import { signupUser, UserSignupRequestState, getSupportedLanguages, Language} from '../../models';
 import { useNavigate } from 'react-router-dom';
 import { apiEndpoint } from "../../app.config";
 
@@ -8,27 +8,22 @@ type LanguageSelectComponentProps = {
 };
 
 function LanguageSelectComponent ({setLanguage}: LanguageSelectComponentProps): React.ReactElement {
-    const languages = [
-        {
-            "name": "French",
-            "flag": "🇫🇷"
-        },
-        {
-            "name": "Russian",
-            "flag": "🇷🇺"
-        },
-        {
-            "name": "English",
-            "flag": "🇬🇧"
-        },
-    ]
+    const [languages, setLanguages] = useState<Language[]>([{
+        name: "",
+        flag: "",
+        code: ""
+    }]);
+
     const onChange = (event: any): void => setLanguage(event.target.value);
-    useEffect((): void => setLanguage(languages[0].name ), []);
+    useEffect((): void => {
+        setLanguage(languages[0].code);
+        getSupportedLanguages(apiEndpoint, setLanguages);
+    } , []);
     return (
         <div className={`w-full flex justify-between items-center my-4`}>
             <p>Language:</p>
             <select className={`bg-light dark:bg-dark`} onChange={onChange}>
-                {languages.map((element, index) => <option value={element.name} key={index} className={`bg-light dark:bg-dark`}>{element.flag}</option>)}
+                {languages.map((element, index) => <option title={element.name} value={element.code} key={index} className={`bg-light dark:bg-dark`}>{element.flag}</option>)}
             </select>
         </div>
     )
