@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Background from "./components/Background";
 import Nav from "./components/Nav";
 import UserLogin from "./components/user_login";
@@ -23,11 +23,19 @@ import { apiEndpoint } from "./app.config";
 
 function App(): React.ReactElement {
 
+
   const setToken = (userToken: string): void => sessionStorage.setItem('token', userToken);
   const getToken = (): string | null => sessionStorage.getItem('token');
   const token: string | null = getToken();
   const ifLoggedIn = (element: React.ReactElement): React.ReactElement => token ? element : <Navigate replace to="/login" />;
   const ifNotLoggedIn = (element: React.ReactElement): React.ReactElement => !token ? element : <Navigate replace to="/" />;
+
+  const [userId, setUserId] = useState<number | null>(null);
+  useEffect(() => {
+    if (token === null) setUserId(null);
+    else setUserId(parseInt(token));
+  }, [token]);
+  
 
   useEffect(() => {
     wakeBackend(apiEndpoint);
@@ -42,7 +50,7 @@ function App(): React.ReactElement {
             <Route path='/' element={ifLoggedIn(<HomePage />)}/>
             <Route path="/login" element={ifNotLoggedIn(<UserLogin setToken={setToken}/>)}/>
             <Route path="/signup" element={ifNotLoggedIn(<UserSignup />)}/>
-            <Route path="/add_words" element={ifLoggedIn(<AddWordsPage />)} />
+            <Route path="/add_words" element={ifLoggedIn(<AddWordsPage userId={userId}/>)} />
             <Route path="/play" element={ifLoggedIn(<PlayPage />)} />
             <Route path="/home" element={ifLoggedIn(<></>)}/>
             <Route path="/config" element={<ConfigPage />} />

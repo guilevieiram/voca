@@ -3,6 +3,14 @@ import React, { useEffect, useState } from 'react';
 import AddWordsBar from './AddWordsBar';
 import SaveButton from './SaveButton';
 import AddWordsList from './WordsList';
+import Loader from '../Loader';
+
+import { apiEndpoint } from '../../app.config';
+import { addWords, AddWordsRequestState } from '../../models';
+
+type AddWordsPageProps = {
+    userId: number | null
+};
 
 const getWordsFromSessionStorage = (): string[] => {
     const storedWords: string | null = sessionStorage.getItem("words");
@@ -10,20 +18,38 @@ const getWordsFromSessionStorage = (): string[] => {
     else return []
 };
 
-export default function AddWordsPage (): React.ReactElement {
+export default function AddWordsPage ({ userId }: AddWordsPageProps): React.ReactElement {
     const [words, setWords] = useState<string[]>(getWordsFromSessionStorage());
+    const [requestState, setRequestState] = useState<AddWordsRequestState>(AddWordsRequestState.NotStarted);
     const addWord = (word: string): void => {if (!words.includes(word)) setWords([...words, word])};
     const removeWord = (word: string): void => setWords(words.filter(item => item !== word));
     const saveWords = (): void => {
         // in this function we need to call the server api to actually save the words...
-        console.log("saving words...")
+        addWords(userId, words, setRequestState, apiEndpoint)
         setWords([]);
-        window.alert("Your new vocabulary has been saved!")
     };
 
+    useEffect(() => sessionStorage.setItem("words", JSON.stringify(words)), [words]);
+
     useEffect(() => {
-        sessionStorage.setItem("words", JSON.stringify(words));
-    }, [words])
+        switch (requestState){
+            case AddWordsRequestState.BackendIssue:{
+                window.alert("Looks like our servers are down. Try again in a few minutes...");
+                break;
+            }
+            case AddWordsRequestState.UserNotFound:{
+                window.alert("You've been disconnected, please login.");
+                sessionStorage.removeItem("token");
+                window.location.reload();
+                break;
+            }
+            case AddWordsRequestState.Successful:{
+                window.alert("Words added successfully! You can now keep playing!");
+                break;
+            }
+            default: break;
+        }
+    }, [requestState]);
 
     return (
         <div className='flex flex-col items-start min-h-screen'>
@@ -31,7 +57,13 @@ export default function AddWordsPage (): React.ReactElement {
             <div className="h-bar mb-6"></div>
             <AddWordsBar addWord={addWord}/>
             <AddWordsList words={words} removeWord={removeWord}/>
-            <SaveButton saveWords={saveWords} />
+
+            <div className="fixed top-3/4 right-0 m-10">
+                {
+                    requestState === AddWordsRequestState.Waiting ? <Loader /> :
+                    <SaveButton saveWords={saveWords} />
+                }
+            </div>
         </div>
     )
 }
