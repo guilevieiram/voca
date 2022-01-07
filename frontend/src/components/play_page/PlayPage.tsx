@@ -10,33 +10,52 @@ type Word = {
     id: number
 };
 
+const setWordsListInSessionStorage = (wordsList: Word[]): void => sessionStorage.setItem("wordList", JSON.stringify(wordsList));
+const readWordsListFromSessionStorage = (): Word[] => {
+    const wordListString: string | null = sessionStorage.getItem("wordList");
+    if(wordListString === null) return [{word: "", id: 0}]
+    return JSON.parse(wordListString);
+}
+
+const setWordIndexInSessionStorage = (wordIndex: number) => sessionStorage.setItem("wordIndex", JSON.stringify(wordIndex));
+const readWordIndexFromSessionStorage = (): number => {
+    const wordIndex: string | null = sessionStorage.getItem("wordIndex");
+    if(wordIndex === null) return 0;
+    return JSON.parse(wordIndex);
+}
+
 // need to create a focus system to facilitate keyboard navigating when playing
 export default function PlayPage (): React.ReactElement {
-    const defaultWordList: Word[] = [{word:"", id: 0}]
-    const [wordsList, setWordsList] = useState<Word[]>(defaultWordList);
-    const [targetWordIndex, setTargetWordIndex] = useState<number>(0);
+    const [wordsList, setWordsList] = useState<Word[]>(readWordsListFromSessionStorage());
+    const [targetWordIndex, setTargetWordIndex] = useState<number>(readWordIndexFromSessionStorage());
     const [targetWord, setTargetWord] = useState<Word>(wordsList[targetWordIndex]);
     const [score, setScore] = useState<number | null>(null);
     const [finished, setFinished] = useState<boolean>(false);
     const nextWord = (): void => {
         setScore(null);
-        if (targetWordIndex >= wordsList.length - 1) return setFinished(true);
+        if (targetWordIndex >= wordsList.length - 1) {
+            setTargetWordIndex(0);
+            return setFinished(true);
+        }
         setTargetWordIndex(targetWordIndex + 1);
     }
     const loadWords = (): void => {
         // test load words function, need to be changed for the api call.
-        console.log("loading words")
-        setWordsList([
+        const words: Word[] = [
             {word: "Planet", id: 5},
             {word: "House", id: 10},
             {word: "Floor", id: 3}
-        ]);
+        ]
+        setWordsList(words);
         setFinished(false);
         setTargetWordIndex(0);
     };
 
-    useEffect(() => loadWords(), []);
+    useEffect(() => {if (JSON.stringify(wordsList) === JSON.stringify([{word: "", id: 0}])) loadWords();}, []);
     useEffect(() => setTargetWord(wordsList[targetWordIndex]), [targetWordIndex, wordsList]);
+
+    useEffect(() => setWordIndexInSessionStorage(targetWordIndex), [targetWordIndex])
+    useEffect(() => setWordsListInSessionStorage(wordsList), [wordsList])
 
     return (
         <div className="my-6">
@@ -53,7 +72,6 @@ export default function PlayPage (): React.ReactElement {
                         <NextButton nextWord={nextWord} show={score !== null}/>
                     </div>
                 </>
-
             }
         </div>
     )

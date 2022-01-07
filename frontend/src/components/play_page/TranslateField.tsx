@@ -12,7 +12,6 @@ export default function TranslateField ({ setScore, score, wordIndex}: Translate
     // This function needs to be implemented to support the api calls. Right now it does nothing.
     const submitWord = (event: any): void => {
         event.preventDefault();
-        console.log(translatedWord);
         setTranslatedWord("");
         setScore(0.40);
     };  
@@ -24,7 +23,7 @@ export default function TranslateField ({ setScore, score, wordIndex}: Translate
     return (
         <div className="w-full">
 
-            <form className="flex justify-between items-center">
+            <form autoComplete="off" className="flex justify-between items-center">
                 <input onChange={changeTranslatedWord} type="text" id="translate-word-input" placeholder="Translation" className="input-field w-full mr-4"/>
                 <button onClick={submitWord} className="rounded-button px-3">{!translatedWord ? "?" : ">"}</button>
             </form>

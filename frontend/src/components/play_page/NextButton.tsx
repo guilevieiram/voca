@@ -1,4 +1,5 @@
 import { CgArrowLongRight } from 'react-icons/cg';
+
 type NextButtonProps = {
     nextWord: () => void,
     show: boolean
