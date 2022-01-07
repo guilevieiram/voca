@@ -26,7 +26,13 @@
   .rounded-button {
     @apply rounded-full bg-blue text-black h-10 w-10
   }
+  .secondary-rounded-button {
+    @apply rounded-full bg-transparent text-blue border border-blue h-10 w-10
+  }
   .page-title {
     @apply mx-4 my-6 filter drop-shadow-md
+  }
+  .h-bar {
+    @apply w-full bg-dark dark:bg-light h-px
   }
 }

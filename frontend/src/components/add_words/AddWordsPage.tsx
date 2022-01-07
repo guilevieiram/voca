@@ -28,6 +28,7 @@ export default function AddWordsPage (): React.ReactElement {
     return (
         <div className='flex flex-col items-start min-h-screen'>
             <h1 className='page-title'>New vocabulary</h1>
+            <div className="h-bar mb-6"></div>
             <AddWordsBar addWord={addWord}/>
             <AddWordsList words={words} removeWord={removeWord}/>
             <SaveButton saveWords={saveWords} />

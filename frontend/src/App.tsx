@@ -38,8 +38,6 @@ function App(): React.ReactElement {
     <div className={`flex justify-center`}>
       <div className="max-w-xl w-full px-8 ">
         <Router>
-          <Background />
-          <Nav />
           <Routes>
             <Route path='/' element={ifLoggedIn(<HomePage />)}/>
             <Route path="/login" element={ifNotLoggedIn(<UserLogin setToken={setToken}/>)}/>
@@ -50,6 +48,10 @@ function App(): React.ReactElement {
             <Route path="/config" element={<ConfigPage />} />
             <Route path='*' element={<NotFoundPage />}/>
           </Routes>
+
+          <Background />
+          <Nav />
+
         </Router>
       </div>
     </div>

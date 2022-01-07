@@ -20,7 +20,7 @@ export default function AddWordsBar ({ addWord }: AddWordsBarProps ): React.Reac
         <div className="my-2 w-full">
             <form className="flex items-center w-full" autoComplete="off" >
                 <input id="add-word-input" type="text" placeholder="Add words" className="input-field w-full mr-4" onChange={changeWord}/>
-                <button onClick={sumbitWord} className="rounded-button px-2 mr-4 text-lg ">+</button>
+                <button onClick={sumbitWord} className="rounded-button px-2 text-lg ">+</button>
             </form>
         </div>
     )

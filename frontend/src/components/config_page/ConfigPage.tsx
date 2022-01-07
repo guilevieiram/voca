@@ -4,7 +4,7 @@ export default function ConfigPage () {
     return(
         <div className="">
             <h1 className="page-title ">Configurations</h1>
-            <div className="w-full h-px border-dark bg-dark dark:bg-light"></div>
+            <div className="h-bar"></div>
             <DarkModeConfig />
         </div>
     )
