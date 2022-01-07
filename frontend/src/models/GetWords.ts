@@ -1,4 +1,4 @@
-enum AddWordsRequestState {
+enum GetWordsRequestState{
     NotStarted,
     Started,
     Waiting,
@@ -7,13 +7,13 @@ enum AddWordsRequestState {
     BackendIssue
 };
 
-type setRequestStateType = (requestState: AddWordsRequestState) => void;
+type setRequestStateType = (requestState: GetWordsRequestState) => void;
+type setWordsType = (words: string[]) => void;
 
-function addWords(userId: number | null, wordsList: string[], setRequestState: setRequestStateType, url: string): void {
-    const endpoint = `${url}language/add_words`;
+function getWords (userId: number | null, setWords: setWordsType, setRequestState: setRequestStateType, url: string): void {
+    const endpoint = `${url}language/get_words`;
     const data = {
         user_id: userId,
-        words: wordsList
     };
     const parameters = {
         headers: {
@@ -23,36 +23,37 @@ function addWords(userId: number | null, wordsList: string[], setRequestState: s
         method: "POST"
     };
 
-    setRequestState(AddWordsRequestState.Started)
+    setRequestState(GetWordsRequestState.Started)
     fetch(endpoint, parameters)
     .then( (data) => {
-        setRequestState(AddWordsRequestState.Waiting);
+        setRequestState(GetWordsRequestState.Waiting);
         return data.json();
     })
     .then( (response) => {
         console.log(response);
         switch(response.code){
             case 1:{
-                setRequestState(AddWordsRequestState.Successful);
+                setRequestState(GetWordsRequestState.Successful);
+                setWords(response.words);
                 break;
             }
             case -5:{
-                setRequestState(AddWordsRequestState.UserNotFound);
+                setRequestState(GetWordsRequestState.UserNotFound);
                 break;
             }
             default:{
-                setRequestState(AddWordsRequestState.BackendIssue);
+                setRequestState(GetWordsRequestState.BackendIssue);
                 break;
             }
         }
     })
     .catch( e => {
-        setRequestState(AddWordsRequestState.BackendIssue);
+        setRequestState(GetWordsRequestState.BackendIssue);
         console.log(e);
     });
 };
 
 export {
-    addWords,
-    AddWordsRequestState
+    GetWordsRequestState,
+    getWords
 }
