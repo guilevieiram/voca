@@ -8,6 +8,7 @@ import PlayPage from "./components/play_page";
 import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 import ConfigPage from "./components/config_page";
+import UserPage from "./components/user_page";
 
 import { loadTheme } from "./models";
 
@@ -52,7 +53,7 @@ function App(): React.ReactElement {
             <Route path="/signup" element={ifNotLoggedIn(<UserSignup />)}/>
             <Route path="/add_words" element={ifLoggedIn(<AddWordsPage userId={userId}/>)} />
             <Route path="/play" element={ifLoggedIn(<PlayPage userId={userId}/>)} />
-            <Route path="/home" element={ifLoggedIn(<></>)}/>
+            <Route path="/user_page" element={ifLoggedIn(<UserPage />)}/>
             <Route path="/config" element={<ConfigPage />} />
             <Route path='*' element={<NotFoundPage />}/>
           </Routes>
