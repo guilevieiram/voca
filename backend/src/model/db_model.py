@@ -299,7 +299,7 @@ class LocalDataBaseModel(DataBaseModel):
         self.users: List[dict] = [{
             "user_name": "test",
             "user_email": "test@gmail.com",
-            "user_language": "Testuguese",
+            "user_language": "en",
             "user_password": "pass1234",
             "user_photo": "ph.com",
         }]

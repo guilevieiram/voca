@@ -18,7 +18,7 @@ def instantiate(cls):
 class Configurations:
     """Configuration class, not to be instantiated but to be utilized to get the configurations from the raw config file."""
 
-    configuration_file: str = "configurations.json"
+    configuration_file: str = "configurations_testing.json"
 
     @property
     def debug(self) -> bool:

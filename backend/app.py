@@ -10,14 +10,14 @@ from src.controller import LanguageController, MyLanguageController, DummyLangua
 from src.model import UserModel, MyUserModel
 from src.model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model import WordsModel, MyWordsModel
-from src.model import TranslationModel, DummyTranslationModel
-from src.model import NlpModel, DummyNlpModel
+from src.model import TranslationModel, DummyTranslationModel, GoogleTranslationModel
+from src.model import NlpModel, DummyNlpModel, SpacyNlpModel
 
 database_model: DataBaseModel = LocalDataBaseModel()
 
 user_model: UserModel = MyUserModel
-nlp_model: NlpModel = DummyNlpModel
-translation_model: TranslationModel = DummyTranslationModel
+nlp_model: NlpModel = SpacyNlpModel
+translation_model: TranslationModel = GoogleTranslationModel
 words_model: WordsModel = MyWordsModel
 user_controller: UserController = MyUserController
 language_controller: LanguageController = MyLanguageController
@@ -38,7 +38,7 @@ endpoint = main_controller(
             database_model=database_model
         ),
         translation_model=translation_model(),
-        nlp_model=nlp_model(),
+        nlp_model=nlp_model(supported_languages=supported_languages_codes),
         supported_languages=supported_languages
     )
 )

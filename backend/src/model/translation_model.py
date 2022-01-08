@@ -29,6 +29,6 @@ class GoogleTranslationModel(TranslationModel):
     def translate(self, to_language: str, word: str) -> str:
         """Translates word from detected language to to_language, returning the translated word"""
         try:
-            return self.translator.translate(word, dest=to_language)
+            return self.translator.translate(word, dest=to_language).text
         except ValueError:
             raise LanguageNotSupportedError("The desired language is not supported.")

@@ -197,7 +197,8 @@ class MyLanguageController(LanguageController):
                 "code": Error.NLP_CALCULATION_ERROR.value,
                 "message": "The NLP model could not calculate your request."
             }
-        except Exception:
+        except Exception as e:
+            print(type(e), e)
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
