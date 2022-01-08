@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 type AddWordsBarProps = {
     addWord: (word: string) => void

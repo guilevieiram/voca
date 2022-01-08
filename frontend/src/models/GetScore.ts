@@ -14,7 +14,7 @@ type setRequestStateType = (requestState: GetScoreRequestState) => void;
 type setScoreType = (setScore: number) => void;
 
 function getScore (wordId: number, word: string, setScore: setScoreType, setRequestState: setRequestStateType, url: string): void {
-    const endpoint = `${url}language/get_words`;
+    const endpoint = `${url}language/score`;
     const data = {
         word_id: wordId,
         word: word

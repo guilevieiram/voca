@@ -21,7 +21,7 @@ type PlayPageProps = {
 const setWordsListInSessionStorage = (wordsList: Word[]): void => sessionStorage.setItem("wordList", JSON.stringify(wordsList));
 const readWordsListFromSessionStorage = (): Word[] => {
     const wordListString: string | null = sessionStorage.getItem("wordList");
-    if(wordListString === null || wordListString === "[]") return [{word: "", id: 0}]
+    if(wordListString === null || wordListString === "[]") return [{word: "", id: 0}];
     return JSON.parse(wordListString);
 };
 
