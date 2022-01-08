@@ -16,7 +16,7 @@ const signupUser = (name: string, email: string, password: string, language: str
         user_email: email,
         user_password: password,
         user_language: language,
-        user_photo: ""
+        user_photo: `https://avatars.dicebear.com/api/croodles-neutral/${email}svg`
     };
     const parameters = {
         headers: {
