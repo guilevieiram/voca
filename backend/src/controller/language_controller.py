@@ -49,6 +49,51 @@ class LanguageController(SubController):
             ]
         }
 
+class DummyLanguageController(LanguageController):
+    """Dummy controller responsible for defining the endpoints of the language related tasks of the api."""
+
+    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]]) -> None:
+        """Initializes the controller with all the needed initialized models."""
+        self.nlp_model: NlpModel = nlp_model
+        self.translation_model: TranslationModel = translation_model
+        self.words_model: WordsModel = words_model
+        self.supported_languages: List[Dict[str, str]] = supported_languages
+
+    @router(endpoint="language/add_words")
+    def res_add_words(self, user_id: int, words: List[str]) -> ResourceResponse:
+        """Adds a list of words in the database for a given user located by its ID. Returns the api response dict/json."""
+        return {
+            "code": 1,
+            "message": "Words added successfully."
+        }
+
+    @router(endpoint="language/get_words")
+    def res_get_words_from_user(self, user_id: int) -> ResourceResponse:
+        """Gets the list of words from an user sorted by relevance, along with the words ids. Returns the api response dict/json."""
+        return {
+            "code": Error.USER_ID_ERROR.value,
+            "message": "Words fetched successfully.",
+            "words": ["House", "Plant"]
+        }
+        
+    @router(endpoint="language/score")
+    def res_calculate_score(self, word_id: int, word: str) -> ResourceResponse:
+        """Calculates the similarity score between the user inputed word and the given word in the DB located by its ID. Returns the api response."""
+        return {
+            "code": 1,
+            "message": "Score calculated successfully.",
+            "score": 0.78737
+        }
+
+    @router(endpoint="language/supported_languages", method=Method.GET)
+    def res_get_supported_languages(self) -> ResourceResponse:
+        """Returns the dictionary of the supported languages on user signup."""
+        return {
+            "code": 1,
+            "message": "Supported languages fetched successfully.",
+            "languages": self.supported_languages
+        }
+
 
 # The implementation user input type checking error handling
 class MyLanguageController(LanguageController):

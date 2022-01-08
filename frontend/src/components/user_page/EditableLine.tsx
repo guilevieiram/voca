@@ -19,7 +19,8 @@ export default function EditableLine ({ apiKey, label, placeholder, inputType, c
     const [enableEdit, setEnableEdit] = useState<boolean>(false);
     const [field, setField] = useState<string>("");
     const onChangeField = (event: any): void => setField(event.target.value);
-    const editFunction = (): void => {
+    const editFunction = (event: any): void => {
+        event.preventDefault();
         setEnableEdit(true);
     };
     const saveFunction = (event: any): void => {

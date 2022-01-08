@@ -321,7 +321,7 @@ class LocalDataBaseModel(DataBaseModel):
         """Closes connection with the database"""
         print("Connection closed.")
 
-    def add_user(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> None: 
+    def add_user(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: str) -> None: 
         """Adds a user to the database"""
         if any([user.get("user_email") == user_email for user in self.users]):
             raise UserAlreadyExistsError("This email is already in use.")

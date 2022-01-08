@@ -74,7 +74,8 @@ class MyUserModel(UserModel):
             user_name=user.name,
             user_email=user.email,
             user_password=user.password,
-            user_language=user.language
+            user_language=user.language,
+            user_photo=user.photo_url
         )
 
     def delete_user(self, user_id: int) -> None:

@@ -6,7 +6,7 @@ from config import Configurations
 
 from src.controller import MainController, FlaskController, TerminalController
 from src.controller import UserController, MyUserController, DummyUserController
-from src.controller import LanguageController, MyLanguageController
+from src.controller import LanguageController, MyLanguageController, DummyLanguageController
 from src.model import UserModel, MyUserModel
 from src.model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model import WordsModel, MyWordsModel

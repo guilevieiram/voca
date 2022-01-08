@@ -6,7 +6,7 @@ import Disconnect from "./Disconnect";
 
 import { apiEndpoint } from "../../app.config";
 
-import { getUser, updateUser, GetUserRequestState, UpdateUserRequestState, GetScoreRequestState } from "../../models";
+import { getUser, updateUser, GetUserRequestState, UpdateUserRequestState } from "../../models";
 
 type UserPageProps = {
     userId: number | null
