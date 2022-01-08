@@ -53,7 +53,7 @@ function App(): React.ReactElement {
             <Route path="/signup" element={ifNotLoggedIn(<UserSignup />)}/>
             <Route path="/add_words" element={ifLoggedIn(<AddWordsPage userId={userId}/>)} />
             <Route path="/play" element={ifLoggedIn(<PlayPage userId={userId}/>)} />
-            <Route path="/user_page" element={ifLoggedIn(<UserPage />)}/>
+            <Route path="/user_page" element={ifLoggedIn(<UserPage userId={userId} />)}/>
             <Route path="/config" element={<ConfigPage />} />
             <Route path='*' element={<NotFoundPage />}/>
           </Routes>

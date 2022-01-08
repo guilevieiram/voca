@@ -15,8 +15,8 @@ type User = {
 };
 type setUserType = (user: User) => void;
 
-function getUser (userId: number, setUser: setUserType, setRequestState: setRequestStateType, url: string): void {
-    const endpoint = `${url}language/get`;
+function getUser (userId: number | null, setUser: setUserType, setRequestState: setRequestStateType, url: string): void {
+    const endpoint = `${url}user/get`;
     const data = {
         user_id: userId
     };

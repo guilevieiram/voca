@@ -10,8 +10,8 @@ enum UpdateUserRequestState{
 
 type setRequestStateType = (requestState: UpdateUserRequestState) => void;
 
-function updateUser (userId: number, property: string, value: string, setRequestState: setRequestStateType, url: string): void {
-    const endpoint = `${url}language/update`;
+function updateUser (userId: number | null, property: string, value: string, setRequestState: setRequestStateType, url: string): void {
+    const endpoint = `${url}user/update`;
     const data = {
         user_id: userId,
         property: property,

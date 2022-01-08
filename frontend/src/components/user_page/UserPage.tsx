@@ -2,8 +2,12 @@ import EditableLine from "./EditableLine";
 import EditableImage from "./EditableImage";
 import { useState, useEffect } from "react";
 
-type UserPageProps = {
+import { apiEndpoint } from "../../app.config";
 
+import { getUser, updateUser, GetUserRequestState, UpdateUserRequestState, GetScoreRequestState } from "../../models";
+
+type UserPageProps = {
+    userId: number | null
 };
 
 type User = {
@@ -13,22 +17,48 @@ type User = {
 }
 
 // for now user cannot eddit their photos for i dont know how to do that and I dont care for the moment.
-export default function UserPage ({ }:UserPageProps): React.ReactElement {
+export default function UserPage ({ userId }:UserPageProps): React.ReactElement {
     const [user, setUser] = useState<User>({email: "", name: "", photo: ""});
-    
-    // dummy update user data funcion. Later will be changed to the actual api call.
-    const updateUserData = (key: string, value: string ): void =>  {
-        console.log(`Changing user ${key} to value ${value}`);
-    };
 
+    const [getUserRequestState, setGetUserRequestState] = useState<GetUserRequestState>(GetUserRequestState.NotStarted);
+    const [updateUserRequestState, setUpdateUserRequestState] = useState<UpdateUserRequestState>(UpdateUserRequestState.NotStarted);
+    const updateUserData = (key: string, value: string ): void => updateUser(userId, key, value, setUpdateUserRequestState, apiEndpoint);
+
+    useEffect(() => getUser(userId, setUser, setGetUserRequestState, apiEndpoint), []);
     useEffect(() => {
-        //needs to be changed by the api call who will fetch the user data
-        setUser({
-            name: "Guilherme Vieira",
-            email: "guile@gmail.com",
-            photo: "https://icatcare.org/app/uploads/2018/07/Thinking-of-getting-a-cat.png"
-        });
-    }, []);
+        switch(getUserRequestState){
+            case GetUserRequestState.BackendIssue: {
+                window.alert("Looks like our servers are down. Try again in a couple of minutes!");
+                break;
+            }
+            case GetUserRequestState.UserNotFound: {
+                window.alert("You've been disconnected, please login.");
+                sessionStorage.removeItem("token");
+                window.location.reload();
+                break;
+            }
+            default: break;
+        }
+    }, [getUserRequestState]);
+    useEffect(() => {
+        switch(updateUserRequestState){
+            case UpdateUserRequestState.Successful: {
+                window.alert("Information updated successfully.");
+                break;
+            }
+            case UpdateUserRequestState.BackendIssue: {
+                window.alert("Looks like our servers are down. Try again in a couple of minutes!");
+                break;
+            }
+            case UpdateUserRequestState.UserNotFound: {
+                window.alert("You've been disconnected, please login.");
+                sessionStorage.removeItem("token");
+                window.location.reload();
+                break;
+            }
+            default: break;
+        }
+    }, [updateUserRequestState]);
 
     return (
         <div className="w-full">
