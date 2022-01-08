@@ -6,6 +6,8 @@ import { signupUser, UserSignupRequestState } from "./SignupUser";
 import { addWords, AddWordsRequestState } from "./AddWords";
 import { getWords, GetWordsRequestState } from "./GetWords";
 import { getScore, GetScoreRequestState } from "./GetScore";
+import { getUser, GetUserRequestState } from "./GetUser";
+import { updateUser, UpdateUserRequestState } from "./UpdateUser";
 
 export {
     // request funcitons
@@ -17,12 +19,16 @@ export {
     addWords,
     getWords,
     getScore,
+    getUser,
+    updateUser,
 
     // requests states
     UserLoginRequestState,
     UserSignupRequestState,
     AddWordsRequestState,
     GetWordsRequestState,
-    GetScoreRequestState
+    GetScoreRequestState,
+    GetUserRequestState,
+    UpdateUserRequestState
 };
 export type { Language };
