@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
+
 import EditableLine from "./EditableLine";
 import EditableImage from "./EditableImage";
-import { useState, useEffect } from "react";
+import Disconnect from "./Disconnect";
 
 import { apiEndpoint } from "../../app.config";
 
@@ -67,6 +69,7 @@ export default function UserPage ({ userId }:UserPageProps): React.ReactElement 
             <EditableImage apiKey="user_profile" placeholder={user.photo} changeFunction={updateUserData} />
             <EditableLine apiKey="user_name" label="Name" placeholder={user.name} inputType="text" changeFunction={updateUserData}/>
             <EditableLine apiKey="user_email" label="E-mail" placeholder={user.email} inputType="email" changeFunction={updateUserData}/>
+            <Disconnect />
         </div>
     )
 };
