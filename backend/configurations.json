@@ -1,4 +1,5 @@
 {
+    "debug": true,
     "supportedLanguages": [
             {
                 "name": "English",

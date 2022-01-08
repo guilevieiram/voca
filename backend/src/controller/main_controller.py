@@ -91,8 +91,9 @@ class TerminalController(MainController):
         self.add_resources(sub_controller=user_controller)
         self.add_resources(sub_controller=language_controller)
         
-    def run(self) -> None:
+    def run(self, debug: bool = True) -> None:
         """Runs the application."""
+        print(f"Running controller {'(debug active)' if debug else ''}")
         while self.on:
             endpoint: str = input("\n~ ")
             if endpoint in ["exit", "EXIT", "Exit", "e", "exit()"]:

@@ -21,6 +21,12 @@ class Configurations:
     configuration_file: str = "configurations.json"
 
     @property
+    def debug(self) -> bool:
+        """Returns a boolean to say if the debug mode is active."""
+        with open(self.configuration_file, encoding="utf-8") as file:
+            return load(file).get("debug")
+
+    @property
     def supported_languages(self) -> List[Dict[str, str]]:
         """Return all the supported languages of the backend application."""
         with open(self.configuration_file, encoding="utf-8") as file:

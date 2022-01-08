@@ -45,4 +45,4 @@ endpoint = main_controller(
 app = endpoint.app
 
 if __name__ == "__main__":
-    endpoint.run()
+    endpoint.run(debug=Configurations.debug)
