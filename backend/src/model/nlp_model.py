@@ -3,6 +3,8 @@ from typing import Dict, Any, List
 
 import spacy
 
+from src.model.exceptions import LanguageNotSupportedError
+
 class NlpModel(ABC):
     """Abstract model class to handle Natural Language Processing related tasks."""
 
@@ -32,22 +34,19 @@ class SpacyNlpModel(NlpModel):
             "fr": "fr_core_news_md",
             "ru": "ru_core_news_md",
             "pt": "pt_core_news_md",
-            "zh-cn": "zh_core_web_md"
+            "zh-CN": "zh_core_web_md"
         }
-
         self.nlp: Dict[str, Any] = {} # dictionary to encapsulate all the loaded modules
         for language in supported_languages:
             self.nlp[language] = spacy.load(languages_models_mapping[language])
 
-
     def calculate_similarity(self, first_word: str, second_word: str, language: str) -> float:
-        """Calculates the similarity between two words."""
-        first_token = self.nlp[language](first_word)
-        second_token = self.nlp[language](second_word)
-        print(f"the similarity between {first_token} and {second_token} is {first_token.similarity(second_token)}")
-        return first_token.similarity(second_token)
+        """Calculates the similarity between two words in a given language."""
+        if not isinstance(first_word, str) or not isinstance(second_word, str):
+            raise TypeError("The words should be passed in as strings.")
 
-if __name__ == "__main__":
-    n = SpacyNlpModel()
-    score = n.calculate_similarity("soleil", "ciel", "fr")
-    print(score)
+        try:
+            nlp = self.nlp[language]
+        except KeyError:
+            raise LanguageNotSupportedError("This language has no modules that support it.")
+        return nlp(first_word).similarity(nlp(second_word))
