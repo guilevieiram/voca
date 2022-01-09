@@ -1,7 +1,7 @@
 from unittest import TestCase, mock
 
 from src.controller import MyUserController
-from src.model import UserModel, User
+from src.model import User
 from src.model.exceptions import WrongPasswordError, UserAlreadyExistsError, UserIdError, PropertyNotValidError, ValueTypeNotValidError, UserNotFoundError
 
 class MyUserControllerTestCase (TestCase):

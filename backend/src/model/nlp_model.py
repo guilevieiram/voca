@@ -28,7 +28,6 @@ class DummyNlpModel(NlpModel):
 class SpacyNlpModel(NlpModel):
     """Concrete model class to handle Natural Language Processing related tasks implemented using Spacy."""
 
-    
     def __init__(self, supported_languages: List[str]) -> None:
         """Initializer to import the necessary spacy models."""
 
@@ -47,7 +46,6 @@ class SpacyNlpModel(NlpModel):
         """Calculates the similarity between two words in a given language."""
         if not isinstance(first_word, str) or not isinstance(second_word, str):
             raise TypeError("The words should be passed in as strings.")
-
         try:
             nlp = self.nlp[language]
         except KeyError:

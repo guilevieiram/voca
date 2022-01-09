@@ -4,12 +4,6 @@ from src.controller import LanguageController, MyLanguageController
 from src.model import WordInfo
 from src.model.exceptions import LanguageNotSupportedError, UserIdError, WordDoesNotExistError, TranslationNotFound, TranslationApiConnectionError, NlpCalculationError
 
-"""
-Lacking implementation:
-- type checking of the inputs
-- differenciating between server error and db error (in all tests and controllers)
-"""
-
 
 class MyLanguageControllerTestCase(TestCase):
 

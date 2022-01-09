@@ -1,4 +1,5 @@
 {
+    "postgresqlDatabase": "VOCA_DATABASE_URL",
     "debug": true,
     "supportedLanguages": [
         {
@@ -10,21 +11,6 @@
             "name": "French",
             "flag": "🇫🇷",
             "code": "fr"
-        },
-        {
-            "name": "Portuguese",
-            "flag": "🇧🇷",
-            "code": "pt"
-        },
-        {
-            "name": "Russian",
-            "flag": "🇷🇺",
-            "code": "ru"
-        },
-        {
-            "name": "Chinese (simplified)",
-            "flag": "🇨🇳",
-            "code": "zh-CN"
         }
     ]
 }

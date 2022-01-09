@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Optional, Dict, Any
+from typing import List, Optional, Dict, Any
 from dataclasses import dataclass
 
-from .db_model import DataBaseModel
+from .database_model import DataBaseModel
 
 @dataclass
 class WordInfo:

@@ -1,6 +1,5 @@
 from abc import abstractmethod
-from typing import Callable, List, Dict, Any
-from json import load
+from typing import Callable, List, Dict
 
 from src.model import WordInfo 
 from src.model import NlpModel, TranslationModel, WordsModel
@@ -20,22 +19,22 @@ class LanguageController(SubController):
     supported_languages: List[Dict[str, str]]
     conversion_function: Callable[..., int] # converts float to int but python keeps sending me errors if I put float in the type annotation
 
-    @router(endpoint="")
+    @router(endpoint="language/add_words")
     @abstractmethod
     def res_add_words(self, user_id: int, words: List[str]) -> ResourceResponse:
         """Adds a list of words in the database for a given user located by its ID. Returns the api response dict/json."""
 
-    @router(endpoint="")
+    @router(endpoint="language/get_words")
     @abstractmethod
     def res_get_words_from_user(self, user_id: int) -> ResourceResponse:
         """Gets the list of words from an user sorted by relevance, along with the words ids. Returns the api response dict/json."""
 
-    @router(endpoint="")
+    @router(endpoint="language/score")
     @abstractmethod
     def res_calculate_score(self, word_id: int, word: str) -> ResourceResponse:
         """Calculates the similarity score between the user inputed word and the given word in the DB located by its ID. Returns the api response."""
 
-    @router(endpoint="")
+    @router(endpoint="language/supported_languages")
     @abstractmethod
     def res_get_supported_languages(self) -> ResourceResponse:
         """Returns the dictionary of the supported languages on user signup."""
@@ -50,6 +49,7 @@ class LanguageController(SubController):
                 }, ...
             ]
         }
+
 
 class DummyLanguageController(LanguageController):
     """Dummy controller responsible for defining the endpoints of the language related tasks of the api."""
@@ -98,7 +98,6 @@ class DummyLanguageController(LanguageController):
         }
 
 
-# The implementation user input type checking error handling
 class MyLanguageController(LanguageController):
     """Concrete controller responsible for defining the endpoints of the language related tasks of the api."""
 
@@ -154,10 +153,12 @@ class MyLanguageController(LanguageController):
                 "message": "An error occured in the database."
             }
             
-    # can be redesigned to take words and languages from frontend (will need more testing and confirmation)
     @router(endpoint="language/score")
     def res_calculate_score(self, word_id: int, word: str) -> ResourceResponse:
-        """Calculates the similarity score between the user inputed word and the given word in the DB located by its ID. Returns the api response."""
+        """
+        Calculates the similarity score between the user inputed word and the given word in the DB located by its ID. Returns the api response.
+        Can be redesigned to to take words and languages from the frontend. Not a priority right now.
+        """
         try:
             word_info: WordInfo = self.words_model.get_word_and_language(word_id=word_id)
             translated_word: str = self.translation_model.translate(

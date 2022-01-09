@@ -1,23 +1,24 @@
 from unittest import TestCase, mock
-from typing import List
 
 from src.model import LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError, WordDoesNotExistError
 
-from src.model.db_model import parse_postgresql_url, construct_and_query, encapsulate, construct_values_query, UniqueViolation, DatatypeMismatch
+from src.model.database_model import parse_postgresql_url, construct_and_query, encapsulate, construct_values_query, UniqueViolation, DatatypeMismatch
 
 
 class PostgresqlDataBaseModelTestCase(TestCase):
 
     def setUp(self):
-        patcher = mock.patch('src.model.db_model.psycopg2.connect')
+        patcher = mock.patch('src.model.database_model.psycopg2.connect')
         self.connect = patcher.start()
         self.addCleanup(patcher.stop)
 
         self.connect.commit.return_value = None
         self.cursor = self.connect.return_value.cursor.return_value.__enter__.return_value
 
-        self.db_model = PostgresqlDataBaseModel()
+        self.database_model = PostgresqlDataBaseModel(
+            database_url="postgres://username:password@asd-10-10-100-100-100.computer-1.amazonaws.com:5000/databasename"
+        )
 
     def test_url_parsing(self):
         result = parse_postgresql_url(
@@ -60,17 +61,17 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.connect.side_effect = Exception("ops...")
         self.assertRaises(
             ConnectionToDBRefusedError,
-            self.db_model.connect
+            self.database_model.connect
         )
 
     def test_add_user(self):
         self.cursor.execute.side_effect = UniqueViolation("ops..")
-        patcher = mock.patch('src.model.db_model.PostgresqlDataBaseModel._rollback')
+        patcher = mock.patch('src.model.database_model.PostgresqlDataBaseModel._rollback')
         self._rollback = patcher.start()
         self._rollback.return_value = None
         self.assertRaises(
             UserAlreadyExistsError,
-            self.db_model.add_user,
+            self.database_model.add_user,
             user_name="Guile",
             user_email="guile@gmail.com",
             user_password="senha123",
@@ -83,14 +84,14 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.cursor.fetchone.return_value = None
         self.assertRaises(
             UserIdError,
-            self.db_model.delete_user,
+            self.database_model.delete_user,
             user_id=1
         )
 
     def test_find_user_property_not_valid(self):
         self.assertRaises(
             PropertyNotValidError, 
-            self.db_model.find_user,
+            self.database_model.find_user,
             properties={
                 "surname": "Guile"
             }
@@ -99,7 +100,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
     def test_find_user_value_type_not_valid(self):
         self.assertRaises(
             ValueTypeNotValidError,
-            self.db_model.find_user,
+            self.database_model.find_user,
             properties={
                 "user_name": 12
             }
@@ -109,7 +110,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.cursor.fetchone.return_value = None
         self.assertRaises(
             UserNotFoundError,
-            self.db_model.find_user,
+            self.database_model.find_user,
             properties={
                 "user_name": "Guile"
             }
@@ -118,7 +119,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
     def test_update_user_property_not_valid(self):
         self.assertRaises(
             PropertyNotValidError, 
-            self.db_model.update_user,
+            self.database_model.update_user,
             user_id=10,
             property="surname",
             value="Vieira"
@@ -127,7 +128,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
     def test_update_user_value_type_not_valid(self):
         self.assertRaises(
             ValueTypeNotValidError,
-            self.db_model.update_user,
+            self.database_model.update_user,
             user_id=10,
             property="user_name",
             value=10
@@ -137,7 +138,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.cursor.fetchone.return_value = None
         self.assertRaises(
             UserIdError,
-            self.db_model.update_user,
+            self.database_model.update_user,
             user_id=10,
             property="user_name",
             value="Guile"
@@ -147,13 +148,13 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.cursor.fetchone.return_value = None
         self.assertRaises(
             UserIdError,
-            self.db_model.get_user,
+            self.database_model.get_user,
             user_id=10
         )
     
     def test_add_words(self):
         self.assertIsNone(
-            self.db_model.add_words(
+            self.database_model.add_words(
                 user_id=1,
                 words=["House", "Plant"]
             )
@@ -162,7 +163,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
     def test_add_words_wrong_type(self):
         self.assertRaises(
             TypeError,
-            self.db_model.add_words,
+            self.database_model.add_words,
             0,
             ["House", 3]
         )
@@ -171,7 +172,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.cursor.fetchone.return_value = None
         self.assertRaises(
             UserIdError,
-            self.db_model.add_words,
+            self.database_model.add_words,
             10,
             ["House", "Horse"]
         )
@@ -181,7 +182,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             ("House", 1), ("Plant", 5)
         ]
         self.assertEqual(
-            self.db_model.get_words(user_id=1),
+            self.database_model.get_words(user_id=1),
             [
                 {
                     "word": "House",
@@ -198,14 +199,14 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.cursor.fetchone.return_value = None
         self.assertRaises(
             UserIdError,
-            self.db_model.get_words,
+            self.database_model.get_words,
             user_id=10
         )
     
     def test_get_word_and_user_info(self):
         self.cursor.fetchone.return_value = (1, "Test", "test@gmail.com", "ph.com", "English", 2, "Plant", 20, True)
         self.assertEqual(
-            self.db_model.get_word_and_user_info(word_id=2),
+            self.database_model.get_word_and_user_info(word_id=2),
             {
                 "user": {
                     "id": 1,
@@ -227,14 +228,14 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.cursor.fetchone.return_value = None
         self.assertRaises(
             WordDoesNotExistError,
-            self.db_model.get_word_and_user_info,
+            self.database_model.get_word_and_user_info,
             word_id=100
         )
 
     def test_update_word_property_not_valid(self):
         self.assertRaises(
             PropertyNotValidError,
-            self.db_model.update_word,
+            self.database_model.update_word,
             word_id=1,
             property="aaa",
             value=True
@@ -244,7 +245,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.cursor.fetchone.side_effect = DatatypeMismatch
         self.assertRaises(
             ValueTypeNotValidError,
-            self.db_model.update_word,
+            self.database_model.update_word,
             word_id=1,
             property="score",
             value=True
@@ -254,7 +255,7 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.cursor.fetchone.return_value = None
         self.assertRaises(
             WordDoesNotExistError,
-            self.db_model.update_word,
+            self.database_model.update_word,
             word_id = 1,
             property = "user_id",
             value=10

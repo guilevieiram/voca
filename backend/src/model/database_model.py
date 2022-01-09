@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional, Union, Dict, Any
-from os import environ
 
 import psycopg2
-from psycopg2.errors import UniqueViolation, InFailedSqlTransaction, DatatypeMismatch
+from psycopg2.errors import UniqueViolation, DatatypeMismatch
 
 from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError, WordDoesNotExistError
+
 
 def parse_postgresql_url(url: str) -> dict:
     """A function to parse the posgresql url into a dictionary format with the login information"""
@@ -107,13 +107,14 @@ class DataBaseModel(ABC):
 
 
 class PostgresqlDataBaseModel(DataBaseModel):
-    """Data base model that is implemented using local variables to store data. Mostly to test purposes"""
+    """PostgreSQL database implementation. Production oriented."""
 
-    def __init__(self) -> None:
+    def __init__(self, database_url: str) -> None:
         """Initializes the data base tables as local lists"""
-        self.url = environ.get("VOCA_DATABASE_URL")
+        self.url = database_url
         self.connection: psycopg2.connect
         self.connect()
+
         self.user_table_columns = ["user_name", "user_email", "user_password", "user_language", "user_photo"]
         self.words_table_columns = ["word", "score", "active", "user_id"]
 
@@ -245,7 +246,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
         return [{
             "word": word,
             "id": id
-        }for word, id in results]
+        } for word, id in results]
 
     def get_word_and_user_info(self, word_id: int) -> dict:
         """Gets all relevant info from a word and its user given the word ID."""
@@ -316,13 +317,12 @@ class PostgresqlDataBaseModel(DataBaseModel):
             raise UserIdError("The required user cannot be found in the database.")
 
 
-
 class LocalDataBaseModel(DataBaseModel):
     """Data base model that is implemented using local variables to store data. Mostly to test purposes"""
 
-    def __init__(self) -> None:
-        """Initializes the data base tables as local lists"""
-        self.connection: bool = True
+    def __init__(self, database_url: str = "") -> None:
+        """Initializes the data base tables as local lists. The url is only to facilitate integration."""
+        self.connection: bool = bool(database_url)
         self.users: List[dict] = [{
             "user_name": "test",
             "user_email": "test@gmail.com",
@@ -341,7 +341,6 @@ class LocalDataBaseModel(DataBaseModel):
         """Method to be called to connect with the database"""
         if not self.connection:
             raise ConnectionToDBRefusedError("Connection to the db could not be made.")
-            
         print("Connection made!")
 
     def close_connection(self) -> None:
@@ -397,7 +396,6 @@ class LocalDataBaseModel(DataBaseModel):
         """Gets a user non-sensible info from the database and returns in the form of a dictionary."""
         if not user_id < len(self.users) or self.users[user_id] is None:
             raise UserIdError("The required user cannot be found in the database.")
-
         user = self.users[user_id]
         return {
             "user_name": user.get("user_name"),

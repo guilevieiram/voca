@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from typing import Union, Optional, Dict, List
 
-from .db_model import DataBaseModel
+from .database_model import DataBaseModel
 from .exceptions import UserNotFoundError, WrongPasswordError, LanguageNotSupportedError
 
 
@@ -26,32 +26,26 @@ class UserModel(ABC):
     @abstractmethod
     def add_user(self, user: User) -> None:
         """Adds a given user to the data base."""
-        pass
 
     @abstractmethod
     def delete_user(self, user_id: int) -> None:
         """Deletes a user from the data base."""
-        pass
 
     @abstractmethod
     def get_user(self, user_id) -> User:
         """Finds a user in the data base by its id and returns the user object."""
-        pass
 
     @abstractmethod
     def get_user_id(self, properties: Dict[str, str]) -> int:
         """Gets the first found user that satisfy the property value dictionary pairs"""
-        pass
 
     @abstractmethod
     def login_user(self, user_email: str, user_password: str) -> int:
         """Logs in a user with email and password, returning the user id if valid credentials"""
-        pass
 
     @abstractmethod
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
         """Updates a user in the data base given the user_id and a property, value pair."""
-        pass
 
 
 class MyUserModel(UserModel):
@@ -97,9 +91,9 @@ class MyUserModel(UserModel):
         """Gets the first found user that satisfy that property"""
         return self.database_model.find_user(properties=properties)
     
-    # Right now this method is making two calls to the database and can be enhanced sometime in the future ...
     def login_user(self, user_email: str, user_password: str) -> int:
         """Tries to log in the user returning the user id if successful"""
+        # Right now this method is making two calls to the database and can be enhanced sometime in the future ...
         try:
             self.database_model.find_user(properties={
                 "user_email": user_email

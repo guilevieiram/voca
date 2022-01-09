@@ -6,6 +6,7 @@ This class is to be utilized only by the app.py file.
 
 from typing import List, Dict
 from json import load
+import os
 
 
 def instantiate(cls):
@@ -18,7 +19,14 @@ def instantiate(cls):
 class Configurations:
     """Configuration class, not to be instantiated but to be utilized to get the configurations from the raw config file."""
 
-    configuration_file: str = "configurations_testing.json"
+    configuration_file: str = "configurations.json"
+
+    @property
+    def database_url(self) -> str:
+        """Returns the database url."""
+        with open(self.configuration_file, encoding="utf-8") as file:
+            database_url_env_name: str = load(file).get("postgresqlDatabase")
+        return os.environ.get(database_url_env_name)
 
     @property
     def debug(self) -> bool:

@@ -28,22 +28,19 @@ def insert_https_parameters(sub_controller: SubController, parameters_names: Lis
 
 
 class MainController(ABC):
-    """Responsible for controlling the application"""
+    """Responsible for controlling the application."""
 
     @abstractmethod
     def __init__(self, user_controller: UserController, language_controller: LanguageController):
         """Initialises the controller with the necessary subcontrollers and adds the resources from those subcontrollers."""
-        pass
 
     @abstractmethod
     def run(self) -> None:
         """Runs the application."""
-        pass
 
     @abstractmethod
     def add_resources(self, sub_controller: SubController) -> None:
         """Add resources from the other controllers"""
-        pass
 
 
 class FlaskController(MainController):
@@ -72,7 +69,7 @@ class FlaskController(MainController):
     def _home(self) -> None:
         """Defines an api endpoint to check if the server ir running fine and well."""
         @self.app.route("/")
-        def home() -> dict:
+        def _() -> dict:
             return {
                 "code": 1,
                 "message": "all good here!!"

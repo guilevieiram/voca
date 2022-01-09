@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from googletrans import Translator
 from .exceptions import LanguageNotSupportedError
 
+
 class TranslationModel(ABC):
     """Abstract model class to handle translation of words between languages"""
 

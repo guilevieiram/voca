@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, asdict
+from dataclasses import asdict
 from typing import Any, Optional 
 
 from .sub_controller import SubController, router, ResourceResponse
@@ -10,53 +10,43 @@ from src.model.exceptions import UserNotFoundError, UserIdError, UserAlreadyExis
 
 
 class UserController(SubController):
-    """
-    UserController abstract class responsible for defining user related resources.
-    """
+    """UserController abstract class responsible for defining user related resources."""
 
     @abstractmethod
     def close_connection(self) -> None:
         """Closes connections with databases"""
-        pass
         
-    @router(endpoint="")
+    @router(endpoint="user/login")
     @abstractmethod
     def res_login(self, user_email: str, password: str) -> ResourceResponse:
         """Logs a user in and returns the dict message with the user id (if successfull)"""
-        pass
 
-    @router(endpoint="")
+    @router(endpoint="user/signup")
     @abstractmethod
     def res_sign_up(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> ResourceResponse:
         """Add a user in the system."""
-        pass
         
-    @router(endpoint="")
+    @router(endpoint="user/delete")
     @abstractmethod
     def res_delete_user(self, user_id: id) -> ResourceResponse:
         """Delete a user in the system."""
-        pass
         
-    @router(endpoint="")
+    @router(endpoint="user/get")
     @abstractmethod
     def res_get_user(self, user_id: int) -> ResourceResponse:
         """Find a user in the system."""
-        pass
         
-    @router(endpoint="")
+    @router(endpoint="user/update")
     @abstractmethod
     def res_update_user(self, user_id: int, property: str, value: Any) -> ResourceResponse:
         """Update a user in the system."""
-        pass
 
 
 class DummyUserController(UserController):
-    """
-    UserController dummy class responsible for defining user related resources.
-    """
+    """UserController dummy class responsible for defining user related resources."""
+
     def __init__(self, *args, **kwargs) -> None:
         """Initializes the dummy controller with whatever args it needs"""
-        pass
     
     def close_connection(self) -> None:
         """Closes connections with databases"""
@@ -105,9 +95,7 @@ class DummyUserController(UserController):
 
 
 class MyUserController(UserController):
-    """
-    UserController implementation responsible for defining user related resources.
-    """
+    """UserController implementation responsible for defining user related resources."""
 
     def __init__(self, user_model: UserModel):
         """Initializer that makes connection with the required user model"""
@@ -140,7 +128,7 @@ class MyUserController(UserController):
                 "code": Error.WRONG_PASSWORD_ERROR.value,
                 "message": "Wrong password."
             }
-        except Exception as e:
+        except Exception:
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured with the database."
@@ -166,7 +154,7 @@ class MyUserController(UserController):
                 "code": Error.USER_ALREADY_EXISTS_ERROR.value,
                 "message": "This user email is already in use."
             }
-        except Exception as e:
+        except Exception:
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
@@ -186,7 +174,7 @@ class MyUserController(UserController):
                 "code": Error.USER_ID_ERROR.value,
                 "message": "Given user id is not valid."
             }
-        except Exception as e:
+        except Exception:
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
@@ -207,7 +195,7 @@ class MyUserController(UserController):
                 "code": Error.USER_ID_ERROR.value,
                 "message": "Given user id is not valid."
             }
-        except Exception as e:
+        except Exception:
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
@@ -241,7 +229,7 @@ class MyUserController(UserController):
                 "code": Error.VALUE_TYPE_NOT_VALID_ERROR.value,
                 "message": "The wanted value is not from the right type."
             }
-        except Exception as e:
+        except Exception:
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."

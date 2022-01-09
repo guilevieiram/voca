@@ -1,15 +1,17 @@
 from abc import ABC
 from dataclasses import dataclass
 from enum import Enum
-from typing import Callable, Any, List, Dict, Union
+from typing import Callable, Any, List, Dict
 from inspect import signature, getmembers
 
 
 ResourceResponse = Dict[str, Any]
 
+
 class Method(Enum):
     GET = "GET"
     POST = "POST"
+
 
 @dataclass
 class Resource:
