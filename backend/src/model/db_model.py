@@ -5,8 +5,6 @@ from os import environ
 import psycopg2
 from psycopg2.errors import UniqueViolation, InFailedSqlTransaction
 
-from model.words_model import WordInfo
-
 from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError, WordDoesNotExistError
 
 def parse_postgresql_url(url: str) -> dict:
@@ -438,10 +436,10 @@ class LocalDataBaseModel(DataBaseModel):
         """Updates the given word property to the given value in the database."""
         if not property in self.words[0].keys():
             raise PropertyNotValidError("The required property is not valid.")
-        if not isinstance(value, (bool, int, str)):
+        if type(value) != type(self.words[0].get(property)):
             raise ValueTypeNotValidError("The value given is not of the correct type.")
         try:
-            word = self.words[word_id]
+            self.words[word_id][property] = value
         except IndexError:
             raise WordDoesNotExistError("The required word does not exists.")
         

@@ -482,6 +482,75 @@ class LocalDbModelTestCase(TestCase):
             10
         )
 
+    def test_update_word(self):
+        self.database.update_word(
+            word_id=0,
+            property="score",
+            value=20
+        )
+        self.assertEqual(
+            self.database.words[0]["score"],
+            20
+        )
+        self.database.update_word(
+            word_id=0,
+            property="active",
+            value=False
+        )
+        self.assertEqual(
+            self.database.words[0]["active"],
+            False
+        )
+        self.database.update_word(
+            word_id=0,
+            property="user_id",
+            value=10
+        )
+        self.assertEqual(
+            self.database.words[0]["user_id"],
+            10 
+        )
+    
+    def test_update_word_property_not_valid(self):
+        self.assertRaises(
+            PropertyNotValidError,
+            self.database.update_word,
+            word_id=0,
+            property="aaaa",
+            value=True
+        )
+    
+    def test_update_word_value_type_not_valid(self):
+        self.assertRaises(
+            ValueTypeNotValidError,
+            self.database.update_word,
+            word_id=0,
+            property="score",
+            value="hey"
+        )
+        self.assertRaises(
+            ValueTypeNotValidError,
+            self.database.update_word,
+            word_id=0,
+            property="active",
+            value=10
+        )
+        self.assertRaises(
+            ValueTypeNotValidError,
+            self.database.update_word,
+            word_id=0,
+            property="user_id",
+            value=True
+        )
+
+    def test_update_word_word_not_exists(self):
+        self.assertRaises(
+            WordDoesNotExistError,
+            self.database.update_word,
+            word_id=100,
+            property="score",
+            value=10
+        )
 
 
 
