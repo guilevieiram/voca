@@ -29,7 +29,7 @@ function App(): React.ReactElement {
   const getToken = (): string | null => sessionStorage.getItem('token');
   const token: string | null = getToken();
   const ifLoggedIn = (element: React.ReactElement): React.ReactElement => token ? element : <Navigate replace to="/login" />;
-  const ifNotLoggedIn = (element: React.ReactElement): React.ReactElement => !token ? element : <Navigate replace to="/" />;
+  const ifNotLoggedIn = (element: React.ReactElement): React.ReactElement => !token ? element : <Navigate replace to="/add_words" />;
 
   const [userId, setUserId] = useState<number | null>(null);
   useEffect(() => {
