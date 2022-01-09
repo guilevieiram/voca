@@ -18,17 +18,18 @@ class WordsModel(ABC):
     @abstractmethod
     def add_words(self, user_id: int, words: List[str]) -> None:
         """Adds a list of words in the DB associated with a user"""
-        pass
 
     @abstractmethod
     def get_words_from_user(self, user_id: int) -> List[str]:
         """Fetches a list of words from the DB and returns as list in importance order"""
-        pass
 
     @abstractmethod
     def get_word_and_language(self, word_id: int) -> WordInfo:
         """Fetches the word and language of that word given the word ID."""
-        pass
+
+    @abstractmethod
+    def update_word_score(self, word_id: int, score: int) -> None:
+        """Updates a given word score in the database."""
 
 
 class DummyWordsModel(WordsModel):
@@ -50,6 +51,9 @@ class DummyWordsModel(WordsModel):
         """Fetches the word and language of that word given the word ID."""
         return WordInfo(word="Word1", language="english")
 
+    def update_word_score(self, word_id: int, score: int) -> None:
+        """Updates a given word score in the database."""
+        print(f"Updated word with id {word_id} to have {score=}")
 
 class MyWordsModel(WordsModel):
     """Concrete model class to handle the words related methods with the database"""
@@ -72,4 +76,12 @@ class MyWordsModel(WordsModel):
         return WordInfo(
             word=infos.get("word").get("word"),
             language=infos.get("user").get("language")
+        )
+
+    def update_word_score(self, word_id: int, score: int) -> None:
+        """Updates a given word score in the database."""
+        self.database_model.update_word(
+            word_id=word_id,
+            property="score",
+            value=score
         )

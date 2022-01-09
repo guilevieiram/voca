@@ -74,7 +74,8 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             user_name="Guile",
             user_email="guile@gmail.com",
             user_password="senha123",
-            user_language="french"
+            user_language="french",
+            user_photo=""
         )
         patcher.stop()
 
@@ -254,7 +255,8 @@ class LocalDbModelTestCase(TestCase):
             user_name="Guile",
             user_email="test@gmail.com",
             user_password="senha1234",
-            user_language="Portuguese"
+            user_language="Portuguese",
+            user_photo=""
         )
     
     def test_delete_user(self):
@@ -356,7 +358,7 @@ class LocalDbModelTestCase(TestCase):
                 "user_name": "test",
                 "user_email": "test@gmail.com",
                 "user_photo": "ph.com",
-                "user_language": "Testuguese"
+                "user_language": "en"
             }
         )
 
@@ -461,7 +463,7 @@ class LocalDbModelTestCase(TestCase):
                     "id": 0,
                     "name": "test",
                     "email": "test@gmail.com",
-                    "language": "Testuguese",
+                    "language": "en",
                     "photo": "ph.com"
                 },
                 "word": {

@@ -8,3 +8,5 @@ from .db_model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 from .nlp_model import NlpModel, DummyNlpModel, SpacyNlpModel
 from .translation_model import TranslationModel, DummyTranslationModel, GoogleTranslationModel
 from .words_model import WordsModel, DummyWordsModel, MyWordsModel, WordInfo
+
+from .functions import ConversionFunction, FloorConversion

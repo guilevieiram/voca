@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import List, Dict
+from typing import Callable, List, Dict
 from json import load
 
 from src.model import WordInfo 
@@ -17,6 +17,8 @@ class LanguageController(SubController):
     nlp_model: NlpModel
     translation_model: TranslationModel
     words_model: WordsModel
+    supported_languages: List[Dict[str, str]]
+    conversion_function: Callable[..., int] # converts float to int but python keeps sending me errors if I put float in the type annotation
 
     @router(endpoint="")
     @abstractmethod
@@ -52,12 +54,13 @@ class LanguageController(SubController):
 class DummyLanguageController(LanguageController):
     """Dummy controller responsible for defining the endpoints of the language related tasks of the api."""
 
-    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]]) -> None:
+    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]], conversion_function: Callable) -> None:
         """Initializes the controller with all the needed initialized models."""
         self.nlp_model: NlpModel = nlp_model
         self.translation_model: TranslationModel = translation_model
         self.words_model: WordsModel = words_model
         self.supported_languages: List[Dict[str, str]] = supported_languages
+        self.conversion_function: Callable = conversion_function
 
     @router(endpoint="language/add_words")
     def res_add_words(self, user_id: int, words: List[str]) -> ResourceResponse:
@@ -99,12 +102,13 @@ class DummyLanguageController(LanguageController):
 class MyLanguageController(LanguageController):
     """Concrete controller responsible for defining the endpoints of the language related tasks of the api."""
 
-    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]]) -> None:
+    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]], conversion_function: Callable) -> None:
         """Initializes the controller with all the needed initialized models."""
         self.nlp_model: NlpModel = nlp_model
         self.translation_model: TranslationModel = translation_model
         self.words_model: WordsModel = words_model
         self.supported_languages: List[Dict[str, str]] = supported_languages
+        self.conversion_function: Callable = conversion_function
 
     @router(endpoint="language/add_words")
     def res_add_words(self, user_id: int, words: List[str]) -> ResourceResponse:
@@ -197,8 +201,7 @@ class MyLanguageController(LanguageController):
                 "code": Error.NLP_CALCULATION_ERROR.value,
                 "message": "The NLP model could not calculate your request."
             }
-        except Exception as e:
-            print(type(e), e)
+        except Exception:
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."

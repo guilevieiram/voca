@@ -38,7 +38,8 @@ class MyLanguageControllerTestCase(TestCase):
                     "flag": "🇬🇧",
                     "code": "en"
                 }
-            ]
+            ],
+            conversion_function=lambda x: 10
         )
 
         self.mock_words_model.get_word_and_language.return_value = WordInfo("Cat", "English")

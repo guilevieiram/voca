@@ -5,6 +5,8 @@ from os import environ
 import psycopg2
 from psycopg2.errors import UniqueViolation, InFailedSqlTransaction
 
+from model.words_model import WordInfo
+
 from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError, WordDoesNotExistError
 
 def parse_postgresql_url(url: str) -> dict:
@@ -98,8 +100,8 @@ class DataBaseModel(ABC):
         }
     
     @abstractmethod
-    def update_word_score(self, word_id: int, score: int) -> None:
-        """Updates the given word score to the given value in the database."""
+    def update_word(self, word_id: int, property: str, value: Union[bool, int, str]) -> None:
+        """Updates the given word property to the given value in the database."""
 
 
 class PostgresqlDataBaseModel(DataBaseModel):
@@ -270,6 +272,9 @@ class PostgresqlDataBaseModel(DataBaseModel):
                 "active": word_active
             }
         }
+
+    def update_word(self, word_id: int, property: str, value: Union[bool, int, str]) -> None:
+        """Updates the given word property to the given value in the database."""
     
     def _rollback(self) -> None:
         with self.connection.cursor() as cursor:
@@ -428,11 +433,15 @@ class LocalDataBaseModel(DataBaseModel):
                 "active": word.get("active")
             }
         }
-
-    def update_word_score(self, word_id: int, score: int) -> None:
-        """Updates the given word score to the given value in the database."""
+        
+    def update_word(self, word_id: int, property: str, value: Union[bool, int, str]) -> None:
+        """Updates the given word property to the given value in the database."""
+        if not property in self.words[0].keys():
+            raise PropertyNotValidError("The required property is not valid.")
+        if not isinstance(value, (bool, int, str)):
+            raise ValueTypeNotValidError("The value given is not of the correct type.")
         try:
-            self.words[word_id]["score"] = score
+            word = self.words[word_id]
         except IndexError:
             raise WordDoesNotExistError("The required word does not exists.")
         
