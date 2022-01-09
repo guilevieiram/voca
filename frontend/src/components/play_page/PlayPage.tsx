@@ -6,13 +6,8 @@ import NextButton from "./NextButton";
 import LoadMore from "./LoadMore";
 
 import { apiEndpoint } from '../../app.config';
-import { getWords, GetWordsRequestState } from "../../models";
+import { getWords, GetWordsRequestState, Word } from "../../models";
 import Loader from "../Loader";
-
-type Word = {
-    word: string,
-    id: number
-};
 
 type PlayPageProps = {
     userId: number | null
@@ -51,10 +46,8 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
         setTargetWordIndex(targetWordIndex + 1);
     }
 
-    // to be soon fixed. the api should give the words ids
-    const setWords = (words : string[]): void => setWordsList(words.map(wordString => {return {word: wordString, id: 0}}));
     const loadWords = (): void => {
-        getWords(userId, setWords, setRequestState, apiEndpoint);
+        getWords(userId, setWordsList, setRequestState, apiEndpoint);
         setFinished(false);
         setTargetWordIndex(0);
     };
@@ -93,7 +86,7 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
                 <button onClick={window.location.reload} className="secondary-button ">Reload page.</button> :
                 <>
                     <ShowTargetWord word={targetWord.word} />
-                    <TranslateField setScore={setScore} score={score} wordIndex={targetWordIndex} />
+                    <TranslateField setScore={setScore} wordId={targetWord.id} wordIndex={targetWordIndex} />
                     <div className="w-full flex justify-around items-center my-6">
                         <Score score={score} />
                         <NextButton nextWord={nextWord} show={score !== null}/>

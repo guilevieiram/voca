@@ -6,19 +6,18 @@ import Loader from "../Loader";
 
 type TranslateFieldProps = {
     setScore: (score: number) => void,
-    score: number | null,
+    wordId: number,
     wordIndex: number
 };
 
-export default function TranslateField ({ setScore, score, wordIndex}: TranslateFieldProps): React.ReactElement {
-    const [enableInput, setEnableInput] = useState<boolean>(true);
+export default function TranslateField ({ setScore, wordId, wordIndex}: TranslateFieldProps): React.ReactElement {
     const [translatedWord, setTranslatedWord] = useState<string>("");
     const [requestState, setRequestState] = useState<GetScoreRequestState>(GetScoreRequestState.NotStarted);
     const changeTranslatedWord = (event: any): void => setTranslatedWord(event.target.value);
     const submitWord = (event: any): void => {
         event.preventDefault();
         setTranslatedWord("");
-        getScore(0, translatedWord, setScore, setRequestState, apiEndpoint)
+        getScore(wordId, translatedWord, setScore, setRequestState, apiEndpoint)
     };  
     useEffect(() => {
         const inputElement: any = document.querySelector("#translate-word-input");

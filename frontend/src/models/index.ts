@@ -4,7 +4,7 @@ import { getSupportedLanguages, Language } from "./GetSupportedLanguages";
 import { loginUser, UserLoginRequestState } from "./LoginUser";
 import { signupUser, UserSignupRequestState } from "./SignupUser";
 import { addWords, AddWordsRequestState } from "./AddWords";
-import { getWords, GetWordsRequestState } from "./GetWords";
+import { getWords, GetWordsRequestState, Word } from "./GetWords";
 import { getScore, GetScoreRequestState } from "./GetScore";
 import { getUser, GetUserRequestState } from "./GetUser";
 import { updateUser, UpdateUserRequestState } from "./UpdateUser";
@@ -29,6 +29,6 @@ export {
     GetWordsRequestState,
     GetScoreRequestState,
     GetUserRequestState,
-    UpdateUserRequestState
+    UpdateUserRequestState,
 };
-export type { Language };
+export type { Language, Word };

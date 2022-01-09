@@ -7,8 +7,12 @@ enum GetWordsRequestState{
     BackendIssue
 };
 
+type Word = {
+    word: string,
+    id: number 
+};
 type setRequestStateType = (requestState: GetWordsRequestState) => void;
-type setWordsType = (words: string[]) => void;
+type setWordsType = (words: Word[]) => void;
 
 function getWords (userId: number | null, setWords: setWordsType, setRequestState: setRequestStateType, url: string): void {
     const endpoint = `${url}language/get_words`;
@@ -56,4 +60,5 @@ function getWords (userId: number | null, setWords: setWordsType, setRequestStat
 export {
     GetWordsRequestState,
     getWords
-}
+};
+export type { Word };

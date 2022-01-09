@@ -14,7 +14,7 @@ from src.model import TranslationModel, DummyTranslationModel, GoogleTranslation
 from src.model import NlpModel, DummyNlpModel, SpacyNlpModel
 from src.model import ConversionFunction, FloorConversion
 
-database_model: DataBaseModel = PostgresqlDataBaseModel()
+database_model: DataBaseModel = LocalDataBaseModel()
 
 user_model: UserModel = MyUserModel
 nlp_model: NlpModel = DummyNlpModel
