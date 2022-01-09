@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Callable, List, Dict
+from typing import Callable, List, Dict, Any
 from json import load
 
 from src.model import WordInfo 
@@ -134,11 +134,14 @@ class MyLanguageController(LanguageController):
     def res_get_words_from_user(self, user_id: int) -> ResourceResponse:
         """Gets the list of words from an user sorted by relevance, along with the words ids. Returns the api response dict/json."""
         try:
-            words: List[str] = self.words_model.get_words_from_user(user_id=user_id)
+            words: List[WordInfo] = self.words_model.get_words_from_user(user_id=user_id)
             return {
                 "code": 1,
                 "message": "Words fetched successfully.",
-                "words": words
+                "words": [{
+                    "word": word.word,
+                    "id": word.id
+                } for word in words ]
             }
         except UserIdError:
             return {
@@ -205,8 +208,7 @@ class MyLanguageController(LanguageController):
                 "code": Error.NLP_CALCULATION_ERROR.value,
                 "message": "The NLP model could not calculate your request."
             }
-        except Exception as e:
-            print(type(e), e)
+        except Exception:
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."

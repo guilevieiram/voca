@@ -178,11 +178,20 @@ class PostgresqlDataBaseModelTestCase(TestCase):
     
     def test_get_words(self):
         self.cursor.fetchall.return_value = [
-            ("House", ), ("Plant", )
+            ("House", 1), ("Plant", 5)
         ]
         self.assertEqual(
             self.db_model.get_words(user_id=1),
-            ["House", "Plant"]
+            [
+                {
+                    "word": "House",
+                    "id": 1
+                },
+                {
+                    "word": "Plant",
+                    "id": 5
+                }
+            ]
         )
 
     def test_get_words_user_not_exists(self):
@@ -442,7 +451,16 @@ class LocalDbModelTestCase(TestCase):
         })
         self.assertEqual(
             self.database.get_words(user_id=0),
-            ["House", "Cup"]
+            [
+                {
+                    "word": "House",
+                    "id": 1
+                },
+                {
+                    "word": "Cup",
+                    "id": 0
+                }
+            ]
         )
 
     def test_get_words_actives(self):
@@ -454,7 +472,10 @@ class LocalDbModelTestCase(TestCase):
         })
         self.assertEqual(
             self.database.get_words(user_id=0),
-            ["Cup"]
+            [{
+                "word": "Cup",
+                "id": 0
+            }]
         )
 
     def test_get_words_same_user(self):
@@ -473,7 +494,10 @@ class LocalDbModelTestCase(TestCase):
         })
         self.assertEqual(
             self.database.get_words(user_id=0),
-            ["Cup"]
+            [{
+                "word": "Cup",
+                "id": 0
+            }]
         )
 
     def test_get_words_user_not_exists(self):

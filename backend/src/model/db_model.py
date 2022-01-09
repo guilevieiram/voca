@@ -75,8 +75,12 @@ class DataBaseModel(ABC):
         """Adds a list of words in the words table in the database"""
 
     @abstractmethod
-    def get_words(self, user_id: int) -> List[str]:
+    def get_words(self, user_id: int) -> List[Dict[str, Any]]:
         """Gets the list of words from a user in the relevance order"""
+        return [{
+            "word": ...,
+            "id": ...
+        }, ... ]
 
     @abstractmethod
     def get_word_and_user_info(self, word_id: int) -> dict:
@@ -226,10 +230,10 @@ class PostgresqlDataBaseModel(DataBaseModel):
             cursor.execute(sql)
         self.connection.commit()
 
-    def get_words(self, user_id: int) -> List[str]:
+    def get_words(self, user_id: int) -> List[Dict[str, Any]]:
         """Gets the list of words from a user in the relevance order"""
         sql = f"""
-        SELECT word FROM app_words
+        SELECT word, id FROM app_words
         WHERE user_id = {user_id}
         AND active = true
         ORDER BY score;
@@ -238,7 +242,10 @@ class PostgresqlDataBaseModel(DataBaseModel):
             cursor.execute(sql)
             results = cursor.fetchall()
         self._check_user_exitst(user_id=user_id)
-        return [word for word, in results]
+        return [{
+            "word": word,
+            "id": id
+        }for word, id in results]
 
     def get_word_and_user_info(self, word_id: int) -> dict:
         """Gets all relevant info from a word and its user given the word ID."""
@@ -413,17 +420,20 @@ class LocalDataBaseModel(DataBaseModel):
                 "user_id": user_id
             })
 
-    def get_words(self, user_id: int) -> List[str]:
+    def get_words(self, user_id: int) -> List[Dict[str, Any]]:
         """Gets the list of words from a user in the relevance order"""
         if not user_id < len(self.users) or self.users[user_id] is None:
             raise UserIdError("The required user cannot be found in the database.")
         words: List[dict]  = [
-            word
-            for word in self.words
+            {"id": id, **word}
+            for id, word in enumerate(self.words)
             if word.get("user_id") == user_id
             and word.get("active")
         ]
-        return [word.get("word") for word in sorted(words, key = lambda word: word.get("score"))]
+        return [{
+            "word": word.get("word"),
+            "id": word.get("id")
+        } for word in sorted(words, key = lambda word: word.get("score"))]
 
     def get_word_and_user_info(self, word_id: int) -> dict:
         """Gets all relevant info from a word and its user given the word ID."""

@@ -90,7 +90,7 @@ class MyLanguageControllerTestCase(TestCase):
         )
 
     def test_get_words_from_user(self):
-        self.mock_words_model.get_words_from_user.return_value = ["House", "Plant", "Pig"]
+        self.mock_words_model.get_words_from_user.return_value = [WordInfo("House", id=1), WordInfo("Plant", id=10)]
         self.assertEqual(
             self.language_controller.res_get_words_from_user.callable(
                 self.language_controller,
@@ -99,7 +99,16 @@ class MyLanguageControllerTestCase(TestCase):
             {
                 "code": 1,
                 "message": "Words fetched successfully.",
-                "words": ["House", "Plant", "Pig"]
+                "words": [
+                    {
+                        "word": "House",
+                        "id": 1
+                    },
+                    {
+                        "word": "Plant",
+                        "id": 10
+                    }
+                ]
             }
         )
 

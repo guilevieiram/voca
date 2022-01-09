@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List, Tuple, Optional, Dict, Any
 from dataclasses import dataclass
 
 from .db_model import DataBaseModel
@@ -7,7 +7,8 @@ from .db_model import DataBaseModel
 @dataclass
 class WordInfo:
     word: str
-    language: str
+    language: Optional[str] = None
+    id: Optional[int] = None
 
 
 class WordsModel(ABC):
@@ -20,7 +21,7 @@ class WordsModel(ABC):
         """Adds a list of words in the DB associated with a user"""
 
     @abstractmethod
-    def get_words_from_user(self, user_id: int) -> List[str]:
+    def get_words_from_user(self, user_id: int) -> List[WordInfo]:
         """Fetches a list of words from the DB and returns as list in importance order"""
 
     @abstractmethod
@@ -43,9 +44,9 @@ class DummyWordsModel(WordsModel):
         """Adds a list of words in the DB associated with a user"""
         print(f"Adding words {','.join(words)} in the user {user_id}.")
 
-    def get_words_from_user(self, user_id: int) -> List[str]:
+    def get_words_from_user(self, user_id: int) -> List[WordInfo]:
         """Fetches a list of words from the DB and returns as list in importance order"""
-        return ["Word1", "Word2", "Word3"]
+        return [WordInfo("Word1", id=1), WordInfo("Word2", id=2)]
 
     def get_word_and_language(self, word_id: int) -> WordInfo:
         """Fetches the word and language of that word given the word ID."""
@@ -66,9 +67,10 @@ class MyWordsModel(WordsModel):
         """Adds a list of words in the DB associated with a user"""
         self.database_model.add_words(user_id=user_id, words=words)
 
-    def get_words_from_user(self, user_id: int) -> List[str]:
+    def get_words_from_user(self, user_id: int) -> List[WordInfo]:
         """Fetches a list of words from the DB and returns as list in importance order"""
-        return self.database_model.get_words(user_id=user_id)
+        words: Dict[str, Any] = self.database_model.get_words(user_id=user_id)
+        return [WordInfo(**word) for word in words]
 
     def get_word_and_language(self, word_id: int) -> WordInfo:
         """Fetches the word and language of that word given the word ID."""
