@@ -14,11 +14,11 @@ from src.model import TranslationModel, DummyTranslationModel, GoogleTranslation
 from src.model import NlpModel, DummyNlpModel, SpacyNlpModel
 from src.model import ConversionFunction, FloorConversion
 
-database_model: DataBaseModel = LocalDataBaseModel()
+database_model: DataBaseModel = PostgresqlDataBaseModel()
 
 user_model: UserModel = MyUserModel
-nlp_model: NlpModel = DummyNlpModel
-translation_model: TranslationModel = DummyTranslationModel
+nlp_model: NlpModel = SpacyNlpModel
+translation_model: TranslationModel = GoogleTranslationModel
 words_model: WordsModel = MyWordsModel
 user_controller: UserController = MyUserController
 language_controller: LanguageController = MyLanguageController
