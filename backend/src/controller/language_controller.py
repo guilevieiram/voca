@@ -166,6 +166,10 @@ class MyLanguageController(LanguageController):
                 second_word=translated_word,
                 language=word_info.language
             )
+            self.words_model.update_word_score(
+                word_id=word_id,
+                score=self.conversion_function(similarity_score)
+            )
             return {
                 "code": 1,
                 "message": "Score calculated successfully.",
