@@ -39,32 +39,26 @@ class DataBaseModel(ABC):
     @abstractmethod
     def connect (self) -> None:
         """Method to be called to connect with the database"""
-        pass
 
     @abstractmethod
     def close_connection(self) -> None:
         """Closes connection with the database"""
-        pass
 
     @abstractmethod
     def add_user(self, user_name: str, user_email: str, user_password: str, user_language: str, user_photo: Optional[str] = "") -> None: 
         """Adds a user to the database"""
-        pass
 
     @abstractmethod
     def delete_user(self, user_id: int) -> None:
         """Deletes a user from the database"""
-        pass
 
     @abstractmethod
     def find_user(self, properties: Dict[str, str]) -> int:
         """Finds a user in the database"""
-        pass
 
     @abstractmethod
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
         """Updates user in the database"""
-        pass
 
     @abstractmethod
     def get_user(self, user_id: int) -> dict:
@@ -79,12 +73,10 @@ class DataBaseModel(ABC):
     @abstractmethod
     def add_words(self, user_id: int, words: List[str]) -> None:
         """Adds a list of words in the words table in the database"""
-        pass
 
     @abstractmethod
     def get_words(self, user_id: int) -> List[str]:
         """Gets the list of words from a user in the relevance order"""
-        pass
 
     @abstractmethod
     def get_word_and_user_info(self, word_id: int) -> dict:
@@ -104,6 +96,11 @@ class DataBaseModel(ABC):
                 "active": ...
             }
         }
+    
+    @abstractmethod
+    def update_word_score(self, word_id: int, score: int) -> None:
+        """Updates the given word score to the given value in the database."""
+
 
 class PostgresqlDataBaseModel(DataBaseModel):
     """Data base model that is implemented using local variables to store data. Mostly to test purposes"""
@@ -431,3 +428,12 @@ class LocalDataBaseModel(DataBaseModel):
                 "active": word.get("active")
             }
         }
+
+    def update_word_score(self, word_id: int, score: int) -> None:
+        """Updates the given word score to the given value in the database."""
+        try:
+            self.words[word_id]["score"] = score
+        except IndexError:
+            raise WordDoesNotExistError("The required word does not exists.")
+        
+
