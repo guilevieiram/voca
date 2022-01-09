@@ -4,7 +4,7 @@ from typing import List
 from src.model import LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model.exceptions import UserIdError, PropertyNotValidError, UserNotFoundError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError, WordDoesNotExistError
 
-from src.model.db_model import parse_postgresql_url, construct_and_query, encapsulate, construct_values_query, UniqueViolation
+from src.model.db_model import parse_postgresql_url, construct_and_query, encapsulate, construct_values_query, UniqueViolation, DatatypeMismatch
 
 
 class PostgresqlDataBaseModelTestCase(TestCase):
@@ -222,6 +222,34 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             word_id=100
         )
 
+    def test_update_word_property_not_valid(self):
+        self.assertRaises(
+            PropertyNotValidError,
+            self.db_model.update_word,
+            word_id=1,
+            property="aaa",
+            value=True
+        )
+    
+    def test_update_word_value_type_not_valid(self):
+        self.cursor.fetchone.side_effect = DatatypeMismatch
+        self.assertRaises(
+            ValueTypeNotValidError,
+            self.db_model.update_word,
+            word_id=1,
+            property="score",
+            value=True
+        )
+    
+    def test_update_word_word_not_exitst(self):
+        self.cursor.fetchone.return_value = None
+        self.assertRaises(
+            WordDoesNotExistError,
+            self.db_model.update_word,
+            word_id = 1,
+            property = "user_id",
+            value=10
+        )
     
 
 class LocalDbModelTestCase(TestCase):

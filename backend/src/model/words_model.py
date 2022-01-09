@@ -83,5 +83,5 @@ class MyWordsModel(WordsModel):
         self.database_model.update_word(
             word_id=word_id,
             property="score",
-            value=score
+            value=True
         )

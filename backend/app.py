@@ -12,12 +12,13 @@ from src.model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model import WordsModel, MyWordsModel
 from src.model import TranslationModel, DummyTranslationModel, GoogleTranslationModel
 from src.model import NlpModel, DummyNlpModel, SpacyNlpModel
+from src.model import ConversionFunction, FloorConversion
 
-database_model: DataBaseModel = LocalDataBaseModel()
+database_model: DataBaseModel = PostgresqlDataBaseModel()
 
 user_model: UserModel = MyUserModel
-nlp_model: NlpModel = SpacyNlpModel
-translation_model: TranslationModel = GoogleTranslationModel
+nlp_model: NlpModel = DummyNlpModel
+translation_model: TranslationModel = DummyTranslationModel
 words_model: WordsModel = MyWordsModel
 user_controller: UserController = MyUserController
 language_controller: LanguageController = MyLanguageController
@@ -25,6 +26,7 @@ main_controller: MainController = FlaskController
 
 supported_languages: List[Dict[str, str]] = Configurations.supported_languages
 supported_languages_codes: List[str] = Configurations.supported_languages_codes
+conversion: ConversionFunction = FloorConversion
 
 endpoint = main_controller(
     user_controller=user_controller(
@@ -39,7 +41,8 @@ endpoint = main_controller(
         ),
         translation_model=translation_model(),
         nlp_model=nlp_model(supported_languages=supported_languages_codes),
-        supported_languages=supported_languages
+        supported_languages=supported_languages,
+        conversion_function=conversion.calculate
     )
 )
 app = endpoint.app

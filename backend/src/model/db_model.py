@@ -3,7 +3,7 @@ from typing import List, Optional, Union, Dict, Any
 from os import environ
 
 import psycopg2
-from psycopg2.errors import UniqueViolation, InFailedSqlTransaction
+from psycopg2.errors import UniqueViolation, InFailedSqlTransaction, DatatypeMismatch
 
 from .exceptions import UserIdError, UserNotFoundError, PropertyNotValidError, ValueTypeNotValidError, UserAlreadyExistsError, ConnectionToDBRefusedError, WordDoesNotExistError
 
@@ -111,6 +111,7 @@ class PostgresqlDataBaseModel(DataBaseModel):
         self.connection: psycopg2.connect
         self.connect()
         self.user_table_columns = ["user_name", "user_email", "user_password", "user_language", "user_photo"]
+        self.words_table_columns = ["word", "score", "active", "user_id"]
 
     def connect (self) -> None:
         """Method to be called to connect with the database"""
@@ -273,6 +274,25 @@ class PostgresqlDataBaseModel(DataBaseModel):
 
     def update_word(self, word_id: int, property: str, value: Union[bool, int, str]) -> None:
         """Updates the given word property to the given value in the database."""
+        if not property in self.words_table_columns:
+            raise PropertyNotValidError("The required property is not valid.")
+
+        if type(value) == str: value = encapsulate(value)
+        sql = f"""
+        UPDATE app_words
+        SET {property} = {value}
+        WHERE id = {word_id}
+        RETURNING id;
+        """
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(sql)
+                word = cursor.fetchone()
+            self.connection.commit()
+        except DatatypeMismatch:
+            raise ValueTypeNotValidError("The value given is not of the correct type.")
+        if word is None:
+            raise WordDoesNotExistError("The required word does not exists.")
     
     def _rollback(self) -> None:
         with self.connection.cursor() as cursor:

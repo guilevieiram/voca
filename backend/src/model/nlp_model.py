@@ -17,6 +17,9 @@ class NlpModel(ABC):
 class DummyNlpModel(NlpModel):
     """Dummy model class to handle Natural Language Processing related tasks."""
 
+    def __init__(self, *args, **kwargs) -> None:
+        """Dummy init method to get whatever parameters"""
+
     def calculate_similarity(self, first_word: str, second_word: str, language: str) -> float:
         """Calculates the similarity between two words."""
         return 0.98
