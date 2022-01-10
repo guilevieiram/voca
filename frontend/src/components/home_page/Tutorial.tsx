@@ -11,8 +11,10 @@ export default function Tutorial (): React.ReactElement {
             {
                 !expand ? <></> :
                 <div className="w-full text-justify">
-                    <p className='py-2'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam molestiae dicta vitae similique modi deleniti, laborum expedita ratione dolorem dolores odio error alias, blanditiis adipisci ad eaque quam earum necessitatibus.</p>
-                    <p className='py-2'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellendus harum beatae ipsum excepturi rerum! Magni nemo porro maxime dolorem deserunt.</p>
+                    <p className='py-2'>After signing up to Voca and logging in (both of which you've already done!) you need to add words to your personal list. You can access that page by the plus sign (+) button in the bottom of the page. There you input all the new vocabulary you want to train, in the language that you want to learn. The best moments to do that is during a class, or when you're reading a text. After, just hit save and all will be recorded in our databases!</p>
+                    <p className='py-2'>After you added words in your list you'll be able to play with them! Just go to the play page (in the play-like button in the bottom of the page) and well ... play! It goes like this: for each word that appears you should give your translation (it can be in your mother tongue, in English, or any other language in which you can remember the translation. After that, our Machine Learning algorithm will kick in to determine how close to the answer you were. The words that you know less will appear more often, and the ones you know better will appear less often.</p>
+                    <p className="py-2">If you want to see of modify anything in your profile, just go to the home button in the bottom. The same if you want to change any configurations of the app (like switching between light and dark mode), just go to the settings page in the bottom right.</p>
+                    <p className='py-2'>And ... thats it! This tutorial will be here if you need it! Good learning!</p>
                 </div>
             }
         </div>
