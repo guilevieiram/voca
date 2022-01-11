@@ -6,7 +6,8 @@ After constructing them in a separate file, import them here, both the abstract 
 from .user_model import User, UserModel, MyUserModel
 from .database_model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 from .nlp_model import NlpModel, DummyNlpModel, SpacyNlpModel
-from .translation_model import TranslationModel, DummyTranslationModel, GoogleTranslationModel
+from .translation_model import TranslationModel, DummyTranslationModel, GoogleTranslationModel, LingueeTranslationModel
+
 from .words_model import WordsModel, DummyWordsModel, MyWordsModel, WordInfo
 
 from .functions import ConversionFunction, FloorConversion
