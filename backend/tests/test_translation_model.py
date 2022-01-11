@@ -24,7 +24,7 @@ class GoogleTranslationModelTestCase(TestCase):
         )
 
     def test_translate_all_translations(self):
-        self.mock_translator.return_value.translate.return_value = "word"
+        self.mock_translator.return_value.translate.return_value.text = "word"
         self.assertIsInstance(
             self.google_translation_model.translate(
                 to_language="en",
