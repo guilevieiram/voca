@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Union
 
 import spacy
+import nltk
 
 from src.model.exceptions import LanguageNotSupportedError
 
@@ -59,3 +60,36 @@ class SpacyNlpModel(NlpModel):
     def _similarity(self, first_word: str, second_word: str, language_processing_model) -> float:
         """Calculate the similarity strictly between two words, given a spacy language processing model (already loaded)."""
         return language_processing_model(first_word).similarity(language_processing_model(second_word))
+
+
+class NltkNlpModel(NlpModel):
+    """Concrete Nlp model utilizing the NLTK natural processing module."""
+
+    def __init__(self, supported_languages: List[str]) -> None:
+        """Initializes module with the required instances."""
+        self.supported_languages = supported_languages
+        nltk.download("wordnet")
+
+    def calculate_similarity(self, first: Union[str, List[str]], second: Union[str, List[str]], language: str) -> float:
+        """Calculates the similarity between two words, or two list of words, returning the best result."""
+        if language != "en":
+            raise LanguageNotSupportedError("The given language is not supported. The NLTK NLP module only supports english.")
+        if isinstance(first, str): first = [first]
+        if isinstance(second, str): second = [second]
+        return max([
+            self._similarity(first_word=first_word, second_word=second_word)
+            for first_word in first
+            for second_word in second
+        ])
+        
+    def _similarity(self, first_word: str, second_word: str) -> float:
+        """Calculates the similarity between two words in english and returns te result."""
+        try:
+            return self._encode(first_word).wup_similarity(self._encode(second_word))
+        except IndexError:
+            return 0.0
+            
+    @staticmethod
+    def _encode(word: str):
+        """Returns the wordnet object for a given word. If the word is not in the english langage, raises an IndexError."""
+        return nltk.corpus.wordnet.synsets(word)[0]
