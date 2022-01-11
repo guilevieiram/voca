@@ -52,5 +52,5 @@ class LingueeTranslationModel(TranslationModel):
         try:
             detected_language: str = self.detector(word)
             return self.translator(source=detected_language, target=to_language).translate(word, return_all=all_translations)
-        except deep_translator.exceptions.LanguageNotSupportedException:
+        except Exception:
             raise LanguageNotSupportedError("The desired language is not supported.")
