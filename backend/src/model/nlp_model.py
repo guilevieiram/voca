@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Union
 
 import spacy
 
@@ -9,9 +9,8 @@ class NlpModel(ABC):
     """Abstract model class to handle Natural Language Processing related tasks."""
 
     @abstractmethod
-    def calculate_similarity(self, first_word: str, second_word: str, language: str) -> float:
-        """Calculates the similarity between two words."""
-        pass
+    def calculate_similarity(self, first: Union[str, List[str]], second: Union[str, List[str]], language: str) -> float:
+        """Calculates the similarity between two words, or two list of words, returning the best result."""
 
 
 class DummyNlpModel(NlpModel):
@@ -20,8 +19,8 @@ class DummyNlpModel(NlpModel):
     def __init__(self, *args, **kwargs) -> None:
         """Dummy init method to get whatever parameters"""
 
-    def calculate_similarity(self, first_word: str, second_word: str, language: str) -> float:
-        """Calculates the similarity between two words."""
+    def calculate_similarity(self, first: Union[str, List[str]], second: Union[str, List[str]], language: str) -> float:
+        """Calculates the similarity between two words, or two list of words, returning the best result."""
         return 0.98
 
 
@@ -42,12 +41,21 @@ class SpacyNlpModel(NlpModel):
         for language in supported_languages:
             self.nlp[language] = spacy.load(languages_models_mapping[language])
 
-    def calculate_similarity(self, first_word: str, second_word: str, language: str) -> float:
-        """Calculates the similarity between two words in a given language."""
-        if not isinstance(first_word, str) or not isinstance(second_word, str):
-            raise TypeError("The words should be passed in as strings.")
+    def calculate_similarity(self, first: Union[str, List[str]], second: Union[str, List[str]], language: str) -> float:
+        """Calculates the similarity between two words, or two list of words, returning the best result."""
+        # Converting the single lists to strings
+        if isinstance(first, str): first = [first]
+        if isinstance(second, str): second = [second]
         try:
             nlp = self.nlp[language]
         except KeyError:
             raise LanguageNotSupportedError("This language has no modules that support it.")
-        return nlp(first_word).similarity(nlp(second_word))
+        return max([
+            self._similarity(first_word=first_word, second_word=second_word, language_processing_model=nlp)
+            for first_word in first
+            for second_word in second
+        ])
+    
+    def _similarity(self, first_word: str, second_word: str, language_processing_model) -> float:
+        """Calculate the similarity strictly between two words, given a spacy language processing model (already loaded)."""
+        return language_processing_model(first_word).similarity(language_processing_model(second_word))
