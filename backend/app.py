@@ -7,13 +7,13 @@ from config import Configurations
 
 from src.controller import MainController, FlaskController, TerminalController
 from src.controller import UserController, MyUserController, DummyUserController
-from src.controller import LanguageController, MyLanguageController, DummyLanguageController
+from src.controller import LanguageController, MyLanguageController, DummyLanguageController, SimpleLanguageController
 
 from src.model import UserModel, MyUserModel
 from src.model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model import WordsModel, MyWordsModel
-from src.model import TranslationModel, DummyTranslationModel, GoogleTranslationModel
-from src.model import NlpModel, DummyNlpModel, SpacyNlpModel
+from src.model import TranslationModel, DummyTranslationModel, GoogleTranslationModel, LingueeTranslationModel
+from src.model import NlpModel, DummyNlpModel, SpacyNlpModel, NltkNlpModel
 from src.model import ConversionFunction, FloorConversion
 
 
@@ -31,14 +31,14 @@ conversion: ConversionFunction = FloorConversion
 # Defining the controllers and models to be used
 # -----------------------------------------------------------
 
-database_model: DataBaseModel = PostgresqlDataBaseModel(database_url=database_url)
+database_model: DataBaseModel = LocalDataBaseModel(database_url=database_url)
 
 user_model:             UserModel =             MyUserModel
-nlp_model:              NlpModel =              SpacyNlpModel
-translation_model:      TranslationModel =      GoogleTranslationModel
+nlp_model:              NlpModel =              NltkNlpModel
+translation_model:      TranslationModel =      LingueeTranslationModel
 words_model:            WordsModel =            MyWordsModel
 user_controller:        UserController =        MyUserController
-language_controller:    LanguageController =    MyLanguageController
+language_controller:    LanguageController =    SimpleLanguageController
 main_controller:        MainController =        FlaskController
 
 

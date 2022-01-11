@@ -50,7 +50,8 @@ class LingueeTranslationModel(TranslationModel):
     def translate(self, to_language: str, word: str, all_translations: bool = False) -> Union[str, List[str]]:
         """Translates word from detected language to to_language, returning the translated word"""
         try:
-            detected_language: str = self.detector(word)
+            detected_language: str = self.detector(word).lang
+            if detected_language == to_language: return [word]
             return self.translator(source=detected_language, target=to_language).translate(word, return_all=all_translations)
         except Exception:
             raise LanguageNotSupportedError("The desired language is not supported.")

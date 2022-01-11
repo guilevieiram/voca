@@ -1,7 +1,5 @@
 from unittest import TestCase, mock
 
-import deep_translator
-
 from src.model import GoogleTranslationModel, LingueeTranslationModel
 from src.model.exceptions import LanguageNotSupportedError
 

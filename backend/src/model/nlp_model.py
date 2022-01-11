@@ -69,6 +69,7 @@ class NltkNlpModel(NlpModel):
         """Initializes module with the required instances."""
         self.supported_languages = supported_languages
         nltk.download("wordnet")
+        nltk.download('omw-1.4')
 
     def calculate_similarity(self, first: Union[str, List[str]], second: Union[str, List[str]], language: str) -> float:
         """Calculates the similarity between two words, or two list of words, returning the best result."""

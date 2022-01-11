@@ -166,8 +166,8 @@ class MyLanguageController(LanguageController):
                 word=word
             )
             similarity_score = self.nlp_model.calculate_similarity(
-                first_word=word_info.word,
-                second_word=translated_word,
+                first=word_info.word,
+                second=translated_word,
                 language=word_info.language
             )
             self.words_model.update_word_score(
@@ -231,11 +231,21 @@ class MyLanguageController(LanguageController):
         }
     
 
-class SimpleLanguageController(LanguageController):
+class SimpleLanguageController(MyLanguageController):
     """
     Concrete controller responsible for defining the endpoints of the language related tasks of the api.
     Subclass on the MyLanguageController to override the socore resource to to all the NLP comparisons in english.
     """
+
+    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]], conversion_function: Callable) -> None:
+        """Initializing the superclass"""
+        super().__init__(
+            nlp_model=nlp_model,
+            translation_model=translation_model,
+            words_model=words_model,
+            supported_languages=supported_languages,
+            conversion_function=conversion_function
+        )
 
     @router(endpoint="language/score")
     def res_calculate_score(self, word_id: int, word: str) -> ResourceResponse:
@@ -257,8 +267,8 @@ class SimpleLanguageController(LanguageController):
                 all_translations=True
             )
             similarity_score: float = self.nlp_model.calculate_similarity(
-                first_words=target_possible_translations_en,
-                second_words=try_possible_translations_en,
+                first=target_possible_translations_en,
+                second=try_possible_translations_en,
                 language="en"
             )
             self.words_model.update_word_score(
@@ -300,7 +310,8 @@ class SimpleLanguageController(LanguageController):
                 "code": Error.NLP_CALCULATION_ERROR.value,
                 "message": "The NLP model could not calculate your request."
             }
-        except Exception:
+        except Exception as e:
+            print(type(e), e)
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
