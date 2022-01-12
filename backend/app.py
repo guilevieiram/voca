@@ -31,7 +31,7 @@ conversion: ConversionFunction = FloorConversion
 # Defining the controllers and models to be used
 # -----------------------------------------------------------
 
-database_model: DataBaseModel = LocalDataBaseModel(database_url=database_url)
+database_model: DataBaseModel = PostgresqlDataBaseModel(database_url=database_url)
 
 user_model:             UserModel =             MyUserModel
 nlp_model:              NlpModel =              NltkNlpModel
