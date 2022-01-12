@@ -40,9 +40,11 @@ function Button ({active, icon, link}: ButtonProps): React.ReactElement {
 
 function NavLogoButton ({icon, link}: NavLogoButtonProps):React.ReactElement {
     return (
-        <a href={link} className={`h-full`}>
-            <img src={icon} alt={icon} className={`h-16 p-1 filter drop-shadow-lg`}/>
-        </a>
+        <div className={`h-full`}>
+            <Link to={link}>
+                <img src={icon} alt={icon} className={`h-16 p-1 filter drop-shadow-lg`}/>
+            </Link>
+        </div>
     )
 };
 

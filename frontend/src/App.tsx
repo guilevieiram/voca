@@ -6,9 +6,9 @@ import UserSignup from "./components/user_signup";
 import AddWordsPage from "./components/add_words";
 import PlayPage from "./components/play_page";
 import NotFoundPage from "./components/NotFoundPage";
-import HomePage from "./components/HomePage";
 import ConfigPage from "./components/config_page";
 import UserPage from "./components/user_page";
+import HomePage from "./components/home_page";
 
 import { loadTheme } from "./models";
 

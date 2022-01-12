@@ -4,12 +4,17 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
+
+
 @layer base {
   * {
     @apply text-dark dark:text-light
   }
   h1, h2, h3 {
     @apply text-2xl font-title;
+  }
+  a {
+    @apply underline hover:text-blue
   }
   * {
     @apply font-body;

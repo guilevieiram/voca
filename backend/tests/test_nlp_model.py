@@ -1,6 +1,6 @@
 from unittest import TestCase, mock
 
-from src.model import SpacyNlpModel
+from src.model import SpacyNlpModel, NltkNlpModel
 from src.model.exceptions import LanguageNotSupportedError
 
 class SpacyNlpModelTestCase(TestCase):
@@ -38,4 +38,61 @@ class SpacyNlpModelTestCase(TestCase):
             "aa"
         )
     
+class NltkNlpModelTestcase(TestCase):
+
+    def setUp(self) -> None:
+       patcher = mock.patch("src.model.nlp_model.nltk") 
+       self.mock_nltk = patcher.start()
+       self.addCleanup(patcher.stop)
+
+       self.similarity = self.mock_nltk.corpus.wordnet.synsets.return_value[0].wup_similarity
+       self.mock_nltk.download.return_value = None
+
+       self.nlp_model = NltkNlpModel(
+           supported_languages=["en"]
+       )
+    
+    def test_translate(self):
+        self.similarity.return_value = 0.8
+        self.assertEqual(
+            self.nlp_model.calculate_similarity(
+                "rat",
+                ["cat", "kitty"],
+                language="en"
+            ),
+            0.8
+        )
+        self.assertEqual(
+            self.nlp_model.calculate_similarity(
+                ["rat", "mouse"],
+                ["cat", "kitty"],
+                language="en"
+            ),
+            0.8
+        )
+        self.assertEqual(
+            self.nlp_model.calculate_similarity(
+                ["rat", "mouse"],
+                "cat",
+                language="en"
+            ),
+            0.8
+        )
+        self.assertEqual(
+            self.nlp_model.calculate_similarity(
+                "rat",
+                "cat",
+                language="en"
+            ),
+            0.8
+        )
+
+    def test_language_not_supported(self):
+        self.assertRaises(
+            LanguageNotSupportedError,
+            self.nlp_model.calculate_similarity,
+            first="rat",
+            second=["cat", "kitty"],
+            language="fr"
+        )
     
