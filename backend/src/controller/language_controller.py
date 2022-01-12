@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from typing import Callable, List, Dict
+import logging
 
 from src.model import WordInfo 
 from src.model import NlpModel, TranslationModel, WordsModel
@@ -18,6 +19,7 @@ class LanguageController(SubController):
     words_model: WordsModel
     supported_languages: List[Dict[str, str]]
     conversion_function: Callable[..., int] # converts float to int but python keeps sending me errors if I put float in the type annotation
+    logger: logging.Logger
 
     @router(endpoint="language/add_words")
     @abstractmethod
@@ -54,13 +56,14 @@ class LanguageController(SubController):
 class DummyLanguageController(LanguageController):
     """Dummy controller responsible for defining the endpoints of the language related tasks of the api."""
 
-    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]], conversion_function: Callable) -> None:
+    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]], conversion_function: Callable, logger: logging.Logger) -> None:
         """Initializes the controller with all the needed initialized models."""
         self.nlp_model: NlpModel = nlp_model
         self.translation_model: TranslationModel = translation_model
         self.words_model: WordsModel = words_model
         self.supported_languages: List[Dict[str, str]] = supported_languages
         self.conversion_function: Callable = conversion_function
+        self.logger: logging.Logger = logger
 
     @router(endpoint="language/add_words")
     def res_add_words(self, user_id: int, words: List[str]) -> ResourceResponse:
@@ -101,7 +104,7 @@ class DummyLanguageController(LanguageController):
 class MyLanguageController(LanguageController):
     """Concrete controller responsible for defining the endpoints of the language related tasks of the api."""
 
-    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]], conversion_function: Callable) -> None:
+    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]], conversion_function: Callable, logger: logging.Logger) -> None:
         """Initializes the controller with all the needed initialized models."""
         self.nlp_model: NlpModel = nlp_model
         self.translation_model: TranslationModel = translation_model
@@ -123,7 +126,8 @@ class MyLanguageController(LanguageController):
                 "code": Error.USER_ID_ERROR.value,
                 "message": "The desired user was not found in the database." 
             }
-        except Exception as e:
+        except Exception:
+            self.logger.exception("An exception occurred in the server.")
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
@@ -148,6 +152,7 @@ class MyLanguageController(LanguageController):
                 "message": "The desired user was not found in the database."
             }
         except Exception:
+            self.logger.exception("An exception occurred in the server.")
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
@@ -210,6 +215,7 @@ class MyLanguageController(LanguageController):
                 "message": "The NLP model could not calculate your request."
             }
         except Exception:
+            self.logger.exception("An exception occurred in the server.")
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
@@ -218,17 +224,23 @@ class MyLanguageController(LanguageController):
     @router(endpoint="language/supported_languages", method=Method.GET)
     def res_get_supported_languages(self) -> ResourceResponse:
         """Returns the dictionary of the supported languages on user signup."""
-        print("called")
         if self.supported_languages is None:
             return {
                 "code": Error.SUPPORTED_LANGUAGES_NOT_FOUND_ERROR,
                 "message": "The list of supported languages could not be found."
             }
-        return {
-            "code": 1,
-            "message": "Supported languages fetched successfully.",
-            "languages": self.supported_languages
-        }
+        try:
+            return {
+                "code": 1,
+                "message": "Supported languages fetched successfully.",
+                "languages": self.supported_languages
+            }
+        except Exception:
+            self.logger.exception("An exception occurred in the server.")
+            return {
+                "code": Error.SERVER_ERROR.value,
+                "message": "An error occured in the database."
+            }
     
 
 class SimpleLanguageController(MyLanguageController):
@@ -237,14 +249,15 @@ class SimpleLanguageController(MyLanguageController):
     Subclass on the MyLanguageController to override the socore resource to to all the NLP comparisons in english.
     """
 
-    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]], conversion_function: Callable) -> None:
+    def __init__(self, nlp_model: NlpModel, translation_model: TranslationModel, words_model: WordsModel, supported_languages: List[Dict[str, str]], conversion_function: Callable, logger: logging.Logger) -> None:
         """Initializing the superclass"""
         super().__init__(
             nlp_model=nlp_model,
             translation_model=translation_model,
             words_model=words_model,
             supported_languages=supported_languages,
-            conversion_function=conversion_function
+            conversion_function=conversion_function,
+            logger=logger
         )
 
     @router(endpoint="language/score")
@@ -310,8 +323,8 @@ class SimpleLanguageController(MyLanguageController):
                 "code": Error.NLP_CALCULATION_ERROR.value,
                 "message": "The NLP model could not calculate your request."
             }
-        except Exception as e:
-            print(type(e), e)
+        except Exception:
+            self.logger.exception("An exception occurred in the server.")
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
