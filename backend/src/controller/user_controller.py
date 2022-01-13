@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import asdict
 from typing import Any, Optional 
+import logging
 
 from .sub_controller import SubController, router, ResourceResponse
 from .error import Error
@@ -11,6 +12,9 @@ from src.model.exceptions import UserNotFoundError, UserIdError, UserAlreadyExis
 
 class UserController(SubController):
     """UserController abstract class responsible for defining user related resources."""
+
+    user_model: UserModel
+    logger: logging.Logger
 
     @abstractmethod
     def close_connection(self) -> None:
@@ -97,9 +101,10 @@ class DummyUserController(UserController):
 class MyUserController(UserController):
     """UserController implementation responsible for defining user related resources."""
 
-    def __init__(self, user_model: UserModel):
+    def __init__(self, user_model: UserModel, logger: logging.Logger):
         """Initializer that makes connection with the required user model"""
         self.user_model = user_model
+        self.logger: logging = logger
 
     def close_connection(self) -> None:
         """Closes connections with databases"""
@@ -129,6 +134,7 @@ class MyUserController(UserController):
                 "message": "Wrong password."
             }
         except Exception:
+            self.logger.exception("An exception occurred in the server.")
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured with the database."
@@ -155,6 +161,7 @@ class MyUserController(UserController):
                 "message": "This user email is already in use."
             }
         except Exception:
+            self.logger.exception("An exception occurred in the server.")
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
@@ -175,6 +182,7 @@ class MyUserController(UserController):
                 "message": "Given user id is not valid."
             }
         except Exception:
+            self.logger.exception("An exception occurred in the server.")
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
@@ -196,6 +204,7 @@ class MyUserController(UserController):
                 "message": "Given user id is not valid."
             }
         except Exception:
+            self.logger.exception("An exception occurred in the server.")
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."
@@ -230,6 +239,7 @@ class MyUserController(UserController):
                 "message": "The wanted value is not from the right type."
             }
         except Exception:
+            self.logger.exception("An exception occurred in the server.")
             return {
                 "code": Error.SERVER_ERROR.value,
                 "message": "A problem occured in the database."

@@ -6,6 +6,7 @@ This class is to be utilized only by the app.py file.
 
 from typing import List, Dict
 from json import load
+import logging
 import os
 
 
@@ -20,6 +21,20 @@ class Configurations:
     """Configuration class, not to be instantiated but to be utilized to get the configurations from the raw config file."""
 
     configuration_file: str = "configurations.json"
+
+    def logger(self, name: str = "") -> logging.Logger:
+        """A loggers generating funcion, with the given configurations."""
+        if name == "": name = "logs"
+        with open(self.configuration_file, encoding="utf-8") as file:
+            logging_folder: str = load(file).get("logging_folder")
+
+        logger = logging.getLogger(name)
+        formatter = logging.Formatter("%(asctime)s  -  %(message)s")
+        file_handler = logging.FileHandler(f"{logging_folder}/{name}.log")
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+
+        return logger
 
     @property
     def database_url(self) -> str:

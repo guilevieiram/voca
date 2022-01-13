@@ -2,6 +2,7 @@
 # git subtree push --prefix backend heroku main
 
 from typing import List, Dict
+import logging
 
 from config import Configurations
 
@@ -24,6 +25,8 @@ database_url: str = Configurations.database_url
 debug: bool = Configurations.debug
 supported_languages: List[Dict[str, str]] = Configurations.supported_languages
 supported_languages_codes: List[str] = Configurations.supported_languages_codes
+user_logger: logging.Logger = Configurations.logger(name="user")
+language_logger: logging.Logger = Configurations.logger(name="language")
 
 conversion: ConversionFunction = FloorConversion
 
@@ -51,7 +54,8 @@ endpoint = main_controller(
         user_model=user_model(
             database_model=database_model,
             supported_languages_codes=supported_languages_codes
-        )
+        ),
+        logger=user_logger
     ),
     language_controller=language_controller(
         words_model=words_model(
@@ -60,7 +64,8 @@ endpoint = main_controller(
         translation_model=translation_model(),
         nlp_model=nlp_model(supported_languages=supported_languages_codes),
         supported_languages=supported_languages,
-        conversion_function=conversion.calculate
+        conversion_function=conversion.calculate,
+        logger=language_logger
     )
 )
 
