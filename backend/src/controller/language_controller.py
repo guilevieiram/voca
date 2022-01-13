@@ -111,6 +111,7 @@ class MyLanguageController(LanguageController):
         self.words_model: WordsModel = words_model
         self.supported_languages: List[Dict[str, str]] = supported_languages
         self.conversion_function: Callable = conversion_function
+        self.logger: logging.Logger = logger
 
     @router(endpoint="language/add_words")
     def res_add_words(self, user_id: int, words: List[str]) -> ResourceResponse:

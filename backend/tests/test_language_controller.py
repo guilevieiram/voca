@@ -1,4 +1,5 @@
 from unittest import TestCase, mock
+import logging
 
 from src.controller import LanguageController, MyLanguageController
 from src.model import WordInfo
@@ -22,6 +23,9 @@ class MyLanguageControllerTestCase(TestCase):
             patcher_nlp_model.stop()
         self.addCleanup(cleanup)
 
+        logger = logging.getLogger()
+        logger.exception = lambda x: None
+
         self.language_controller: LanguageController = MyLanguageController(
             words_model=self.mock_words_model,
             translation_model=self.mock_translation_model, 
@@ -33,7 +37,8 @@ class MyLanguageControllerTestCase(TestCase):
                     "code": "en"
                 }
             ],
-            conversion_function=lambda x: 10
+            conversion_function=lambda x: 10, 
+            logger=logger
         )
 
         self.mock_words_model.get_word_and_language.return_value = WordInfo("Cat", "English")

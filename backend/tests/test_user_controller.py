@@ -1,4 +1,5 @@
 from unittest import TestCase, mock
+import logging
 
 from src.controller import MyUserController
 from src.model import User
@@ -10,7 +11,9 @@ class MyUserControllerTestCase (TestCase):
         patcher = mock.patch('src.model.MyUserModel')
         self.mock_user_model = patcher.start()
         self.addCleanup(patcher.stop)
-        self.user_controller = MyUserController(self.mock_user_model)
+        logger = logging.getLogger()
+        logger.exception = lambda x: None
+        self.user_controller = MyUserController(self.mock_user_model, logger)
 
     def test_login(self):
         self.mock_user_model.login_user.return_value = 0
