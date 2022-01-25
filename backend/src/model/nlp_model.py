@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Union
 
-# import spacy
-import nltk
+import spacy
+# import nltk
 
 from src.model.exceptions import LanguageNotSupportedError
 
