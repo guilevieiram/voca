@@ -34,14 +34,14 @@ conversion: ConversionFunction = FloorConversion
 # Defining the controllers and models to be used
 # -----------------------------------------------------------
 
-database_model: DataBaseModel = LocalDataBaseModel(database_url=database_url)
+database_model: DataBaseModel = PostgresqlDataBaseModel(database_url=database_url)
 
 user_model:             UserModel =             MyUserModel
-nlp_model:              NlpModel =              NltkNlpModel
-translation_model:      TranslationModel =      LingueeTranslationModel
+nlp_model:              NlpModel =              SpacyNlpModel
+translation_model:      TranslationModel =      GoogleTranslationModel
 words_model:            WordsModel =            MyWordsModel
 user_controller:        UserController =        MyUserController
-language_controller:    LanguageController =    SimpleLanguageController
+language_controller:    LanguageController =    MyLanguageController
 main_controller:        MainController =        FlaskController
 
 

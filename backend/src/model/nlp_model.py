@@ -40,7 +40,10 @@ class SpacyNlpModel(NlpModel):
         }
         self.nlp: Dict[str, Any] = {} # dictionary to encapsulate all the loaded modules
         for language in supported_languages:
-            self.nlp[language] = spacy.load(languages_models_mapping[language])
+            self.nlp[language] = spacy.load(
+                languages_models_mapping[language],
+                disable=["tagger", "parser", "attribute_ruler", "lemmatizer", "ner"]
+            )
 
     def calculate_similarity(self, first: Union[str, List[str]], second: Union[str, List[str]], language: str) -> float:
         """Calculates the similarity between two words, or two list of words, returning the best result."""
