@@ -310,6 +310,7 @@ class SimpleLanguageController(MyLanguageController):
                 "message": "The given word could not be translated."
             }
         except LanguageNotSupportedError:
+            self.logger.exception("A language exception occured.")
             return {
                 "code": Error.LANGUAGE_NOT_SUPPORTED_ERROR.value,
                 "message": "The desired language is not supported."
