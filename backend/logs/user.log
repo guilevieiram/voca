@@ -1,0 +1,63 @@
+2022-01-30 23:59:25,180  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 128, in add_user
+    raise LanguageNotSupportedError("The desired language is not supported.")
+src.model.exceptions.LanguageNotSupportedError: The desired language is not supported.
+2022-01-30 23:59:46,619  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 128, in add_user
+    raise LanguageNotSupportedError("The desired language is not supported.")
+src.model.exceptions.LanguageNotSupportedError: The desired language is not supported.
+2022-01-31 00:03:04,897  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 128, in add_user
+    raise LanguageNotSupportedError("The desired language is not supported.")
+src.model.exceptions.LanguageNotSupportedError: The desired language is not supported.
+2022-01-31 00:03:32,554  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 128, in add_user
+    raise LanguageNotSupportedError("The desired language is not supported.")
+src.model.exceptions.LanguageNotSupportedError: The desired language is not supported.
+2022-01-31 00:05:33,159  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 128, in add_user
+    raise LanguageNotSupportedError("The desired language is not supported.")
+src.model.exceptions.LanguageNotSupportedError: The desired language is not supported.
+2022-01-31 00:23:08,499  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 129, in add_user
+    hashed_password = bcrypt.hashpw(user.password, self.salt)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/bcrypt/__init__.py", line 80, in hashpw
+    raise TypeError("Unicode-objects must be encoded before hashing")
+TypeError: Unicode-objects must be encoded before hashing
+2022-01-31 00:24:45,413  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 129, in add_user
+    hashed_password = bcrypt.hashpw(user.password, self.salt.encode("utf-8"))
+AttributeError: 'bytes' object has no attribute 'encode'
+2022-01-31 00:25:35,257  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 130, in add_user
+    self.database_model.add_user(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 148, in add_user
+    cursor.execute(sql)
+psycopg2.errors.SyntaxError: syntax error at or near "$2"
+LINE 3:         VALUES ('Gui Hash', 'gui@hash.com', 'b'$2b$12$eBQ3Ll...
+                                                       ^
+

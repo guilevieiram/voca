@@ -69,6 +69,10 @@ class DataBaseModel(ABC):
             "user_photo": ...,
             "user_language": ...
         }
+    
+    @abstractmethod
+    def get_user_password(self, user_id: int) -> str:
+        """Gets a given user password by the id."""
 
     @abstractmethod
     def add_words(self, user_id: int, words: List[str]) -> None:
@@ -216,6 +220,20 @@ class PostgresqlDataBaseModel(DataBaseModel):
             "user_photo": result[2],
             "user_language": result[3]
         }
+
+    def get_user_password(self, user_id: int) -> str:
+        """Gets a given user password by the id."""
+        sql = f"""
+        SELECT user_password
+        FROM app_users
+        WHERE id = {user_id}
+        """
+        with self.connection.cursor() as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchone()
+        if result is None:
+            raise UserIdError("The requires user cannot be found in the database.")
+        return result[0]
 
     def add_words(self, user_id: int, words: List[str]) -> None:
         """Adds a list of words in the words table in the database"""
@@ -403,6 +421,13 @@ class LocalDataBaseModel(DataBaseModel):
             "user_photo": user.get("user_photo"),
             "user_language": user.get("user_language")
         }
+
+    def get_user_password(self, user_id: int) -> str:
+        """Gets a given user password by the id."""
+        if not user_id < len(self.users) or self.users[user_id] is None:
+            raise UserIdError("The required user cannot be found in the database.")
+        user = self.users[user_id]
+        return user.get("user_password")
 
     def add_words(self, user_id: int, words: List[str]) -> None:
         """Adds a list of words in the words table in the database"""

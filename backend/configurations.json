@@ -1,6 +1,7 @@
 {
     "logging_folder": "logs",
     "postgresqlDatabase": "VOCA_DATABASE_URL",
+    "hashingSaltEnv": "HASHING_SALT",
     "debug": true,
     "supportedLanguages": [
         {
