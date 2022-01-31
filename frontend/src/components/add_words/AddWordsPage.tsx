@@ -61,7 +61,7 @@ export default function AddWordsPage ({ userId }: AddWordsPageProps): React.Reac
             <AddWordsBar addWord={addWord}/>
             <AddWordsList words={words} removeWord={removeWord}/>
 
-            <div className="fixed top-3/4 right-0 m-10">
+            <div className="bottom-float">
                 {
                     requestState === AddWordsRequestState.Waiting ? <Loader /> :
                     <SaveButton saveWords={saveWords} />

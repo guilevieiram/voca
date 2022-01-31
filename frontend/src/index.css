@@ -23,7 +23,7 @@
     @apply my-4 border-blue border-b-2 bg-transparent px-2 py-1;
   }
   .primary-button {
-    @apply cursor-pointer rounded-lg font-bold text-dark bg-blue w-full py-2;
+    @apply cursor-pointer rounded-lg font-bold text-dark bg-blue w-full my-8 py-2;
   }
   .secondary-button {
     @apply cursor-pointer border-blue border-2 rounded-lg font-bold text-blue w-full my-8 py-2;
@@ -39,5 +39,8 @@
   }
   .h-bar {
     @apply w-full bg-dark dark:bg-light h-px
+  }
+  .bottom-float {
+    @apply fixed top-3/4 mx-10 my-4
   }
 }

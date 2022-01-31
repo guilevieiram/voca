@@ -52,6 +52,11 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
         setTargetWordIndex(0);
     };
 
+    const reloadWords = (): void => {
+        loadWords();
+        window.location.reload();
+    };
+
     useEffect(() => {if (JSON.stringify(wordsList) === JSON.stringify([{word: "", id: 0}])) loadWords();}, []);
     useEffect(() => setTargetWord(wordsList[targetWordIndex]), [targetWordIndex, wordsList]);
 
@@ -93,6 +98,9 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
                     </div>
                 </>
             }
+            <div className="bottom-float">
+                <button className="secondary-button px-10" onClick={reloadWords}>Reload words</button>
+            </div>
         </div>
     )
 }
