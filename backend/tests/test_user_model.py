@@ -1,6 +1,6 @@
 from unittest import TestCase, mock
 
-from src.model import MyUserModel, User
+from src.model import MyUserModel, User, HashedUserModel
 from src.model.exceptions import UserNotFoundError, WrongPasswordError, LanguageNotSupportedError
 
 
@@ -71,4 +71,18 @@ class MyUserModelTestCase(TestCase):
             self.user_model.login_user,
             user_email="test@gmail.com",
             user_password="pass1234"
+        )
+
+
+class HashUserModelTestCase(MyUserModelTestCase):
+
+    def setUp(self):
+        patcher = mock.patch('src.model.LocalDataBaseModel')
+        self.mock_database_model = patcher.start()
+        self.addCleanup(patcher.stop)
+        self.mock_database_model.get_user_password.return_value = "$2b$12$6UQtPyiW3KMjYIHYKX80mePFKGwxO4Be0Gh8l6gt5LvOAzOL.klma"
+        self.user_model = HashedUserModel(
+            database_model=self.mock_database_model,
+            supported_languages_codes=["en", "pt"],
+            hashing_salt='$2b$12$6UQtPyiW3KMjYIHYKX80me'
         )

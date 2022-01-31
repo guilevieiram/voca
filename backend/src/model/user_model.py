@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from typing import Union, Optional, Dict, List
+import bcrypt
 
 from .database_model import DataBaseModel
 from .exceptions import UserNotFoundError, WrongPasswordError, LanguageNotSupportedError
@@ -111,3 +112,39 @@ class MyUserModel(UserModel):
     def update_user(self, user_id: int, property: str, value: Union[int, str]) -> None: 
         """Updates a user in the data base given the user_id and a property, value pair."""
         self.database_model.update_user(user_id=user_id, property=property, value=value)
+
+
+class HashedUserModel(MyUserModel):
+    """Implementation of the user model that hashes the users passwords in the database for security."""
+
+    def __init__(self, database_model: DataBaseModel, supported_languages_codes: List[str], hashing_salt: str) -> None:
+        """Initializing the super init."""
+        super().__init__(database_model, supported_languages_codes)
+        self.salt: str = hashing_salt.encode("utf-8")
+
+    def add_user(self, user: User) -> None:
+        """Adds a given user to the data base by hashing his password."""
+        if user.language not in self.supported_languages_codes:
+            raise LanguageNotSupportedError("The desired language is not supported.")
+        hashed_password = bcrypt.hashpw(user.password.encode("utf-8"), self.salt)
+        self.database_model.add_user(
+            user_name=user.name,
+            user_email=user.email,
+            user_password=hashed_password.decode("utf-8"),
+            user_language=user.language,
+            user_photo=user.photo_url
+        )
+
+    def login_user(self, user_email: str, user_password: str) -> int:
+        """Tries to log in the user returning the user id if successful. Uses the hashed password."""
+        try:
+            user_id: int = self.database_model.find_user(properties={
+                "user_email": user_email
+            })
+            user_hashed_password = self.database_model.get_user_password(user_id=user_id)
+            if bcrypt.checkpw(user_password.encode("utf-8"), user_hashed_password.encode("utf-8")):
+                return user_id
+            else:
+                raise WrongPasswordError("Wrong password.")
+        except UserNotFoundError:
+            raise UserNotFoundError("User does not exists in the database.")

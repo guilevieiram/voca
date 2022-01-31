@@ -10,7 +10,7 @@ from src.controller import MainController, FlaskController, TerminalController
 from src.controller import UserController, MyUserController, DummyUserController
 from src.controller import LanguageController, MyLanguageController, DummyLanguageController, SimpleLanguageController
 
-from src.model import UserModel, MyUserModel
+from src.model import UserModel, MyUserModel, HashedUserModel
 from src.model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 from src.model import WordsModel, MyWordsModel
 from src.model import TranslationModel, DummyTranslationModel, GoogleTranslationModel, LingueeTranslationModel
@@ -27,6 +27,7 @@ supported_languages: List[Dict[str, str]] = Configurations.supported_languages
 supported_languages_codes: List[str] = Configurations.supported_languages_codes
 user_logger: logging.Logger = Configurations.logger(name="user")
 language_logger: logging.Logger = Configurations.logger(name="language")
+hashing_salt: str = Configurations.hashing_salt
 
 conversion: ConversionFunction = FloorConversion
 
@@ -36,7 +37,7 @@ conversion: ConversionFunction = FloorConversion
 
 database_model: DataBaseModel = PostgresqlDataBaseModel(database_url=database_url)
 
-user_model:             UserModel =             MyUserModel
+user_model:             UserModel =             HashedUserModel
 nlp_model:              NlpModel =              SpacyNlpModel
 translation_model:      TranslationModel =      GoogleTranslationModel
 words_model:            WordsModel =            MyWordsModel
@@ -50,10 +51,11 @@ main_controller:        MainController =        FlaskController
 # -----------------------------------------------------------
 
 endpoint = main_controller(
-    user_controller=user_controller(
+        user_controller=user_controller(
         user_model=user_model(
             database_model=database_model,
-            supported_languages_codes=supported_languages_codes
+            supported_languages_codes=supported_languages_codes,
+            hashing_salt=hashing_salt
         ),
         logger=user_logger
     ),

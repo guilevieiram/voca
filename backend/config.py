@@ -59,3 +59,10 @@ class Configurations:
     def supported_languages_codes(self) -> List[str]:
         """Return the list with all the codes for the supported languages."""
         return [language.get("code") for language in self.supported_languages]
+
+    @property
+    def hashing_salt(self) -> str:
+        """Returns the hashing salt used for encripting the database."""
+        with open(self.configuration_file, encoding="utf-8") as file:
+            hashing_salt_env_name: str = load(file).get("hashingSaltEnv")
+        return os.environ.get(hashing_salt_env_name)

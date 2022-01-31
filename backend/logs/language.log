@@ -1,0 +1,177 @@
+2022-01-31 00:55:43,378  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 170, in res_calculate_score
+    translated_word: str = self.translation_model.translate(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/translation_model.py", line 36, in translate
+    translation: str = self.translator.translate(word, dest=to_language).text
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/googletrans/client.py", line 219, in translate
+    parsed = json.loads(data[0][2])
+  File "/usr/lib/python3.8/json/__init__.py", line 341, in loads
+    raise TypeError(f'the JSON object must be str, bytes or bytearray, '
+TypeError: the JSON object must be str, bytes or bytearray, not NoneType
+2022-01-31 09:58:05,800  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 258, in add_words
+    cursor.execute(sql)
+psycopg2.errors.SyntaxError: syntax error at or near "argent"
+LINE 3: ...couler', 4) , ('Un brocage', 4) , ('blanchement d'argent', 4...
+                                                             ^
+
+2022-01-31 09:58:54,680  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 251, in add_words
+    self._check_user_exitst(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 341, in _check_user_exitst
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 10:04:08,862  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 258, in add_words
+    cursor.execute(sql)
+psycopg2.errors.SyntaxError: syntax error at or near "argent"
+LINE 3:         VALUES ('blanchement d'argent', 4) , ('une escroquer...
+                                       ^
+
+2022-01-31 10:05:01,741  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 251, in add_words
+    self._check_user_exitst(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 341, in _check_user_exitst
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 13:13:17,891  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 170, in res_calculate_score
+    translated_word: str = self.translation_model.translate(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/translation_model.py", line 36, in translate
+    translation: str = self.translator.translate(word, dest=to_language).text
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/googletrans/client.py", line 222, in translate
+    translated_parts = list(map(lambda part: TranslatedPart(part[0], part[1] if len(part) >= 2 else []), parsed[1][0][0][5]))
+TypeError: 'NoneType' object is not iterable
+2022-01-31 13:15:08,584  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 170, in res_calculate_score
+    translated_word: str = self.translation_model.translate(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/translation_model.py", line 36, in translate
+    translation: str = self.translator.translate(word, dest=to_language).text
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/googletrans/client.py", line 194, in translate
+    data, response = self._translate(text, dest, src)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/googletrans/client.py", line 120, in _translate
+    r = self.client.post(url, params=params, data=data)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpx/_client.py", line 824, in post
+    return self.request(
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpx/_client.py", line 600, in request
+    return self.send(
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpx/_client.py", line 620, in send
+    response = self.send_handling_redirects(
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpx/_client.py", line 647, in send_handling_redirects
+    response = self.send_handling_auth(
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpx/_client.py", line 684, in send_handling_auth
+    response = self.send_single_request(request, timeout)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpx/_client.py", line 714, in send_single_request
+    ) = transport.request(
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpcore/_sync/connection_pool.py", line 152, in request
+    response = connection.request(
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpcore/_sync/connection.py", line 78, in request
+    return self.connection.request(method, url, headers, stream, timeout)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpcore/_sync/http2.py", line 118, in request
+    return h2_stream.request(method, url, headers, stream, timeout)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpcore/_sync/http2.py", line 292, in request
+    status_code, headers = self.receive_response(timeout)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpcore/_sync/http2.py", line 344, in receive_response
+    event = self.connection.wait_for_event(self.stream_id, timeout)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpcore/_sync/http2.py", line 197, in wait_for_event
+    self.receive_events(timeout)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpcore/_sync/http2.py", line 204, in receive_events
+    data = self.socket.read(self.READ_NUM_BYTES, timeout)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpcore/_backends/sync.py", line 62, in read
+    return self.sock.recv(n)
+  File "/usr/lib/python3.8/contextlib.py", line 131, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/httpcore/_exceptions.py", line 12, in map_exceptions
+    raise to_exc(exc) from None
+httpcore._exceptions.ReadError: [SSL: SSLV3_ALERT_BAD_RECORD_MAC] sslv3 alert bad record mac (_ssl.c:2635)
+2022-01-31 13:19:03,612  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 170, in res_calculate_score
+    translated_word: str = self.translation_model.translate(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/translation_model.py", line 36, in translate
+    translation: str = self.translator.translate(word, dest=to_language).text
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/googletrans/client.py", line 219, in translate
+    parsed = json.loads(data[0][2])
+  File "/usr/lib/python3.8/json/__init__.py", line 341, in loads
+    raise TypeError(f'the JSON object must be str, bytes or bytearray, '
+TypeError: the JSON object must be str, bytes or bytearray, not NoneType
+2022-01-31 13:20:20,726  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 170, in res_calculate_score
+    translated_word: str = self.translation_model.translate(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/translation_model.py", line 36, in translate
+    translation: str = self.translator.translate(word, dest=to_language).text
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/googletrans/client.py", line 219, in translate
+    parsed = json.loads(data[0][2])
+  File "/usr/lib/python3.8/json/__init__.py", line 341, in loads
+    raise TypeError(f'the JSON object must be str, bytes or bytearray, '
+TypeError: the JSON object must be str, bytes or bytearray, not NoneType
+2022-01-31 13:41:19,802  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 259, in add_words
+    cursor.execute(sql)
+psycopg2.errors.SyntaxError: syntax error at or near ";"
+LINE 3:         VALUES ;
+                       ^
+
+2022-01-31 18:56:30,866  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 141, in res_get_words_from_user
+    words: List[WordInfo] = self.words_model.get_words_from_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 72, in get_words_from_user
+    words: Dict[str, Any] = self.database_model.get_words(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 271, in get_words
+    cursor.execute(sql)
+psycopg2.errors.UndefinedColumn: column "none" does not exist
+LINE 3:         WHERE user_id = None
+                                ^
+
+2022-01-31 18:56:40,179  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 141, in res_get_words_from_user
+    words: List[WordInfo] = self.words_model.get_words_from_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 72, in get_words_from_user
+    words: Dict[str, Any] = self.database_model.get_words(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 271, in get_words
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 18:57:19,205  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 141, in res_get_words_from_user
+    words: List[WordInfo] = self.words_model.get_words_from_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 72, in get_words_from_user
+    words: Dict[str, Any] = self.database_model.get_words(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 271, in get_words
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+

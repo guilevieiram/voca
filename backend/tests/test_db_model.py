@@ -40,6 +40,10 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             encapsulate("word"),
             "'word'"
         )
+        self.assertEqual(
+            encapsulate("j'ai"),
+            "'j''ai'"
+        )
     
     def test_construct_values_query(self):
         self.assertEqual(
@@ -149,6 +153,14 @@ class PostgresqlDataBaseModelTestCase(TestCase):
         self.assertRaises(
             UserIdError,
             self.database_model.get_user,
+            user_id=10
+        )
+    
+    def test_get_user_password_no_matches(self):
+        self.cursor.fetchone.return_value = None
+        self.assertRaises(
+            UserIdError,
+            self.database_model.get_user_password,
             user_id=10
         )
     
@@ -410,6 +422,19 @@ class LocalDbModelTestCase(TestCase):
         self.assertRaises(
             UserIdError,
             self.database.get_user,
+            user_id=0
+        )
+
+    def test_get_user_password_no_matches(self):
+        self.assertRaises(
+            UserIdError,
+            self.database.get_user_password,
+            user_id=10
+        )
+        self.database.users[0] = None
+        self.assertRaises(
+            UserIdError,
+            self.database.get_user_password,
             user_id=0
         )
     

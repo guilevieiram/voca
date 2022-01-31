@@ -28,10 +28,9 @@ function getUser (userId: number | null, setUser: setUserType, setRequestState: 
         method: "POST"
     };
 
-    setRequestState(GetUserRequestState.Started)
+    setRequestState(GetUserRequestState.Waiting)
     fetch(endpoint, parameters)
     .then( (data) => {
-        setRequestState(GetUserRequestState.Waiting);
         return data.json();
     })
     .then( (response) => {

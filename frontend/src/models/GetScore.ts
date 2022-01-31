@@ -27,10 +27,9 @@ function getScore (wordId: number, word: string, setScore: setScoreType, setRequ
         method: "POST"
     };
 
-    setRequestState(GetScoreRequestState.Started)
+    setRequestState(GetScoreRequestState.Waiting)
     fetch(endpoint, parameters)
     .then( (data) => {
-        setRequestState(GetScoreRequestState.Waiting);
         return data.json();
     })
     .then( (response) => {

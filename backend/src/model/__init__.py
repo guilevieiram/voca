@@ -3,7 +3,7 @@ This is the models module of your application. Here you should develop the diffe
 After constructing them in a separate file, import them here, both the abstract form and the implementations.
 """
 
-from .user_model import User, UserModel, MyUserModel
+from .user_model import User, UserModel, MyUserModel, HashedUserModel
 from .database_model import DataBaseModel, LocalDataBaseModel, PostgresqlDataBaseModel
 from .nlp_model import NlpModel, DummyNlpModel, SpacyNlpModel, NltkNlpModel
 from .translation_model import TranslationModel, DummyTranslationModel, GoogleTranslationModel, LingueeTranslationModel
