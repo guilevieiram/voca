@@ -9,3 +9,51 @@ Traceback (most recent call last):
   File "/usr/lib/python3.8/json/__init__.py", line 341, in loads
     raise TypeError(f'the JSON object must be str, bytes or bytearray, '
 TypeError: the JSON object must be str, bytes or bytearray, not NoneType
+2022-01-31 09:58:05,800  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 258, in add_words
+    cursor.execute(sql)
+psycopg2.errors.SyntaxError: syntax error at or near "argent"
+LINE 3: ...couler', 4) , ('Un brocage', 4) , ('blanchement d'argent', 4...
+                                                             ^
+
+2022-01-31 09:58:54,680  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 251, in add_words
+    self._check_user_exitst(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 341, in _check_user_exitst
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 10:04:08,862  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 258, in add_words
+    cursor.execute(sql)
+psycopg2.errors.SyntaxError: syntax error at or near "argent"
+LINE 3:         VALUES ('blanchement d'argent', 4) , ('une escroquer...
+                                       ^
+
+2022-01-31 10:05:01,741  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 251, in add_words
+    self._check_user_exitst(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 341, in _check_user_exitst
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+

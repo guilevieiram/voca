@@ -18,6 +18,7 @@ def parse_postgresql_url(url: str) -> dict:
     }
 
 def encapsulate(string: str) -> str:
+    string = string.replace("'", "''")
     return f"'{string}'"
 
 def construct_and_query(properties: Dict[str, Union[str, int]]) -> str:

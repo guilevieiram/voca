@@ -40,6 +40,10 @@ class PostgresqlDataBaseModelTestCase(TestCase):
             encapsulate("word"),
             "'word'"
         )
+        self.assertEqual(
+            encapsulate("j'ai"),
+            "'j''ai'"
+        )
     
     def test_construct_values_query(self):
         self.assertEqual(
