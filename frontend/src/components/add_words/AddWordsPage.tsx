@@ -24,7 +24,10 @@ export default function AddWordsPage ({ userId }: AddWordsPageProps): React.Reac
     const addWord = (word: string): void => {if (!words.includes(word)) setWords([...words, word])};
     const removeWord = (word: string): void => setWords(words.filter(item => item !== word));
     const saveWords = (): void => {
-        // in this function we need to call the server api to actually save the words...
+        if (words.length === 0){
+            window.alert("Try adding some words before saving!");
+            return 
+        }
         addWords(userId, words, setRequestState, apiEndpoint)
         setWords([]);
     };
