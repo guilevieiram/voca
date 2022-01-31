@@ -131,3 +131,47 @@ Traceback (most recent call last):
   File "/usr/lib/python3.8/json/__init__.py", line 341, in loads
     raise TypeError(f'the JSON object must be str, bytes or bytearray, '
 TypeError: the JSON object must be str, bytes or bytearray, not NoneType
+2022-01-31 13:41:19,802  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 120, in res_add_words
+    self.words_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 68, in add_words
+    self.database_model.add_words(user_id=user_id, words=words)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 259, in add_words
+    cursor.execute(sql)
+psycopg2.errors.SyntaxError: syntax error at or near ";"
+LINE 3:         VALUES ;
+                       ^
+
+2022-01-31 18:56:30,866  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 141, in res_get_words_from_user
+    words: List[WordInfo] = self.words_model.get_words_from_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 72, in get_words_from_user
+    words: Dict[str, Any] = self.database_model.get_words(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 271, in get_words
+    cursor.execute(sql)
+psycopg2.errors.UndefinedColumn: column "none" does not exist
+LINE 3:         WHERE user_id = None
+                                ^
+
+2022-01-31 18:56:40,179  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 141, in res_get_words_from_user
+    words: List[WordInfo] = self.words_model.get_words_from_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 72, in get_words_from_user
+    words: Dict[str, Any] = self.database_model.get_words(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 271, in get_words
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 18:57:19,205  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 141, in res_get_words_from_user
+    words: List[WordInfo] = self.words_model.get_words_from_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/words_model.py", line 72, in get_words_from_user
+    words: Dict[str, Any] = self.database_model.get_words(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 271, in get_words
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
