@@ -32,6 +32,8 @@ class GoogleTranslationModel(TranslationModel):
 
     def translate(self, to_language: str, word: str, all_translations: bool = False) -> Union[str, List[str]]:
         """Translates word from detected language to to_language, returning the translated word"""
+        if not word:
+            return ""
         try:
             translation: str = self.translator.translate(word, dest=to_language).text
             return translation if not all_translations else [translation]
@@ -49,6 +51,8 @@ class LingueeTranslationModel(TranslationModel):
 
     def translate(self, to_language: str, word: str, all_translations: bool = False) -> Union[str, List[str]]:
         """Translates word from detected language to to_language, returning the translated word"""
+        if not word:
+            return ""
         try:
             detected_language: str = self.detector(word).lang
             if detected_language == to_language: return [word]

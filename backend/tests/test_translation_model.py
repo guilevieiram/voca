@@ -21,6 +21,15 @@ class GoogleTranslationModelTestCase(TestCase):
             word="House"
         )
 
+    def test_translate_empty(self):
+        self.assertEqual(
+            self.google_translation_model.translate(
+                to_language="en",
+                word=""
+            ),
+            ""
+        )
+
     def test_translate_all_translations(self):
         self.mock_translator.return_value.translate.return_value.text = "word"
         self.assertIsInstance(
@@ -56,6 +65,15 @@ class LingueeTranslationModelTestCase(TestCase):
             self.linguee_translation_model.translate,
             to_language="en",
             word="Casa"
+        )
+
+    def test_translate_empty(self):
+        self.assertEqual(
+            self.linguee_translation_model.translate(
+                to_language="en",
+                word=""
+            ),
+            ""
         )
 
         
