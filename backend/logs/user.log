@@ -61,3 +61,14 @@ psycopg2.errors.SyntaxError: syntax error at or near "$2"
 LINE 3:         VALUES ('Gui Hash', 'gui@hash.com', 'b'$2b$12$eBQ3Ll...
                                                        ^
 
+2022-01-31 07:59:44,626  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 174, in res_delete_user
+    self.user_model.delete_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 78, in delete_user
+    self.database_model.delete_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 162, in delete_user
+    cursor.execute(sql)
+psycopg2.errors.ForeignKeyViolation: update or delete on table "app_users" violates foreign key constraint "app_words_user_id_fkey" on table "app_words"
+DETAIL:  Key (id)=(1) is still referenced from table "app_words".
+

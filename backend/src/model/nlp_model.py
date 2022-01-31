@@ -62,7 +62,7 @@ class SpacyNlpModel(NlpModel):
     
     def _similarity(self, first_word: str, second_word: str, language_processing_model) -> float:
         """Calculate the similarity strictly between two words, given a spacy language processing model (already loaded)."""
-        return language_processing_model(first_word).similarity(language_processing_model(second_word))
+        return language_processing_model(first_word.lower()).similarity(language_processing_model(second_word.lower()))
 
 
 class NltkNlpModel(NlpModel):
@@ -89,7 +89,7 @@ class NltkNlpModel(NlpModel):
     def _similarity(self, first_word: str, second_word: str) -> float:
         """Calculates the similarity between two words in english and returns te result."""
         try:
-            return self._encode(first_word).wup_similarity(self._encode(second_word))
+            return self._encode(first_word.lower()).wup_similarity(self._encode(second_word.lower()))
         except IndexError:
             return 0.0
             

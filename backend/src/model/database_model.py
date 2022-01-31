@@ -153,6 +153,15 @@ class PostgresqlDataBaseModel(DataBaseModel):
 
     def delete_user(self, user_id: int) -> None:
         """Deletes a user from the database"""
+        # Deleting all words related to a user
+        sql = f"""
+        DELETE FROM app_words 
+        WHERE user_id = {user_id};
+        """
+        with self.connection.cursor() as cursor:
+            cursor.execute(sql)
+
+        # Deleting the user themselves
         sql = f"""
         DELETE FROM app_users
         WHERE id = {user_id}
