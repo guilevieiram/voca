@@ -25,10 +25,9 @@ function updateUser (userId: number | null, property: string, value: string, set
         method: "POST"
     };
 
-    setRequestState(UpdateUserRequestState.Started)
+    setRequestState(UpdateUserRequestState.Waiting)
     fetch(endpoint, parameters)
     .then( (data) => {
-        setRequestState(UpdateUserRequestState.Waiting);
         return data.json();
     })
     .then( (response) => {

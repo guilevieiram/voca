@@ -26,10 +26,9 @@ const signupUser = (name: string, email: string, password: string, language: str
         method: "POST"
     };
 
-    setSignupState(UserSignupRequestState.Started);
+    setSignupState(UserSignupRequestState.Waiting);
     fetch(endpoint, parameters)
     .then( (data) => {
-        setSignupState(UserSignupRequestState.Waiting);
         return data.json();
     })
     .then( (response) => {

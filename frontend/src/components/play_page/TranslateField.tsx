@@ -56,7 +56,7 @@ export default function TranslateField ({ setScore, wordId, wordIndex}: Translat
                 <button onClick={submitWord} className="rounded-button px-3">{!translatedWord ? "?" : ">"}</button>
             </form>
             {
-                requestState === GetScoreRequestState.Waiting ? <Loader /> : <></>
+                requestState === GetScoreRequestState.Waiting? <Loader /> : <></>
             }
         </div>
     )

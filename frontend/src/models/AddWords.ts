@@ -23,10 +23,9 @@ function addWords(userId: number | null, wordsList: string[], setRequestState: s
         method: "POST"
     };
 
-    setRequestState(AddWordsRequestState.Started)
+    setRequestState(AddWordsRequestState.Waiting)
     fetch(endpoint, parameters)
     .then( (data) => {
-        setRequestState(AddWordsRequestState.Waiting);
         return data.json();
     })
     .then( (response) => {

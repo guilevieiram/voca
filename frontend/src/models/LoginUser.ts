@@ -25,10 +25,9 @@ const loginUser = (email: string, password: string, setToken: setTokenType, setL
         method: "POST"
     };
 
-    setLoginState(UserLoginRequestState.Started);
+    setLoginState(UserLoginRequestState.Waiting);
     fetch(endpoint, parameters)
     .then( (data) => {
-        setLoginState(UserLoginRequestState.Waiting);
         return data.json();
     })
     .then( (response) => {
