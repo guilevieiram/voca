@@ -136,6 +136,47 @@ class MyLanguageControllerTestCase(TestCase):
                 "message": "An error occured in the database."
             }
         )
+
+    def test_inactivate_word(self):
+        self.mock_words_model.inactivate_word.return_value = None
+        self.assertEqual(
+            self.language_controller.res_inactivate_word.callable(
+                self.language_controller,
+                1
+            ),
+            {
+                "code": 1,
+                "message": "Word inactivated successfully."
+            }
+        )
+    
+    def test_inactivate_word_word_not_exists(self):
+        self.mock_words_model.inactivate_word.side_effect = WordDoesNotExistError("ops...")
+        self.assertEqual(
+            self.language_controller.res_inactivate_word.callable(
+                self.language_controller,
+                1
+            ),
+            {
+                "code": -8,
+                "message": "No word with the given ID could be found in the database."
+            }
+        )
+
+    def test_inactivate_word_server_error(self):
+        self.mock_words_model.inactivate_word.side_effect = Exception("ops...")
+        self.assertEqual(
+            self.language_controller.res_inactivate_word.callable(
+                self.language_controller,
+                1
+            ),
+            {
+                "code": -12,
+                "message": "An error occured in the database."
+            }
+        )
+
+
     
     def test_res_calculate_score(self):
         self.assertEqual(

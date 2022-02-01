@@ -30,6 +30,11 @@ class LanguageController(SubController):
     @abstractmethod
     def res_get_words_from_user(self, user_id: int) -> ResourceResponse:
         """Gets the list of words from an user sorted by relevance, along with the words ids. Returns the api response dict/json."""
+    
+    @router(endpoint="language/inactivate_word")
+    @abstractmethod
+    def res_inactivate_word(self, word_id: int) -> ResourceResponse:
+        """Make a word inactive given the words id."""
 
     @router(endpoint="language/score")
     @abstractmethod
@@ -77,9 +82,17 @@ class DummyLanguageController(LanguageController):
     def res_get_words_from_user(self, user_id: int) -> ResourceResponse:
         """Gets the list of words from an user sorted by relevance, along with the words ids. Returns the api response dict/json."""
         return {
-            "code": Error.USER_ID_ERROR.value,
+            "code": 1,
             "message": "Words fetched successfully.",
             "words": ["House", "Plant"]
+        }
+
+    @router(endpoint="language/inactivate_word")
+    def res_inactivate_word(self, word_id: int) -> ResourceResponse:
+        """Make a word inactive given the words id."""
+        return {
+            "code": 1,
+            "message": "Word inactivated successfully."
         }
         
     @router(endpoint="language/score")
@@ -158,6 +171,28 @@ class MyLanguageController(LanguageController):
                 "code": Error.SERVER_ERROR.value,
                 "message": "An error occured in the database."
             }
+
+    @router(endpoint="language/inactivate_word")
+    def res_inactivate_word(self, word_id: int) -> ResourceResponse:
+        """Make a word inactive given the words id."""
+        try:
+            self.words_model.inactivate_word(word_id=word_id)
+            return {
+                "code": 1,
+                "message": "Word inactivated successfully."
+            }
+        except WordDoesNotExistError:
+            return {
+                "code": Error.WORD_DOES_NOT_EXISTS_ERROR.value,
+                "message": "No word with the given ID could be found in the database."
+            }
+        except Exception:
+            self.logger.exception("An exception occurred in the server.")
+            return {
+                "code": Error.SERVER_ERROR.value,
+                "message": "An error occured in the database."
+            }
+
             
     @router(endpoint="language/score")
     def res_calculate_score(self, word_id: int, word: str) -> ResourceResponse:

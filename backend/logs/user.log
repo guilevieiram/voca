@@ -72,3 +72,67 @@ Traceback (most recent call last):
 psycopg2.errors.ForeignKeyViolation: update or delete on table "app_users" violates foreign key constraint "app_words_user_id_fkey" on table "app_words"
 DETAIL:  Key (id)=(1) is still referenced from table "app_words".
 
+2022-01-31 19:15:01,522  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 195, in res_get_user
+    user_info: User = self.user_model.get_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 82, in get_user
+    user_information = self.database_model.get_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 223, in get_user
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 19:15:06,609  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 117, in res_login
+    user_id: int = self.user_model.login_user(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 141, in login_user
+    user_id: int = self.database_model.find_user(properties={
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 190, in find_user
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 19:15:20,598  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 117, in res_login
+    user_id: int = self.user_model.login_user(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 141, in login_user
+    user_id: int = self.database_model.find_user(properties={
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 190, in find_user
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 19:15:45,754  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 117, in res_login
+    user_id: int = self.user_model.login_user(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 141, in login_user
+    user_id: int = self.database_model.find_user(properties={
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 190, in find_user
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 19:22:10,098  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 195, in res_get_user
+    user_info: User = self.user_model.get_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 82, in get_user
+    user_information = self.database_model.get_user(user_id=user_id)
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/database_model.py", line 223, in get_user
+    cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+2022-01-31 21:02:31,293  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 128, in add_user
+    raise LanguageNotSupportedError("The desired language is not supported.")
+src.model.exceptions.LanguageNotSupportedError: The desired language is not supported.
+2022-01-31 21:02:40,382  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/user_controller.py", line 147, in res_sign_up
+    self.user_model.add_user(user=User(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/user_model.py", line 128, in add_user
+    raise LanguageNotSupportedError("The desired language is not supported.")
+src.model.exceptions.LanguageNotSupportedError: The desired language is not supported.

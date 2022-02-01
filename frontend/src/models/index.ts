@@ -8,6 +8,7 @@ import { getWords, GetWordsRequestState, Word } from "./GetWords";
 import { getScore, GetScoreRequestState } from "./GetScore";
 import { getUser, GetUserRequestState } from "./GetUser";
 import { updateUser, UpdateUserRequestState } from "./UpdateUser";
+import { deleteWord, DeleteWordRequestState } from "./DeleteWord";
 
 export {
     // request funcitons
@@ -21,6 +22,7 @@ export {
     getScore,
     getUser,
     updateUser,
+    deleteWord,
 
     // requests states
     UserLoginRequestState,
@@ -30,5 +32,6 @@ export {
     GetScoreRequestState,
     GetUserRequestState,
     UpdateUserRequestState,
+    DeleteWordRequestState,
 };
 export type { Language, Word };

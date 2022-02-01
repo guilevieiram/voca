@@ -6,8 +6,8 @@ import NextButton from "./NextButton";
 import LoadMore from "./LoadMore";
 
 import { apiEndpoint } from '../../app.config';
-import { getWords, GetWordsRequestState, Word } from "../../models";
-import Loader from "../Loader";
+import { getWords, GetWordsRequestState, Word, deleteWord, DeleteWordRequestState } from "../../models";
+import ReloadWords from "./ReloadWords";
 
 type PlayPageProps = {
     userId: number | null
@@ -36,7 +36,8 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
     const [targetWord, setTargetWord] = useState<Word>(wordsList[targetWordIndex]);
     const [score, setScore] = useState<number | null>(null);
     const [finished, setFinished] = useState<boolean>(false);
-    const [requestState, setRequestState] = useState<GetWordsRequestState>(GetWordsRequestState.NotStarted);
+    const [getWordsRequestState, setGetWordsRequestState] = useState<GetWordsRequestState>(GetWordsRequestState.NotStarted);
+    const [deleteWordRequestState, setDeleteWordsRequestState] = useState<DeleteWordRequestState>(DeleteWordRequestState.NotStarted);
     const nextWord = (): void => {
         setScore(null);
         if (targetWordIndex >= wordsList.length - 1) {
@@ -47,14 +48,13 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
     }
 
     const loadWords = (): void => {
-        getWords(userId, setWordsList, setRequestState, apiEndpoint);
+        getWords(userId, setWordsList, setGetWordsRequestState, apiEndpoint);
         setFinished(false);
         setTargetWordIndex(0);
     };
 
-    const reloadWords = (): void => {
-        loadWords();
-        window.location.reload();
+    const deleteCurrentWord = (): void => {
+        deleteWord( targetWord.id, setDeleteWordsRequestState, apiEndpoint);
     };
 
     useEffect(() => {if (JSON.stringify(wordsList) === JSON.stringify([{word: "", id: 0}])) loadWords();}, []);
@@ -64,7 +64,7 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
     useEffect(() => setWordsListInSessionStorage(wordsList), [wordsList])
 
     useEffect(() => {
-        switch (requestState){
+        switch (getWordsRequestState){
             case GetWordsRequestState.BackendIssue:{
                 window.alert("Looks like our servers are down. Try again in a few minutes...");
                 setWordsListInSessionStorage([]);
@@ -79,7 +79,27 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
             }
             default: break;
         }
-    }, [requestState]);
+    }, [getWordsRequestState]);
+
+    useEffect(() => {
+        switch (deleteWordRequestState){
+            case DeleteWordRequestState.BackendIssue:{
+                window.alert("Looks like our servers are down. Try again in a few minutes ...");
+                break;
+            }
+            case DeleteWordRequestState.WordNotFound:{
+                window.alert("This word is no longer active in your account.");
+                window.location.reload();
+                break;
+            }
+            case DeleteWordRequestState.Successful:{
+                window.alert("Word deleted successfully!");
+                loadWords();
+                break;
+            }
+            default: break;
+        }
+    }, [deleteWordRequestState]);
 
     return (
         <div className="my-6">
@@ -87,10 +107,10 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
             <div className="h-bar"></div>
             {
                 finished ? <LoadMore loadMoreWords={loadWords} />:
-                requestState === GetWordsRequestState.BackendIssue? 
-                <button onClick={window.location.reload} className="secondary-button ">Reload page.</button> :
+                getWordsRequestState === GetWordsRequestState.BackendIssue? 
+                <button onClick={() => window.location.reload()} className="secondary-button ">Reload page.</button> :
                 <>
-                    <ShowTargetWord word={targetWord.word} />
+                    <ShowTargetWord word={targetWord.word} deleteWord={deleteCurrentWord} />
                     <TranslateField setScore={setScore} wordId={targetWord.id} wordIndex={targetWordIndex} />
                     <div className="w-full flex justify-around items-center my-6">
                         <Score score={score} />
@@ -98,9 +118,7 @@ export default function PlayPage ({ userId }: PlayPageProps): React.ReactElement
                     </div>
                 </>
             }
-            <div className="bottom-float">
-                <button className="secondary-button px-10" onClick={reloadWords}>Reload words</button>
-            </div>
+            <ReloadWords reloadWords={loadWords}/>
         </div>
     )
 }

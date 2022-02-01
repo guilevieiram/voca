@@ -31,6 +31,10 @@ class WordsModel(ABC):
     @abstractmethod
     def update_word_score(self, word_id: int, score: int) -> None:
         """Updates a given word score in the database."""
+    
+    @abstractmethod
+    def inactivate_word(self, word_id: int) -> None:
+        """Makes a word inactive in the database."""
 
 
 class DummyWordsModel(WordsModel):
@@ -55,6 +59,10 @@ class DummyWordsModel(WordsModel):
     def update_word_score(self, word_id: int, score: int) -> None:
         """Updates a given word score in the database."""
         print(f"Updated word with id {word_id} to have {score=}")
+
+    def inactivate_word(self, word_id: int) -> None:
+        """Makes a word inactive in the database."""
+        print(f"Inactivated word with {word_id=}")
 
 class MyWordsModel(WordsModel):
     """Concrete model class to handle the words related methods with the database"""
@@ -86,4 +94,12 @@ class MyWordsModel(WordsModel):
             word_id=word_id,
             property="score",
             value=score
+        )
+
+    def inactivate_word(self, word_id: int) -> None:
+        """Makes a word inactive in the database."""
+        self.database_model.update_word(
+            word_id=word_id,
+            property="active",
+            value=False
         )
