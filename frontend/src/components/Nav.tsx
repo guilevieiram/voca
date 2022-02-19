@@ -56,7 +56,7 @@ export default function Nav (): React.ReactElement {
             <div className={`max-w-2xl w-full h-full px-4 z-10 flex justify-around items-center`}>
                 <Button active={false} icon={addIcon} link='/add_words' />
                 <Button active={false} icon={homeIcon} link='/user_page' />
-                <NavLogoButton icon={navLogo} link='/' />
+                <NavLogoButton icon={navLogo} link='/home' />
                 <Button active={false} icon={playIcon} link='/play' />
                 <Button active={false} icon={pointsIcon} link='/config' />
             </div>

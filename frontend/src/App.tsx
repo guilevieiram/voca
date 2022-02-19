@@ -29,7 +29,7 @@ function App(): React.ReactElement {
   const getToken = (): string | null => sessionStorage.getItem('token');
   const token: string | null = getToken();
   const ifLoggedIn = (element: React.ReactElement): React.ReactElement => token ? element : <Navigate replace to="/login" />;
-  const ifNotLoggedIn = (element: React.ReactElement): React.ReactElement => !token ? element : <Navigate replace to="/" />;
+  const ifNotLoggedIn = (element: React.ReactElement): React.ReactElement => !token ? element : <Navigate replace to="/home" />;
 
   const [userId, setUserId] = useState<number | null>(null);
   useEffect(() => {
@@ -49,6 +49,7 @@ function App(): React.ReactElement {
         <Router>
           <Routes>
             <Route path='/' element={ifLoggedIn(<HomePage />)}/>
+            <Route path='/home' element={<HomePage />}/>
             <Route path="/login" element={ifNotLoggedIn(<UserLogin setToken={setToken}/>)}/>
             <Route path="/signup" element={ifNotLoggedIn(<UserSignup />)}/>
             <Route path="/add_words" element={ifLoggedIn(<AddWordsPage userId={userId}/>)} />

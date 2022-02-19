@@ -1,6 +1,7 @@
 import React from "react";
 import RedirectToSignup from './RedirectToSignup';
 import LoginForm from './LoginForm';
+import GoToHome from './GoToHome';
 
 type UserLoginProps = {
     setToken: (token: string) => void
@@ -12,6 +13,7 @@ export default function UserLogin ({setToken}: UserLoginProps): React.ReactEleme
             <h1 className={`page-title text-dark dark:text-light`}>Login</h1>
             <div className="flex flex-col justify-between h-full ">
                 <LoginForm setToken={setToken}/>
+                <GoToHome />
                 <RedirectToSignup />
             </div>
        </div> 

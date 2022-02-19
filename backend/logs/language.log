@@ -295,3 +295,12 @@ Traceback (most recent call last):
     cursor.execute(sql)
 psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
 
+2022-02-02 10:19:32,230  -  An exception occurred in the server.
+Traceback (most recent call last):
+  File "/mnt/c/Users/guilh/code/voca/backend/src/controller/language_controller.py", line 205, in res_calculate_score
+    translated_word: str = self.translation_model.translate(
+  File "/mnt/c/Users/guilh/code/voca/backend/src/model/translation_model.py", line 38, in translate
+    translation: str = self.translator.translate(word, dest=to_language).text
+  File "/mnt/c/Users/guilh/code/voca/backend/venv/lib/python3.8/site-packages/googletrans/client.py", line 222, in translate
+    translated_parts = list(map(lambda part: TranslatedPart(part[0], part[1] if len(part) >= 2 else []), parsed[1][0][0][5]))
+TypeError: 'NoneType' object is not iterable

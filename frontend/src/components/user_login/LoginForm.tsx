@@ -41,7 +41,7 @@ export default function LoginForm ({setToken}: LoginFormProps): React.ReactEleme
                 requestState === UserLoginRequestState.Waiting ?
                 <Loader /> : <input type="submit" value="Log in" className={`secondary-button bg-light dark:bg-dark`} />
             }
-            <a href="https://google.com" className={`text-blue underline text-right`}>  Forgot password?</a>
+            {/* <a href="https://google.com" className={`text-blue underline text-right`}>  Forgot password?</a> */}
         </form>
     )
 };
